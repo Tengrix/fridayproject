@@ -1,11 +1,11 @@
-type initState = {
+type initStateType = {
 
 }
-let initState:initState = {
+let initState:initStateType = {
 
 }
 
-export const someReducer = (state:initState = initState,action:actionType) => {
+export const someReducer = (state:initStateType = initState,action:actionType) => {
     switch (action.type){
         case'some':{
             return state
