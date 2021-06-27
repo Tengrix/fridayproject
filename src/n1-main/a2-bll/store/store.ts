@@ -1,10 +1,12 @@
 import {combineReducers,createStore} from 'redux';
 import {someReducer} from "./reducers";
+import { signUpReduser } from './signUp-reducer';
 declare global {
     interface Window {store: any}
 }
 const rootReducer = combineReducers({
-    some:someReducer
+    some:someReducer,
+    signUp: signUpReduser
 })
 export const store = createStore(rootReducer);
 // определить автоматически тип всего объекта состояния
