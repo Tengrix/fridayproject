@@ -16,7 +16,6 @@ type signUpDataType = {
 
 export const signUpAPI = {
     signUp(data: signUpDataType) {
-        const promise = instance.post<signUpResponceType>("/auth/register", data)
-        return promise
+        return instance.post<signUpResponceType>("/auth/register", data)
     },
 }
