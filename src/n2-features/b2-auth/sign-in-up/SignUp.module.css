@@ -1,0 +1,15 @@
+.registrBlock{
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.inputBlock{
+    border: 1px solid red;
+    width: 400px;
+    height: 250px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+}

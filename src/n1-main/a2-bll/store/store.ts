@@ -1,14 +1,13 @@
-import {applyMiddleware, combineReducers,createStore} from 'redux';
+import {combineReducers,createStore} from 'redux';
 import {someReducer} from "./reducers";
-import {loginReducer} from "./login-reducer";
-import thunkMiddleware from 'redux-thunk'
+declare global {
+    interface Window {store: any}
+}
 const rootReducer = combineReducers({
-    some:someReducer,
-    login:loginReducer
+    some:someReducer
 })
-export const store = createStore(rootReducer,applyMiddleware(thunkMiddleware));
+export const store = createStore(rootReducer);
 // определить автоматически тип всего объекта состояния
 export type AppRootStateType = ReturnType<typeof rootReducer>
-// @ts-ignore
-window.store = store
-export default store
+window.store = window.store || {}
+export default store;
