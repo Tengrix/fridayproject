@@ -8,14 +8,13 @@ import {AppRootStateType} from "../../../n1-main/a2-bll/store/store";
 import {Redirect} from "react-router-dom";
 import {PATH} from "../../../n1-main/a1-ui/routes/Routes";
 import {useFormik} from "formik";
-import s from './../../../n3-MySuperComponents/SuperInputText/SuperInputText.module.css'
 type FormikErrorType = {
     email?: string
     password?: string
     rememberMe?: boolean
 }
 
-const SignIn = () => {
+const SignInWithFormik = () => {
     const dispatch=useDispatch()
     const isLogged = useSelector<AppRootStateType,boolean>(state => state.login.isLogged)
     const formik = useFormik({
@@ -27,12 +26,12 @@ const SignIn = () => {
         validate:(values )=> {
             const errors: FormikErrorType = {};
             if (!values.email) {
-                errors.email = 'Required';
+                errors.email = 'Email required';
             } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
                 errors.email = 'Invalid email address';
             }
             if(!values.password){
-                errors.password = 'Required'
+                errors.password = 'Password required'
             }else if(values.password.length < 4){
                 errors.password = 'Invalid password'
             }
@@ -68,4 +67,4 @@ if(isLogged){
         </form>
     )
 }
-export default SignIn
+export default SignInWithFormik

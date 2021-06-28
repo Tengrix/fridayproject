@@ -40,8 +40,10 @@ export const LoginTC = (email:string, password:string,rememberMe:boolean) => (di
     authAPI.login(email,password,rememberMe).then((res)=>{
             dispatch(logInAC(true))
     })
-        .catch(()=>{
-
+        .catch((e)=>{
+            const error=e.res? e.res.data.error:
+                (e.message+', more details in the console')
+            console.log('Error:', {...e})
         })
         .finally(()=>{
 
