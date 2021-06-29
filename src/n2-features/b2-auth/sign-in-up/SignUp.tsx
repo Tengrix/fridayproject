@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { Redirect } from "react-router-dom"
 import { signUpTC } from "../../../n1-main/a2-bll/store/signUp-reducer"
 import { AppRootStateType } from "../../../n1-main/a2-bll/store/store"
-import styles from "./SignUp.module.css"
+import styles from "./../../../n1-main/a1-ui/common/styles/signStyles.module.css"
 
 type FormikErrorType = {
     email?: string
@@ -13,10 +13,10 @@ type FormikErrorType = {
 }
 
 const SignUp = () => {
-    const isRegistr = useSelector<AppRootStateType, boolean>((state) => state.signUp.isRegistr)
-    const registrError = useSelector<AppRootStateType, string>((state) => state.signUp.registrError)
+    const isRegister = useSelector<AppRootStateType, boolean>((state) => state.auth.isRegister)
+    const registerError = useSelector<AppRootStateType, string>((state) => state.auth.registerError)
     const dispatch = useDispatch()
-    const sendDataToRegistr = (email: string, password: string) => {
+    const sendDataToRegister = (email: string, password: string) => {
         dispatch(signUpTC(email, password))
     }
     const formik = useFormik({
@@ -34,7 +34,7 @@ const SignUp = () => {
             }
             if (!values.password) {
                 errors.password = "Password required"
-            } else if (values.password.length < 3) {
+            } else if (values.password.length < 7) {
                 errors.password = "Password should be longer 7 symbols"
             }
             if (values.password !== values.confPass) {
@@ -44,10 +44,10 @@ const SignUp = () => {
         },
         onSubmit: (values) => {
             formik.resetForm()
-            sendDataToRegistr(values.email, values.password)
+            sendDataToRegister(values.email, values.password)
         },
     })
-    if (isRegistr) {
+    if (isRegister) {
         return <Redirect to={"/sign-in"} />
     }
     return (
@@ -63,7 +63,6 @@ const SignUp = () => {
                 <input
                     placeholder="password:"
                     name="password"
-                    type="password"
                     onChange={formik.handleChange}
                     value={formik.values.password}
                 />
@@ -78,7 +77,7 @@ const SignUp = () => {
                     <div style={{ color: "red" }}>{formik.errors.password}</div>
                 )}
                 <button type={"submit"}>Sign up</button>
-                <div style={{ color: "red" }}>{registrError}</div>
+                <div style={{ color: "red" }}>{registerError}</div>
             </form>
         </div>
     )

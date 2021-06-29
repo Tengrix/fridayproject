@@ -2,7 +2,7 @@ import React from 'react'
 import SuperButton from "../../../n3-MySuperComponents/SuperButton/SuperButton";
 import SuperInputText from "../../../n3-MySuperComponents/SuperInputText/SuperInputText";
 import {useDispatch, useSelector} from "react-redux";
-import {LoginTC} from "../../../n1-main/a2-bll/store/login-reducer";
+import {LoginTC} from "../../../n1-main/a2-bll/store/mainAuthReducer";
 import SuperCheckbox from "../../../n3-MySuperComponents/SuperCheckbox/SuperCheckbox";
 import {AppRootStateType} from "../../../n1-main/a2-bll/store/store";
 import {Redirect} from "react-router-dom";
@@ -16,7 +16,7 @@ type FormikErrorType = {
 
 const SignInWithFormik = () => {
     const dispatch=useDispatch()
-    const isLogged = useSelector<AppRootStateType,boolean>(state => state.login.isLogged)
+    const isLogged = useSelector<AppRootStateType,boolean>(state => state.auth.isLogged)
     const formik = useFormik({
         initialValues: {
             email: '',
@@ -45,6 +45,7 @@ const SignInWithFormik = () => {
 if(isLogged){
         return <Redirect to={PATH.PROFILE}/>
     }
+
     return(
         <form onSubmit={formik.handleSubmit}>
             <div>

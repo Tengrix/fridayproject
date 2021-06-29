@@ -3,9 +3,10 @@ import axios from "axios"
 const instance = axios.create({
     baseURL: "http://localhost:7542/2.0",
     headers: {},
+    withCredentials:true
 })
 
-type logoutResponceType = {
+type logoutResponseType = {
     info: string
     error: string
 }
@@ -13,7 +14,6 @@ type logoutResponceType = {
 
 export const logoutApi = {
     logout() {
-        const promise = instance.delete<logoutResponceType>("/auth/me")
-        return promise
+        return instance.delete<logoutResponseType>("/auth/me")
     },
 }

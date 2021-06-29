@@ -11,3 +11,8 @@
 .item a.activeLink{
     color: gold
 }
+.logOut{
+    display: flex;
+    flex-direction: column;
+    align-content: flex-end;
+}

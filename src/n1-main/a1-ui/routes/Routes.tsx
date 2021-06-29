@@ -1,11 +1,11 @@
 import {Redirect, Route, Switch} from "react-router-dom";
 import Profile from "../../../n2-features/profile/Profile";
 import Error from "../../../n2-features/b4-errors/error/Error";
-import SignIn from "../../../n2-features/b2-auth/sign-in-up/SignIn";
 import SignUp from "../../../n2-features/b2-auth/sign-in-up/SignUp";
 import NewPass from "../../../n2-features/b3-pass/Password/NewPass";
 import RenewalPass from "../../../n2-features/b3-pass/Password/RenewalPass";
 import React from "react";
+import SignInWithFormik from "../../../n2-features/b2-auth/sign-in-up/SignInWithFormik";
 
 export const PATH = {
     PROFILE:'/profile',
@@ -24,7 +24,7 @@ export const Routes = () => {
                 <Route path={'/'} exact component={Profile}/>
                 <Route path={PATH.PROFILE} component={Profile}/>
                 <Route path={PATH.PROFILE} component={Error}/>
-                <Route path={PATH.SIGN_IN} component={SignIn}/>
+                <Route path={PATH.SIGN_IN} component={SignInWithFormik}/>
                 <Route path={PATH.SIGN_UP} component={SignUp}/>
                 <Route path={PATH.NEW_PASS} component={NewPass}/>
                 <Route path={PATH.RENEWAL_PASS} component={RenewalPass}/>
