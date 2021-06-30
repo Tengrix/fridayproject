@@ -1,10 +1,10 @@
 import { useFormik } from "formik"
 import React from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { Redirect } from "react-router-dom"
-import { signUpTC } from "../../../n1-main/a2-bll/store/signUp-reducer"
+import {  Redirect } from "react-router-dom"
+import { signUpTC } from "../../../n1-main/a2-bll/store/mainAuthReducer"
 import { AppRootStateType } from "../../../n1-main/a2-bll/store/store"
-import styles from "./../../../n1-main/a1-ui/common/styles/signStyles.module.css"
+import styles from "../../../utils/styles/CommonStylesForAuth.module.css"
 
 type FormikErrorType = {
     email?: string
@@ -14,7 +14,7 @@ type FormikErrorType = {
 
 const SignUp = () => {
     const isRegister = useSelector<AppRootStateType, boolean>((state) => state.auth.isRegister)
-    const registerError = useSelector<AppRootStateType, string>((state) => state.auth.registerError)
+    const commonError = useSelector<AppRootStateType, string>((state) => state.auth.commonError)
     const dispatch = useDispatch()
     const sendDataToRegister = (email: string, password: string) => {
         dispatch(signUpTC(email, password))
@@ -51,7 +51,7 @@ const SignUp = () => {
         return <Redirect to={"/sign-in"} />
     }
     return (
-        <div className={styles.registrBlock}>
+        <div className={styles.authBlock}>
             <form className={styles.inputBlock} onSubmit={formik.handleSubmit}>
                 <input
                     placeholder="email:"
@@ -63,6 +63,7 @@ const SignUp = () => {
                 <input
                     placeholder="password:"
                     name="password"
+                    type="password"
                     onChange={formik.handleChange}
                     value={formik.values.password}
                 />
@@ -77,7 +78,8 @@ const SignUp = () => {
                     <div style={{ color: "red" }}>{formik.errors.password}</div>
                 )}
                 <button type={"submit"}>Sign up</button>
-                <div style={{ color: "red" }}>{registerError}</div>
+
+                <div style={{ color: "red" }}>{commonError}</div>
             </form>
         </div>
     )

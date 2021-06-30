@@ -1,16 +1,20 @@
-import axios from "axios";
+import axios from "axios"
 
 const instance = axios.create({
-    baseURL:'http://localhost:7542/2.0/',
-    withCredentials: true
+    baseURL: "http://localhost:7542/2.0/",
+    withCredentials: true,
 })
 
 export const authAPI = {
-    login(email:string, password:string,rememberMe:boolean){
-        return instance.post<ResponseType<{body:loginResponseType}>>('auth/login',{email,password,rememberMe})
+    login(email: string, password: string, rememberMe: boolean) {
+        return instance.post<ResponseType<{ body: loginResponseType }>>("auth/login", {
+            email,
+            password,
+            rememberMe,
+        })
     },
-    getProfile(){
-        return instance.post<userType>('auth/me')
+    getProfile() {
+        return instance.post<userType>("auth/me")
     },
     signUp(data: signUpDataType) {
         return instance.post<signUpResponseType>("auth/register", data)
@@ -18,20 +22,27 @@ export const authAPI = {
     logout() {
         return instance.delete<logoutResponseType>("auth/me")
     },
-    updateUser(data:userType){
-        return instance.put<updatedUserResponseType>('auth/me',{data})
-    }
+    updateUser(data: userType) {
+        return instance.put<updatedUserResponseType>("auth/me", { data })
+    },
+    setNewPassword(password: string, resetPasswordToken: string) {
+        return instance.post<SendNewPassResponseType>("auth/set-new-password", { password, resetPasswordToken })
+    },
 }
 
 export type NewUserType = {
-    name:string;
-    avatar:string;
+    name: string
+    avatar: string
 }
 type updatedUserResponseType = {
-    updatedUser:{}
-    error?:string;
+    updatedUser: {}
+    error?: string
 }
 type logoutResponseType = {
+    info: string
+    error: string
+}
+type SendNewPassResponseType = {
     info: string
     error: string
 }
@@ -45,31 +56,30 @@ type signUpDataType = {
     password: string
 }
 
-export type LoginType={
-    email:string;
-    password:string;
-    rememberMe?:boolean;
+export type LoginType = {
+    email: string
+    password: string
+    rememberMe?: boolean
 }
-export type SignInType<T={}> = {
-    data:signUpDataType
-    rememberMe:boolean
+export type SignInType<T = {}> = {
+    data: signUpDataType
+    rememberMe: boolean
 }
 export type userType = {
-    id: string,
-    email: string,
-    name: string,
+    id: string
+    email: string
+    name: string
     avatar?: string
-
 }
-export type ResponseType<T={}> = {
-    error?:string;
-    body:loginResponseType
+export type ResponseType<T = {}> = {
+    error?: string
+    body: loginResponseType
 }
 type loginResponseType = {
-    data:userType
-    created: any;
-    updated:any;
-    isAdmin:boolean;
-    verified:boolean;
-    rememberMe:boolean;
+    data: userType
+    created: any
+    updated: any
+    isAdmin: boolean
+    verified: boolean
+    rememberMe: boolean
 }
