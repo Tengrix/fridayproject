@@ -22,8 +22,8 @@ export const authAPI = {
     logout() {
         return instance.delete<logoutResponseType>("auth/me")
     },
-    updateUser(data: userType) {
-        return instance.put<updatedUserResponseType>("auth/me", { data })
+    updateUser(data:NewUserType) {
+        return instance.put<updatedUserResponseType>("auth/me", data)
     },
     setNewPassword(password: string, resetPasswordToken: string) {
         return instance.post<SendNewPassResponseType>("auth/set-new-password", { password, resetPasswordToken })
@@ -69,7 +69,7 @@ export type userType = {
     id: string
     email: string
     name: string
-    avatar?: string
+    avatar: string
 }
 export type ResponseType<T = {}> = {
     error?: string

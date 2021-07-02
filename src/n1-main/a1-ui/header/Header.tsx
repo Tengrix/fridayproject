@@ -14,6 +14,9 @@ function Header() {
                 {isLogged && <Logout/>}
             </span>
             <div className={s.item}>
+                <NavLink to={PATH.UPDATE_USER} activeClassName={s.activeLink} replace> Settings </NavLink>
+            </div>
+            <div className={s.item}>
                 <NavLink to={PATH.PROFILE} activeClassName={s.activeLink} replace> My Profile </NavLink>
             </div>
             <div className={s.item}>

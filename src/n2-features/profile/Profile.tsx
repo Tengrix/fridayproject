@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "../../n1-main/a2-bll/store/store";
 import {GetUserTC} from "../../n1-main/a2-bll/store/mainAuthReducer";
@@ -13,11 +13,12 @@ const Profile = () => {
     const userEmail = useSelector<AppRootStateType, string>(state => state.auth.user.email)
     const userAvatar = useSelector<AppRootStateType, string | undefined>(state => state.auth.user.avatar)
     const isLogged = useSelector<AppRootStateType, boolean>(state => state.auth.isLogged)
+    useEffect(()=>{
+        dispatch(GetUserTC())
+    },[dispatch])
 
     if (!isLogged) {
         return <Redirect to={PATH.SIGN_IN}/>
-    } else {
-        dispatch(GetUserTC())
     }
     return (
         <div>

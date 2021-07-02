@@ -1,5 +1,5 @@
 import { Dispatch } from "redux"
-import { authAPI, userType } from "../../a3-dal/mainAPI"
+import {authAPI, NewUserType, userType} from "../../a3-dal/mainAPI"
 //
 //
 type ActionType =
@@ -9,6 +9,9 @@ type ActionType =
     | setErrorRegisterType
     | updatedUserType
     | setNewPasswordType
+    | isInitializedType
+
+
 //
 //
 type switchIsAuthType = ReturnType<typeof switchIsRegister>
@@ -17,12 +20,15 @@ type LogInACType = ReturnType<typeof logIn>
 type setUserType = ReturnType<typeof setUser>
 type updatedUserType = ReturnType<typeof setUpdateUser>
 type setNewPasswordType = ReturnType<typeof setNewPassword>
+type isInitializedType = ReturnType<typeof isInitialized>
 type initStateType = {
     isLogged: boolean
     user: userType
     isRegister: boolean
     commonError: string
-    isUpdatedPassword: boolean
+    isUpdatedPassword: boolean,
+    isInitialized: boolean
+    updatedUser:NewUserType
 }
 //
 //
@@ -30,16 +36,20 @@ let initState: initStateType = {
     isLogged: false,
     user: {
         id: "",
-        email: "qwe",
-        name: "ewq",
-        avatar: "weq",
+        email: "",
+        name: "",
+        avatar: "",
     },
     isRegister: false,
     commonError: "",
     isUpdatedPassword: false,
+    isInitialized:false,
+    updatedUser:{
+        name:'',
+        avatar:''
+    }
 }
-//
-//
+
 export const authReducer = (
     state: initStateType = initState,
     action: ActionType
@@ -48,13 +58,15 @@ export const authReducer = (
         case SIGN_IN:
             return { ...state, isLogged: action.value }
         case SET_USER:
-            return { ...state, user: action.user }
+            return { ...state, user: action.user,  }
         case SWITCH_IS_REGISTR:
             return { ...state, isRegister: action.newValueIsRegister }
         case SET_ERROR_REGISTR:
             return { ...state, commonError: action.error }
         case SET_UPDATE_USER:
-            return { ...state, user: action.data }
+            return { ...state, updatedUser: action.data }
+        case IS_INITIALIZED:
+            return {...state, isInitialized:action.value }
         case SET_NEW_PASSWORD:
             return { ...state, isUpdatedPassword: action.isUpPassword }
         default: {
@@ -70,6 +82,7 @@ const SET_USER = "AUTH/SET-USER"
 const SIGN_IN = "AUTH/SIGN-IN"
 const SET_UPDATE_USER = "AUTH/SET-UPDATE-USER"
 const SET_NEW_PASSWORD = "AUTH/SET-NEW-PASSWORD"
+const IS_INITIALIZED = 'IS-INITIALIZED'
 //
 //
 export const switchIsRegister = (newValueIsRegister: boolean) => {
@@ -83,13 +96,13 @@ export const logIn = (value: boolean) => {
         value,
     } as const
 }
-export const setUser = (id: string, email: string, name: string, avatar?: string) => {
+export const setUser = (id: string, email: string, name: string, avatar: string) => {
     return {
         type: SET_USER,
         user: { id, email, name, avatar },
     } as const
 }
-export const setUpdateUser = (data: userType) => {
+export const setUpdateUser = (data: NewUserType) => {
     return {
         type: SET_UPDATE_USER,
         data,
@@ -100,6 +113,12 @@ export const setNewPassword = (isUpPassword: boolean) =>
         type: SET_NEW_PASSWORD,
         isUpPassword,
     } as const)
+export const isInitialized = (value:boolean) =>{
+    return{
+        type:IS_INITIALIZED,
+        value
+    } as const
+}
 //
 //
 export const signUpTC = (email: string, password: string) => {
@@ -146,12 +165,21 @@ export const LogoutTC = () => (dispatch: Dispatch) => {
 export const GetUserTC = () => (dispatch: Dispatch<setUserType>) => {
     authAPI.getProfile().then((res) => {
         let { id, email, name, avatar } = res.data
-        dispatch(setUser(id, email, name, avatar))
+        dispatch(setUser(id, email, name, avatar,))
     })
 }
-export const UpdateUserInfo = (data: userType) => (dispatch: Dispatch) => {
+export const UpdateUserInfo = (data: NewUserType) => (dispatch: Dispatch) => {
     authAPI.updateUser(data).then((res) => {
         dispatch(setUpdateUser(data))
+    })
+}
+export const isInitializedTC = () => (dispatch:Dispatch) =>{
+    authAPI.getProfile().then((res)=>{
+            dispatch(logIn(true))
+    }).catch(()=>{
+
+    }).finally(()=>{
+        dispatch(isInitialized(true))
     })
 }
 export const SetNewPassword =
