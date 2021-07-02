@@ -17,7 +17,7 @@ const NewPass = () => {
     )
     const commonError = useSelector<AppRootStateType, string>((state) => state.auth.commonError)
     const dispatch = useDispatch()
-    const {token} = useParams<{ token: string }>()
+    const { token } = useParams<{ token: string }>()
     const formik = useFormik({
         initialValues: {
             password: "",
@@ -34,6 +34,7 @@ const NewPass = () => {
             return errors
         },
         onSubmit: (values) => {
+            debugger
             dispatch(SetNewPassword(values.password, token))
             formik.resetForm()
         },
@@ -47,6 +48,7 @@ const NewPass = () => {
                 <input
                     placeholder="password:"
                     name="password"
+                    type="password"
                     onChange={formik.handleChange}
                     value={formik.values.password}
                 />
