@@ -19,7 +19,6 @@ const RenewalPass = () => {
         },
         validate: (values) => {},
         onSubmit: (values) => {
-            debugger
             dispatch(forgot(values.email, message))
             formik.resetForm()
         },
