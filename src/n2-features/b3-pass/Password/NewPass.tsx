@@ -34,8 +34,8 @@ const NewPass = () => {
             return errors
         },
         onSubmit: (values) => {
-            formik.resetForm()
             dispatch(SetNewPassword(values.password, token.token))
+            formik.resetForm()
         },
     })
     if (isUpdatedPassword) {
