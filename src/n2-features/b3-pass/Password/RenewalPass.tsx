@@ -10,7 +10,7 @@ import styles from "../../../utils/styles/CommonStylesForAuth.module.css"
 
 const RenewalPass = () => {
     const message = `<div style="background-color: lime; padding: 15px"> 
-    password recovery link: <a href='https://Tengrix.github.io/fridayproject/new-pass/$token$'>Click to here</a></div>`
+    password recovery link: <a href='https://Tengrix.github.io/#/fridayproject/new-pass/$token$'>Click to here</a></div>`
     const fogot = useSelector<AppRootStateType, boolean>((state) => state.auth.fogot)
     const dispatch = useDispatch()
     const formik = useFormik({
