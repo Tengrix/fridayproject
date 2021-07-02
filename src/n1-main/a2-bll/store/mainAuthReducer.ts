@@ -149,6 +149,7 @@ export const LoginTC =
             .catch((e) => {
                 const error = e.res ? e.res.data.error : e.message + ", more details in the console"
                 console.log("Error:", { ...e })
+                dispatch(setCommonRegister(error))
             })
             .finally(() => {})
     }
@@ -160,7 +161,11 @@ export const LogoutTC = () => (dispatch: Dispatch) => {
                 dispatch(logIn(false))
             }
         })
-        .catch(() => {})
+        .catch((e) => {
+            const error = e.res ? e.res.data.error : e.message + ", more details in the console"
+            console.log("Error:", { ...e })
+            dispatch(setCommonRegister(error))
+        })
 }
 export const GetUserTC = () => (dispatch: Dispatch<setUserType>) => {
     authAPI.getProfile().then((res) => {
@@ -171,6 +176,8 @@ export const GetUserTC = () => (dispatch: Dispatch<setUserType>) => {
 export const UpdateUserInfo = (data: NewUserType) => (dispatch: Dispatch) => {
     authAPI.updateUser(data).then((res) => {
         dispatch(setUpdateUser(data))
+    }).finally(()=>{
+        console.log('check profile')
     })
 }
 export const isInitializedTC = () => (dispatch:Dispatch) =>{

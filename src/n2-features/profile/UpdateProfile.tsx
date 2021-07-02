@@ -11,10 +11,9 @@ const UpdateProfile = () => {
     const[name, setNewName] = useState<string>(oldName)
     const[avatar, setNewAva] = useState<string>(oldAva)
     const newData:NewUserType = {name,avatar}
-    useEffect(()=>{
+    const changeName = () => {
         dispatch(UpdateUserInfo(newData))
-    },[newData])
-
+    }
     const onChangeName = (e:ChangeEvent<HTMLInputElement>) =>{
         setNewName(e.currentTarget.value)
     }
@@ -26,6 +25,7 @@ const UpdateProfile = () => {
         <div>
             <input placeholder={'new name'} value={name} type="text" onChange={onChangeName}/>
             <input placeholder={'new URL for Ava'} value={avatar} type="text" onChange={onChangeAva}/>
+            <button onClick={changeName}>Submit</button>
         </div>
     )
 }
