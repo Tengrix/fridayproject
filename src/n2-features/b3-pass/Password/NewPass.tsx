@@ -47,6 +47,7 @@ const NewPass = () => {
                 <input
                     placeholder="password:"
                     name="password"
+                    type="password"
                     onChange={formik.handleChange}
                     value={formik.values.password}
                 />
