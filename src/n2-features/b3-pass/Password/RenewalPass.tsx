@@ -23,6 +23,12 @@ const RenewalPass = () => {
             formik.resetForm()
         },
     })
+    if (fogot)
+        return (
+            <div className={styles.authBlock}>
+                <div>Checked your email!</div>
+            </div>
+        )
     return (
         <div className={styles.authBlock}>
             <form onSubmit={formik.handleSubmit}>
