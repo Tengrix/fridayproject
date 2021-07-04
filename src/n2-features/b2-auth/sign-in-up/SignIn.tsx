@@ -73,12 +73,16 @@ const SignInWithFormik = () => {
                     <div style={{ color: "red" }}>{formik.errors.password}</div>
                 )}
                 <div>
-                    <SuperCheckbox type={"rememberMe"} {...formik.getFieldProps("rememberMe")} />
+                    <SuperCheckbox type={"rememberMe"} {...formik.getFieldProps("rememberMe")}>
+                        Remember me
+                    </SuperCheckbox>
                 </div>
 
                 <SuperButton type={"submit"}>Sign in HERE</SuperButton>
                 <div>
-                    <NavLink to={PATH.RENEWAL_PASS}>Forgot password</NavLink>
+                    <NavLink to={PATH.RENEWAL_PASS}>
+                        <button>Forgot password</button>
+                    </NavLink>
                 </div>
             </div>
         </form>

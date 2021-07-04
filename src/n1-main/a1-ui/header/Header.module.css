@@ -3,10 +3,15 @@
     background-color: cadetblue;
     color: white;
     padding: 10px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
 }
 .item a{
     color: white;
     text-decoration: none;
+    margin-left: 5px;
+    border: 1px solid red;
 }
 .item a.activeLink{
     color: gold
