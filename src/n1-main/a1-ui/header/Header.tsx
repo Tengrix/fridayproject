@@ -43,6 +43,16 @@ function Header() {
                     Get the new Pass
                 </NavLink>
             </div>}
+            {isLogged && <div className={s.item}>
+                <NavLink to={PATH.PACKS} activeClassName={s.activeLink} replace>
+                    Packs
+                </NavLink>
+            </div>}
+            {isLogged && <div className={s.item}>
+                <NavLink to={PATH.CARDS} activeClassName={s.activeLink} replace>
+                    Cards
+                </NavLink>
+            </div>}
         </nav>
     )
 }
