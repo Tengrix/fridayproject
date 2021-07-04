@@ -17,7 +17,7 @@ const NewPass = () => {
     )
     const commonError = useSelector<AppRootStateType, string>((state) => state.auth.commonError)
     const dispatch = useDispatch()
-    const {token} = useParams<{ token: string }>()
+    const { token } = useParams<{ token: string }>()
     const formik = useFormik({
         initialValues: {
             password: "",
