@@ -54,7 +54,7 @@ let initState: initStateType = {
     },
 }
 //
-//
+//Reducer
 export const authReducer = (
     state: initStateType = initState,
     action: ActionType
@@ -82,7 +82,7 @@ export const authReducer = (
     }
 }
 //
-//
+//Action type
 const SWITCH_IS_REGISTR = "AUTH/SWITCH-IS-REGISTR"
 const SET_ERROR_REGISTR = "AUTH/SET-ERROR-REGISTR"
 const SET_USER = "AUTH/SET-USER"
@@ -92,7 +92,7 @@ const SET_NEW_PASSWORD = "AUTH/SET-NEW-PASSWORD"
 const SWITCH_FOGOT = "AUTH/SWITCH-FOGOT"
 const IS_INITIALIZED = "IS-INITIALIZED"
 //
-//
+//Action creators
 export const switchIsRegister = (newValueIsRegister: boolean) => {
     return { type: SWITCH_IS_REGISTR, newValueIsRegister } as const
 }
@@ -129,7 +129,7 @@ export const isInitialized = (value: boolean) => {
 }
 export const switchFogot = (newFogot: boolean) => ({ type: SWITCH_FOGOT, newFogot } as const)
 //
-//
+//Thunk
 export const signUpTC = (email: string, password: string) => {
     const signUpData = { email, password }
     return (dispatch: Dispatch<ActionType>) => {
@@ -142,12 +142,13 @@ export const signUpTC = (email: string, password: string) => {
                     dispatch(setCommonRegister(resp.data.error))
                 }
             })
-            .catch((error) => {
-                dispatch(setCommonRegister("Common error"))
+            .catch((e) => {
+                const error = e.res ? e.res.data.error : e.message + ", more details in the console"
+                console.log("Error:", { ...e })
+                dispatch(setCommonRegister(error))
             })
     }
 }
-
 export const LoginTC =
     (email: string, password: string, rememberMe: boolean) => (dispatch: Dispatch<ActionType>) => {
         authAPI
@@ -191,6 +192,11 @@ export const UpdateUserInfo = (data: NewUserType) => (dispatch: Dispatch) => {
         .finally(() => {
             console.log("check profile")
         })
+        .catch((e) => {
+            const error = e.res ? e.res.data.error : e.message + ", more details in the console"
+            console.log("Error:", { ...e })
+            dispatch(setCommonRegister(error))
+        })
 }
 export const isInitializedTC = () => (dispatch: Dispatch) => {
     authAPI
@@ -204,17 +210,35 @@ export const isInitializedTC = () => (dispatch: Dispatch) => {
         })
 }
 export const forgot = (email: string, message: string) => (dispatch: Dispatch) => {
-    authAPI.forgot(email, message).then((res) => {
-        dispatch(switchFogot(true))
-    })
-}
-export const SetNewPassword =
-    (newPassword: string, resetPasswordToken: string) => (dispatch: Dispatch) => {
-        authAPI.setNewPassword(newPassword, resetPasswordToken).then((res) => {
-            if (res.data.error.length === 0) {
-                dispatch(setNewPassword(true))
+    authAPI
+        .forgot(email, message)
+        .then((res) => {
+            if (!res.data.error) {
+                dispatch(switchFogot(true))
             } else {
                 dispatch(setCommonRegister(res.data.error))
             }
         })
+        .catch((e) => {
+            const error = e.res ? e.res.data.error : e.message + ", more details in the console"
+            console.log("Error:", { ...e })
+            dispatch(setCommonRegister(error))
+        })
+}
+export const SetNewPassword =
+    (newPassword: string, resetPasswordToken: string) => (dispatch: Dispatch) => {
+        authAPI
+            .setNewPassword(newPassword, resetPasswordToken)
+            .then((res) => {
+                if (!res.data.error) {
+                    dispatch(setNewPassword(true))
+                } else {
+                    dispatch(setCommonRegister(res.data.error))
+                }
+            })
+            .catch((e) => {
+                const error = e.res ? e.res.data.error : e.message + ", more details in the console"
+                console.log("Error:", { ...e })
+                dispatch(setCommonRegister(error))
+            })
     }

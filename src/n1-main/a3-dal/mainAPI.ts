@@ -26,7 +26,7 @@ export const authAPI = {
         return instance.put<updatedUserResponseType>("auth/me", data)
     },
     forgot(email: string, message: string) {
-        return instance.post("auth/forgot", {email, message})
+        return instance.post<SendNewPassResponseType>("auth/forgot", { email, message })
     },
     setNewPassword(password: string, resetPasswordToken: string) {
         return instance.post<SendNewPassResponseType>("auth/set-new-password", {
