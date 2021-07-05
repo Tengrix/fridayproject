@@ -1,6 +1,9 @@
+import { Button } from '@material-ui/core';
 import React, { useCallback } from 'react'
 import { useDispatch } from 'react-redux';
 import { LogoutTC } from '../../../n1-main/a2-bll/store/mainAuthReducer';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+
 const Logout = () => {
     const dispatch = useDispatch()
 
@@ -10,8 +13,7 @@ const Logout = () => {
 
     return (
         <div>
-            <button onClick={logoutHandler}>Logout</button>
-            Logout in Here
+            <Button variant="contained" color="secondary" onClick={logoutHandler}>Logout<ExitToAppIcon/></Button>
         </div>
     )
 }
