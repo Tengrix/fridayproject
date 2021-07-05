@@ -58,38 +58,6 @@ const SignUp = () => {
         return <Redirect to={"/sign-in"} />
     }
     return (
-        /*<div className={styles.authBlock}>
-            <form className={styles.inputBlock} onSubmit={formik.handleSubmit}>
-                <input
-                    placeholder="email:"
-                    name="email"
-                    onChange={formik.handleChange}
-                    value={formik.values.email}
-                />
-                {formik.errors.email && <div style={{ color: "red" }}>{formik.errors.email}</div>}
-                
-                <input
-                    placeholder="password:"
-                    name="password"
-                    type="password"
-                    onChange={formik.handleChange}
-                    value={formik.values.password}
-                />
-                <input
-                    placeholder="confirm password:"
-                    name="confPass"
-                    type="password"
-                    onChange={formik.handleChange}
-                    value={formik.values.confPass}
-                />
-                {formik.errors.password && (
-                    <div style={{ color: "red" }}>{formik.errors.password}</div>
-                )}
-                <button type={"submit"}>Sign up</button>
-
-                <div style={{ color: "red" }}>{commonError}</div>
-            </form>
-        </div>*/
         <Container component="main" maxWidth="xs">
             <div className={s.paper}>
                 <div className={s.avatarConatiner}>

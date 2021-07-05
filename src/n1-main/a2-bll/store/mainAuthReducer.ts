@@ -1,3 +1,4 @@
+import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { Dispatch } from "redux"
 import { authAPI, NewUserType, userType } from "../../a3-dal/mainAPI"
 //
@@ -53,82 +54,41 @@ let initState: initStateType = {
         avatar: "",
     },
 }
-//
-//Reducer
-export const authReducer = (
-    state: initStateType = initState,
-    action: ActionType
-): initStateType => {
-    switch (action.type) {
-        case SIGN_IN:
-            return { ...state, isLogged: action.value }
-        case SET_USER:
-            return { ...state, user: action.user }
-        case SWITCH_IS_REGISTR:
-            return { ...state, isRegister: action.newValueIsRegister }
-        case SET_ERROR_REGISTR:
-            return { ...state, commonError: action.error }
-        case SET_UPDATE_USER:
-            return { ...state, updatedUser: action.data }
-        case IS_INITIALIZED:
-            return { ...state, isInitialized: action.value }
-        case SET_NEW_PASSWORD:
-            return { ...state, isUpdatedPassword: action.isUpPassword }
-        case SWITCH_FOGOT:
-            return { ...state, fogot: action.newFogot }
-        default: {
-            return state
+
+const slice = createSlice({
+    name: 'auth',
+    initialState: initState,
+    reducers: {
+        switchIsRegister(state, action:PayloadAction<{newValueIsRegister:boolean}>){
+            state.isRegister = action.payload.newValueIsRegister;
+        },
+        setCommonRegister(state, action:PayloadAction<{error:any}>){
+            state.commonError = action.payload.error
+        },
+        logIn(state,action:PayloadAction<{value:boolean}>){
+            state.isLogged = action.payload.value
+        },
+        setUser(state, action:PayloadAction<{user:{id: string, email: string, name: string, avatar: string}}>){
+            state.user = action.payload.user
+        },
+        setUpdateUser(state,action:PayloadAction<{data:NewUserType}>){
+            state.updatedUser = action.payload.data
+        },
+        setNewPassword(state,action:PayloadAction<{isUpPassword: boolean}>){
+            state.isUpdatedPassword = action.payload.isUpPassword
+        },
+        isInitialized(state,action:PayloadAction<{value:boolean}>){
+            state.isInitialized = action.payload.value
+        },
+        switchFogot(state,action:PayloadAction<{newFogot: boolean}>){
+            state.fogot = action.payload.newFogot
         }
     }
-}
-//
-//Action type
-const SWITCH_IS_REGISTR = "AUTH/SWITCH-IS-REGISTR"
-const SET_ERROR_REGISTR = "AUTH/SET-ERROR-REGISTR"
-const SET_USER = "AUTH/SET-USER"
-const SIGN_IN = "AUTH/SIGN-IN"
-const SET_UPDATE_USER = "AUTH/SET-UPDATE-USER"
-const SET_NEW_PASSWORD = "AUTH/SET-NEW-PASSWORD"
-const SWITCH_FOGOT = "AUTH/SWITCH-FOGOT"
-const IS_INITIALIZED = "IS-INITIALIZED"
-//
-//Action creators
-export const switchIsRegister = (newValueIsRegister: boolean) => {
-    return { type: SWITCH_IS_REGISTR, newValueIsRegister } as const
-}
-export const setCommonRegister = (error: any) => ({ type: SET_ERROR_REGISTR, error } as const)
+})
 
-export const logIn = (value: boolean) => {
-    return {
-        type: SIGN_IN,
-        value,
-    } as const
-}
-export const setUser = (id: string, email: string, name: string, avatar: string) => {
-    return {
-        type: SET_USER,
-        user: { id, email, name, avatar },
-    } as const
-}
-export const setUpdateUser = (data: NewUserType) => {
-    return {
-        type: SET_UPDATE_USER,
-        data,
-    } as const
-}
-export const setNewPassword = (isUpPassword: boolean) =>
-    ({
-        type: SET_NEW_PASSWORD,
-        isUpPassword,
-    } as const)
-export const isInitialized = (value: boolean) => {
-    return {
-        type: IS_INITIALIZED,
-        value,
-    } as const
-}
-export const switchFogot = (newFogot: boolean) => ({ type: SWITCH_FOGOT, newFogot } as const)
-//
+export const authReducer = slice.reducer
+export const {switchIsRegister,setCommonRegister,logIn,setUser,setUpdateUser,setNewPassword,isInitialized,switchFogot} = slice.actions
+
 //Thunk
 export const signUpTC = (email: string, password: string) => {
     const signUpData = { email, password }
@@ -137,9 +97,9 @@ export const signUpTC = (email: string, password: string) => {
             .signUp(signUpData)
             .then((resp) => {
                 if (resp.data.addedUser) {
-                    dispatch(switchIsRegister(true))
+                    dispatch(switchIsRegister({newValueIsRegister:true}))
                 } else {
-                    dispatch(setCommonRegister(resp.data.error))
+                    dispatch(setCommonRegister({error:resp.data.error}))
                 }
             })
             .catch((e) => {
@@ -154,12 +114,12 @@ export const LoginTC =
         authAPI
             .login(email, password, rememberMe)
             .then((res) => {
-                dispatch(logIn(true))
+                dispatch(logIn({value:true}))
             })
             .catch((e) => {
                 const error = e.res ? e.res.data.error : e.message + ", more details in the console"
                 console.log("Error:", { ...e })
-                dispatch(setCommonRegister(error))
+                dispatch(setCommonRegister({error:error}))
             })
             .finally(() => {})
     }
@@ -168,26 +128,26 @@ export const LogoutTC = () => (dispatch: Dispatch) => {
         .logout()
         .then((res) => {
             if (res.data.info) {
-                dispatch(logIn(false))
+                dispatch(logIn({value:false}))
             }
         })
         .catch((e) => {
             const error = e.res ? e.res.data.error : e.message + ", more details in the console"
             console.log("Error:", { ...e })
-            dispatch(setCommonRegister(error))
+            dispatch(setCommonRegister({error:error}))
         })
 }
 export const GetUserTC = () => (dispatch: Dispatch<setUserType>) => {
     authAPI.getProfile().then((res) => {
         let { id, email, name, avatar } = res.data
-        dispatch(setUser(id, email, name, avatar))
+        dispatch(setUser({user:{id, email, name, avatar}}))
     })
 }
 export const UpdateUserInfo = (data: NewUserType) => (dispatch: Dispatch) => {
     authAPI
         .updateUser(data)
         .then((res) => {
-            dispatch(setUpdateUser(data))
+            dispatch(setUpdateUser({data:data}))
         })
         .finally(() => {
             console.log("check profile")
@@ -195,18 +155,18 @@ export const UpdateUserInfo = (data: NewUserType) => (dispatch: Dispatch) => {
         .catch((e) => {
             const error = e.res ? e.res.data.error : e.message + ", more details in the console"
             console.log("Error:", { ...e })
-            dispatch(setCommonRegister(error))
+            dispatch(setCommonRegister({error:error}))
         })
 }
 export const isInitializedTC = () => (dispatch: Dispatch) => {
     authAPI
         .getProfile()
         .then((res) => {
-            dispatch(logIn(true))
+            dispatch(logIn({value:true}))
         })
         .catch(() => {})
         .finally(() => {
-            dispatch(isInitialized(true))
+            dispatch(isInitialized({value:true}))
         })
 }
 export const forgot = (email: string, message: string) => (dispatch: Dispatch) => {
@@ -214,15 +174,15 @@ export const forgot = (email: string, message: string) => (dispatch: Dispatch) =
         .forgot(email, message)
         .then((res) => {
             if (!res.data.error) {
-                dispatch(switchFogot(true))
+                dispatch(switchFogot({newFogot:true}))
             } else {
-                dispatch(setCommonRegister(res.data.error))
+                dispatch(setCommonRegister({error:res.data.error}))
             }
         })
         .catch((e) => {
             const error = e.res ? e.res.data.error : e.message + ", more details in the console"
             console.log("Error:", { ...e })
-            dispatch(setCommonRegister(error))
+            dispatch(setCommonRegister({error:error}))
         })
 }
 export const SetNewPassword =
@@ -231,14 +191,14 @@ export const SetNewPassword =
             .setNewPassword(newPassword, resetPasswordToken)
             .then((res) => {
                 if (!res.data.error) {
-                    dispatch(setNewPassword(true))
+                    dispatch(setNewPassword({isUpPassword:true}))
                 } else {
-                    dispatch(setCommonRegister(res.data.error))
+                    dispatch(setCommonRegister({error:res.data.error}))
                 }
             })
             .catch((e) => {
                 const error = e.res ? e.res.data.error : e.message + ", more details in the console"
                 console.log("Error:", { ...e })
-                dispatch(setCommonRegister(error))
+                dispatch(setCommonRegister({error:error}))
             })
     }

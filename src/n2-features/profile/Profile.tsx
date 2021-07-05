@@ -14,7 +14,6 @@ import Typography from '@material-ui/core/Typography';
 import s from './Profile.module.css'
 
 const Profile = () => {
-
     const dispatch = useDispatch()
     const userName = useSelector<AppRootStateType, string>(state => state.auth.user.name)
     const userEmail = useSelector<AppRootStateType, string>(state => state.auth.user.email)
@@ -56,16 +55,5 @@ const Profile = () => {
     </Card>
   );
 }
-        /*<div>
-            <div>
-                <img src={userAvatar} alt=""/>
-            </div>
-            <div>
-                {userName}
-            </div>
-            <div>
-                {userEmail}
-            </div>
-        </div>*/
 
 export default Profile;

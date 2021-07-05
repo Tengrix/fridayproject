@@ -55,7 +55,7 @@ const SignInWithFormik = () => {
     if (isLogged) {
         return <Redirect to={PATH.PROFILE} />
     }
-
+    
     return (
         <Container component="main" maxWidth="xs">
             <div className={s.paper}>
