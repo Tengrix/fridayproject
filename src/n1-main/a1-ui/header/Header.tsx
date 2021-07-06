@@ -31,6 +31,9 @@ function Header() {
             <div className={s.item}>
                 <NavLink to={PATH.RENEWAL_PASS} activeClassName={s.activeLink} replace>Get the new Pass</NavLink>
             </div>
+            <div className={s.item}>
+                <NavLink to={PATH.CARDS_PACK} activeClassName={s.activeLink} replace>Cards Pack</NavLink>
+            </div>
 
         </nav>
     )

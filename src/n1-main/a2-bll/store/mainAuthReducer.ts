@@ -11,7 +11,6 @@ type ActionType =
     | setNewPasswordType
     | isInitializedType
 
-
 //
 //
 type switchIsAuthType = ReturnType<typeof switchIsRegister>
@@ -47,7 +46,10 @@ let initState: initStateType = {
     updatedUser:{
         name:'',
         avatar:''
-    }
+    },
+
+
+
 }
 
 export const authReducer = (
@@ -199,3 +201,4 @@ export const SetNewPassword =
             }
         })
     }
+

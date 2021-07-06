@@ -1,11 +1,13 @@
 import {applyMiddleware, combineReducers,createStore} from 'redux';
 import {authReducer} from "./mainAuthReducer";
 import thunk from "redux-thunk";
+import {cardsPackReducer} from "./cardsPackReducer";
 declare global {
     interface Window {store: any}
 }
 const rootReducer = combineReducers({
-    auth:authReducer
+    auth:authReducer,
+    cards:cardsPackReducer
 })
 export const store = createStore(rootReducer,applyMiddleware(thunk));
 // определить автоматически тип всего объекта состояния
