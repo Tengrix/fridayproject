@@ -6,6 +6,7 @@ import Header from "./header/Header";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "../a2-bll/store/store";
 import { isInitializedTC} from "../a2-bll/store/mainAuthReducer";
+import Loading from './loading/Loading';
 
 function App() {
     const dispatch = useDispatch()
@@ -14,15 +15,14 @@ function App() {
         dispatch(isInitializedTC())
     },[])
 
-    if(!isInitialized){
-        return <div>Loading</div>
-    }
     return (
         <HashRouter>
+        {!isInitialized ? <Loading/> : 
             <div className={'mainPage'}>
-                <Header/>
-                <Routes/>
-            </div>
+            <Header/>
+            <Routes/>
+            </div> 
+        }
         </HashRouter>
     );
 }

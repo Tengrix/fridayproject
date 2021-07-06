@@ -15,6 +15,7 @@ import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import { Button } from "@material-ui/core"
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import Loading from "../../../n1-main/a1-ui/loading/Loading"
 
 type FormikErrorType = {
     email?: string
@@ -55,9 +56,10 @@ const SignInWithFormik = () => {
     if (isLogged) {
         return <Redirect to={PATH.PROFILE} />
     }
-    
+
     return (
-        <Container component="main" maxWidth="xs">
+        <div>
+            {isLogged ? <Loading/> : <Container component="main" maxWidth="xs">
             <div className={s.paper}>
                 <div className={s.avatarConatiner}>
                     <Avatar className={s.avatar}>
@@ -102,7 +104,8 @@ const SignInWithFormik = () => {
                     </Grid>
                 </form>
             </div>
-        </Container>
+        </Container>}
+        </div>
 
     )
 }
