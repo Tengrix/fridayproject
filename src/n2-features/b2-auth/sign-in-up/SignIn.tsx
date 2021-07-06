@@ -8,7 +8,14 @@ import { AppRootStateType } from "../../../n1-main/a2-bll/store/store"
 import { NavLink, Redirect } from "react-router-dom"
 import { PATH } from "../../../n1-main/a1-ui/routes/Routes"
 import { useFormik } from "formik"
-import styles from "../../../utils/styles/CommonStylesForAuth.module.css"
+import s from "./SignIn.module.css"
+import Avatar from '@material-ui/core/Avatar';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import Container from '@material-ui/core/Container';
+import { Button } from "@material-ui/core"
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import Loading from "../../../n1-main/a1-ui/loading/Loading"
 
 type FormikErrorType = {
     email?: string
@@ -17,8 +24,10 @@ type FormikErrorType = {
 }
 
 const SignInWithFormik = () => {
+
     const dispatch = useDispatch()
     const isLogged = useSelector<AppRootStateType, boolean>((state) => state.auth.isLogged)
+
     const formik = useFormik({
         initialValues: {
             email: "",
@@ -49,25 +58,37 @@ const SignInWithFormik = () => {
     }
 
     return (
-        <form onSubmit={formik.handleSubmit} className={styles.authBlock}>
-            <div className={styles.inputBlock}>
-                <div>
+        <div>
+            {isLogged ? <Loading/> : <Container component="main" maxWidth="xs">
+            <div className={s.paper}>
+                <div className={s.avatarConatiner}>
+                    <Avatar className={s.avatar}>
+                        <AccountCircleIcon />
+                    </Avatar>
+                </div>
+                <div className={s.typographyContainer}>
+                    <Typography component="h1" variant="h5">
+                        Sign In
+                    </Typography>
+                </div>
+
+                <form onSubmit={formik.handleSubmit} className={s.form} noValidate>
+
                     <SuperInputText
                         placeholder={"Username or email"}
                         type={"email"}
                         {...formik.getFieldProps("email")}
                     />
-                </div>
-                {formik.touched.email && formik.errors.email && (
-                    <div style={{ color: "red" }}>{formik.errors.email}</div>
-                )}
+                    {formik.touched.email && formik.errors.email && (
+                        <div style={{ color: "red" }}>{formik.errors.email}</div>
+                    )}
 
-                <div>
                     <SuperInputText
-                        placeholder={"password"}
+                        placeholder={"Password"}
                         type={"password"}
                         {...formik.getFieldProps("password")}
                     />
+<<<<<<< HEAD
                 </div>
                 {formik.touched.password && formik.errors.password && (
                     <div style={{ color: "red" }}>{formik.errors.password}</div>
@@ -84,8 +105,27 @@ const SignInWithFormik = () => {
                         <button>Forgot password</button>
                     </NavLink>
                 </div>
+=======
+                    {formik.touched.password && formik.errors.password && (
+                        <div style={{ color: "red" }}>{formik.errors.password}</div>
+                    )}
+
+                    <SuperCheckbox type={"rememberMe"} {...formik.getFieldProps("rememberMe")} />
+
+                    <SuperButton type="submit"></SuperButton>
+
+                    <Grid container>
+                        <Grid item xs>
+                            <NavLink to={PATH.RENEWAL_PASS}><Button fullWidth variant="outlined"><span>Forgot password</span></Button></NavLink>
+                            <NavLink to={PATH.SIGN_UP}><Button fullWidth variant="outlined">Don't have an account? Sign Up</Button></NavLink>
+                        </Grid>
+                    </Grid>
+                </form>
+>>>>>>> origin/master
             </div>
-        </form>
+        </Container>}
+        </div>
+
     )
 }
 export default SignInWithFormik

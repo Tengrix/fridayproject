@@ -1,0 +1,23 @@
+.loadPage{
+    background: #fff;
+    overflow: hidden;
+    width: 1518px;
+    height: 553px;
+    padding-top: 200px;
+}
+.loader{
+    margin: auto;    
+    width: 400px;
+    height:400px;
+}
+.loader div{
+    width: calc(100% - 15px);
+    height: calc(100% - 15px);
+    border: 2px solid rgb(160, 100, 95);
+    border-radius: 50%;
+    animation: rotate 10s linear infinite alternate-reverse;
+}
+@keyframes rotate{
+    50%{transform: rotate(80deg);}
+    100%{transform: rotate(360deg);}
+}

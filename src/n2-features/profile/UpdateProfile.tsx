@@ -1,8 +1,11 @@
-import React, {ChangeEvent, useEffect, useState} from 'react'
+import React, {ChangeEvent, useState} from 'react'
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "../../n1-main/a2-bll/store/store";
 import {UpdateUserInfo} from "../../n1-main/a2-bll/store/mainAuthReducer";
 import {NewUserType} from "../../n1-main/a3-dal/mainAPI";
+import { TextField } from '@material-ui/core';
+import s from './Profile.module.css'
+import Button from '@material-ui/core/Button';
 
 const UpdateProfile = () => {
     const dispatch = useDispatch()
@@ -22,10 +25,10 @@ const UpdateProfile = () => {
     }
 
     return(
-        <div>
-            <input placeholder={'new name'} value={name} type="text" onChange={onChangeName}/>
-            <input placeholder={'new URL for Ava'} value={avatar} type="text" onChange={onChangeAva}/>
-            <button onClick={changeName}>Submit</button>
+        <div className={s.updateProfile}>
+            <TextField placeholder={'New name'} value={name} type="text" onChange={onChangeName}/>
+            <TextField placeholder={'New URL for Ava'} value={avatar} type="text" onChange={onChangeAva}/>
+            <Button variant="contained" color="primary" onClick={changeName}>Submit</Button>
         </div>
     )
 }

@@ -1,6 +1,8 @@
 .nav{
-    grid-area: n;
-    background-color: cadetblue;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    background-color: rgb(99, 126, 155);
     color: white;
     padding: 10px;
     display: flex;
@@ -10,14 +12,16 @@
 .item a{
     color: white;
     text-decoration: none;
+<<<<<<< HEAD
     margin-left: 5px;
     border: 1px solid red;
+=======
+    margin: 0 10px 0;
+>>>>>>> origin/master
 }
 .item a.activeLink{
     color: gold
 }
-.logOut{
+.headerLink{
     display: flex;
-    flex-direction: column;
-    align-content: flex-end;
 }

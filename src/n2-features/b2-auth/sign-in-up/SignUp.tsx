@@ -1,10 +1,17 @@
-import { useFormik } from "formik"
 import React from "react"
-import { useDispatch, useSelector } from "react-redux"
-import {  Redirect } from "react-router-dom"
 import { signUpTC } from "../../../n1-main/a2-bll/store/mainAuthReducer"
-import { AppRootStateType } from "../../../n1-main/a2-bll/store/store"
-import styles from "../../../utils/styles/CommonStylesForAuth.module.css"
+import Avatar from '@material-ui/core/Avatar';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import Container from '@material-ui/core/Container';
+import { Button, TextField } from "@material-ui/core"
+import { useDispatch, useSelector } from "react-redux"
+import { NavLink, Redirect } from "react-router-dom"
+import { PATH } from "../../../n1-main/a1-ui/routes/Routes"
+import { useFormik } from "formik"
+import s from "./SignIn.module.css"
+import { AppRootStateType } from "../../../n1-main/a2-bll/store/store";
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
 type FormikErrorType = {
     email?: string
@@ -51,37 +58,76 @@ const SignUp = () => {
         return <Redirect to={"/sign-in"} />
     }
     return (
-        <div className={styles.authBlock}>
-            <form className={styles.inputBlock} onSubmit={formik.handleSubmit}>
-                <input
-                    placeholder="email:"
-                    name="email"
-                    onChange={formik.handleChange}
-                    value={formik.values.email}
-                />
-                {formik.errors.email && <div style={{ color: "red" }}>{formik.errors.email}</div>}
-                <input
-                    placeholder="password:"
-                    name="password"
-                    type="password"
-                    onChange={formik.handleChange}
-                    value={formik.values.password}
-                />
-                <input
-                    placeholder="confirm password:"
-                    name="confPass"
-                    type="password"
-                    onChange={formik.handleChange}
-                    value={formik.values.confPass}
-                />
-                {formik.errors.password && (
-                    <div style={{ color: "red" }}>{formik.errors.password}</div>
-                )}
-                <button type={"submit"}>Sign up</button>
+        <Container component="main" maxWidth="xs">
+            <div className={s.paper}>
+                <div className={s.avatarConatiner}>
+                    <Avatar className={s.avatar}>
+                        <AccountCircleIcon />
+                    </Avatar>
+                </div>
+                <div className={s.typographyContainer}>
+                    <Typography component="h1" variant="h5">
+                        Sign Up
+                    </Typography>
+                </div>
+                <form onSubmit={formik.handleSubmit} className={s.form} noValidate>
 
-                <div style={{ color: "red" }}>{commonError}</div>
-            </form>
-        </div>
+                    <TextField
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        fullWidth
+                        placeholder="Email"
+                        name="email"
+                        onChange={formik.handleChange}
+                        value={formik.values.email}
+                    />
+                    {formik.touched.email && formik.errors.email && (
+                        <div style={{ color: "red" }}>{formik.errors.email}</div>
+                    )}
+
+                    <TextField
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        fullWidth
+                        placeholder="Password"
+                        name="password"
+                        type="password"
+                        onChange={formik.handleChange}
+                        value={formik.values.password}
+                    />
+
+                    <TextField
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        fullWidth
+                        placeholder="Confirm password:"
+                        name="confPass"
+                        type="password"
+                        onChange={formik.handleChange}
+                        value={formik.values.confPass}
+                    />
+
+                    {formik.errors.password && (
+                        <div style={{ color: "red" }}>{formik.errors.password}</div>
+                    )}
+
+                    <Button fullWidth variant="contained" color="secondary">
+                        Sign Up
+                    </Button>
+
+                    <div style={{ color: "red" }}>{commonError}</div>
+
+                    <Grid container>
+                        <Grid item xs>
+                            <NavLink to={PATH.SIGN_IN}><Button fullWidth variant="outlined">Sign In</Button></NavLink>
+                        </Grid>
+                    </Grid>
+                </form>
+            </div>
+        </Container>
     )
 }
 export default SignUp

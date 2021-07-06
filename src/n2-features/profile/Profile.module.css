@@ -1,0 +1,13 @@
+.root{
+    max-width: 445px;
+    margin: 30px;
+}
+.media{
+    height: 180px;
+}
+.updateProfile{
+    margin: 20px;
+}
+.updateProfile input{
+    margin: 0 10px 0 0;
+}

@@ -1,3 +1,4 @@
+import { Button, TextField } from "@material-ui/core"
 import { useFormik } from "formik"
 import React from "react"
 import { useDispatch, useSelector } from "react-redux"
@@ -45,15 +46,17 @@ const NewPass = () => {
     return (
         <div className={styles.authBlock}>
             <form onSubmit={formik.handleSubmit} className={styles.inputBlock}>
-                <input
-                    placeholder="password:"
+                <TextField
+                 variant="outlined"
+                    placeholder="Password:"
                     name="password"
                     type="password"
                     onChange={formik.handleChange}
                     value={formik.values.password}
                 />
-                <input
-                    placeholder="confirm password:"
+                <TextField
+                variant="outlined"
+                    placeholder="Confirm password:"
                     name="confPass"
                     type="password"
                     onChange={formik.handleChange}
@@ -62,7 +65,7 @@ const NewPass = () => {
                 {formik.errors.password && (
                     <div style={{ color: "red" }}>{formik.errors.password}</div>
                 )}
-                <button type={"submit"}>Change password</button>
+                <Button variant="contained" color="secondary" type={"submit"}>Change password</Button>
                 <div style={{ color: "red" }}>{commonError}</div>
             </form>
         </div>

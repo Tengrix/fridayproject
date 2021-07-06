@@ -1,0 +1,21 @@
+.paper{
+      margin-top:100px;
+      display: 'flex';
+      flex-direction: 'column';
+      align-items: 'center';
+}
+.avatarConatiner{
+    display: flex;
+    justify-content: center;
+}
+.avatar{
+      background-color: rgb(45, 139, 170),
+}
+.typographyContainer{
+    display: flex;
+    justify-content: center;
+}
+.form{
+      width: '100%';
+      margin-top: 0
+}
