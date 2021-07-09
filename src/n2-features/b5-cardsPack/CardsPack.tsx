@@ -19,9 +19,7 @@ type ContainerCardsPackType = {
 const CardsPack = (props: ContainerCardsPackType) => {
     const dispatch = useDispatch()
     const [newTitle, setNewTitle] = useState<string>("")
-    useEffect(() => {
-        dispatch(SetPackCards())
-    }, [])
+    
     const onChangeTitle = (e: ChangeEvent<HTMLInputElement>) => {
         setNewTitle(e.currentTarget.value)
     }
@@ -34,16 +32,11 @@ const CardsPack = (props: ContainerCardsPackType) => {
             <td align="center">{props.cardsPack.updated}</td>
             <td align="center">
                 <button>learn</button>
-                <button>update</button>
-                <button>delete</button>
+                <button onClick={() => props.updateTitle(newTitle, props.cardsPack._id)}>
+                    rename
+                </button>
+                <button onClick={() => props.delPack(props.cardsPack._id)}>delete</button>
             </td>
-            {/* <input type="text" value={newTitle} onChange={onChangeTitle} /> */}
-            {/* <button onClick={() => props.updateTitle(newTitle, props.cardsPack._id)}>
-                changeName
-            </button> */}
-            {/* <div>
-                <button onClick={()=>props.delPack(props.cardsPack._id)}>del </button>
-            </div> */}
         </tr>
     )
 }
