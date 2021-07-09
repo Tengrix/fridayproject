@@ -1,7 +1,6 @@
 import React, {ChangeEvent, useCallback, useEffect, useState} from "react";
 import {CardsPackType, initCardsPack} from "../../n1-main/a3-dal/mainAPI";
 import {
-    getAllCard,
     removeCardPackTC,
     setNewCardsPack,
     SetPackCards,
@@ -18,14 +17,11 @@ type ContainerCardsPackType = {
 }
 
 const CardsPack = (props:ContainerCardsPackType) => {
-    const namePack = useSelector<AppRootStateType,initCardsPack[]>(state => state.pack.cardsPack)
+    const namePack = useSelector<AppRootStateType,initCardsPack[]>(state => state.cardsPack.cardsPack)
     const dispatch = useDispatch()
     const [newTitle, setNewTitle] = useState<string>('')
     useEffect(()=>{
         dispatch(SetPackCards())
-    },[])
-    useEffect(()=>{
-        dispatch(getAllCard('5eb6a2f72f849402d46c6ac7'))
     },[])
     const onChangeTitle = (e:ChangeEvent<HTMLInputElement>) => {
         setNewTitle(e.currentTarget.value)

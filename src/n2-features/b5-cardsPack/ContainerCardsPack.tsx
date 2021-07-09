@@ -7,7 +7,7 @@ import CardsPack from "./CardsPack";
 
 const ContainerCardsPack = () => {
     const dispatch = useDispatch()
-    const cardPack = useSelector<AppRootStateType,initCardsPack[]>(state => state.pack.cardsPack)
+    const cardPack = useSelector<AppRootStateType,initCardsPack[]>(state => state.cardsPack.cardsPack)
     debugger
     const newCardPack = useCallback((title:string)=>{
         dispatch(setNewCardsPack(title))
