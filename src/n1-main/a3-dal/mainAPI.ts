@@ -34,49 +34,48 @@ export const authAPI = {
             resetPasswordToken,
         })
     },
-    setCardsPack(){
-        return instance.get<ResponseCardsType>(`cards/pack` )
+    setCardsPack() {
+        return instance.get<ResponseCardsType>(`cards/pack`)
     },
-    createCardsPack(name:string){
-        return instance.post<ResponseCardsType>(`cards/pack`,{cardsPack:{name:name}})
+    createCardsPack(name: string) {
+        return instance.post<ResponseCardsType>(`cards/pack`, { cardsPack: { name: name } })
     },
-    deletePack(){
-        return instance.delete<ResponseCardsType>(`cards/pack/?id=60e7c85b945efa0004ea219b`)
+    deletePack(idPack: string) {
+        return instance.delete<ResponseCardsType>(`cards/pack/?id=${idPack}`)
     },
-    updatePack(id:string,name:string){
-        return instance.put<ResponseCardsType>(`cards/pack`,{cardsPack:{_id:id, name:name}})
-    }
+    updatePack(id: string, name: string) {
+        return instance.put<ResponseCardsType>(`cards/pack`, { cardsPack: { _id: id, name: name } })
+    },
 }
 
 export type createCardsPackType = {
-        name:string
-        private:boolean
+    name: string
+    private: boolean
 }
 export type initCardsPack = {
-    _id: string;
-    user_id: string;
-    name: string;
-    cardsCount: number;
-    created?: string;
-    updated?: string;
-
+    _id: string
+    user_id: string
+    name: string
+    cardsCount: number
+    created?: string
+    updated?: string
 }
 export type ResponseCardsType = {
-    cardsPack:initCardsPack[]
-    cardPacksTotalCount:number;
-    maxCardsCount:number;
-    minCardsCount:number;
-    page:number;
-    pageCount:number;
+    cardPacks: initCardsPack[]
+    cardPacksTotalCount: number
+    maxCardsCount: number
+    minCardsCount: number
+    page: number
+    pageCount: number
 }
 export type CardsPackType = {
-    packName:string;
-    min:number;
-    max:number;
-    sortPacks:number|string;
-    page:number;
-    pageCount:number;
-    user_id:string
+    packName: string
+    min: number
+    max: number
+    sortPacks: number | string
+    page: number
+    pageCount: number
+    user_id: string
 }
 export type NewUserType = {
     name: string
