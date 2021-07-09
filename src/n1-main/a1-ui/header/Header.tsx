@@ -48,6 +48,20 @@ function Header() {
                                 </Button>
                             </NavLink>
                         </div>
+                        <div className={s.item}>
+                            <NavLink to={PATH.PACKS} activeClassName={s.activeLink} replace>
+                                <Button variant="outlined">
+                                    <SettingsIcon /> PACKS{" "}
+                                </Button>
+                            </NavLink>
+                        </div>
+                        <div className={s.item}>
+                            <NavLink to={PATH.PACKS_RAW} activeClassName={s.activeLink} replace>
+                                <Button variant="outlined">
+                                    <SettingsIcon /> PACKS-RAW{" "}
+                                </Button>
+                            </NavLink>
+                        </div>
                         <Logout />
                     </div>
                 </nav>

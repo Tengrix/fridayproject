@@ -9,7 +9,6 @@ import {
 import {useDispatch, useSelector} from "react-redux";
 import AddNewPack from "./AddNewPack";
 import {AppRootStateType} from "../../n1-main/a2-bll/store/store";
-import {current} from "@reduxjs/toolkit";
 
 type ContainerCardsPackType = {
     cardsPack:initCardsPack
@@ -17,7 +16,7 @@ type ContainerCardsPackType = {
 }
 
 const CardsPack = (props:ContainerCardsPackType) => {
-    const namePack = useSelector<AppRootStateType,initCardsPack[]>(state => state.pack.cardsPack)
+    const namePack = useSelector<AppRootStateType,initCardsPack[]>(state => state.cardsPack.cardsPack)
     const dispatch = useDispatch()
     const [newTitle, setNewTitle] = useState<string>('')
     useEffect(()=>{

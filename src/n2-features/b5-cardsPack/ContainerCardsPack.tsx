@@ -8,7 +8,7 @@ import {initCardsPack} from "../../n1-main/a3-dal/mainAPI";
 
 const ContainerCardsPack = () => {
     const dispatch = useDispatch()
-    const cardPack = useSelector<AppRootStateType,initCardsPack[]>(state => state.pack.cardsPack)
+    const cardPack = useSelector<AppRootStateType,initCardsPack[]>(state => state.cardsPack.cardsPack)
     const newCardPack = useCallback((title:string)=>{
         dispatch(setNewCardsPack(title))
     },[dispatch])

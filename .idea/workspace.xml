@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="25942f89-4376-438a-9786-558d9248c0c7" name="Default Changelist" comment="UPDATE">
+    <list default="true" id="25942f89-4376-438a-9786-558d9248c0c7" name="Default Changelist" comment="CRUD done">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/n1-main/a1-ui/header/Header.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/n1-main/a1-ui/header/Header.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/n1-main/a1-ui/routes/Routes.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/n1-main/a1-ui/routes/Routes.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/n1-main/a2-bll/store/store.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/n1-main/a2-bll/store/store.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/n1-main/a3-dal/mainAPI.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/n1-main/a3-dal/mainAPI.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/n2-features/b5-cardsPack/CardsPack.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/n2-features/b5-cardsPack/CardsPack.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/n2-features/b5-cardsPack/ContainerCardsPack.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/n2-features/b5-cardsPack/ContainerCardsPack.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -83,6 +82,14 @@
       <workItem from="1625707457377" duration="9393000" />
       <workItem from="1625786936397" duration="5172000" />
     </task>
+    <task id="LOCAL-00001" summary="CRUD done">
+      <created>1625842222133</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1625842222133</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -102,6 +109,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="UPDATE" />
-    <option name="LAST_COMMIT_MESSAGE" value="UPDATE" />
+    <MESSAGE value="CRUD done" />
+    <option name="LAST_COMMIT_MESSAGE" value="CRUD done" />
   </component>
 </project>
