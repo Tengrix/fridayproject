@@ -7,25 +7,25 @@ import CardsPack from "./CardsPack";
 import AddNewPack from "./AddNewPack";
 
 const ContainerCardsPack = () => {
-    const dispatch = useDispatch()
-    const cardPack = useSelector<AppRootStateType,any>(state => state.cardsPack.cardsPack)
-    debugger
-    const newCardPack = useCallback((title:string)=>{
-        dispatch(setNewCardsPack(title))
-    },[dispatch])
-    const delPack = useCallback((id:string)=>{
-        dispatch(removeCardPackTC(id))
-    },[dispatch])
-    return(
-        <div>
-            {cardPack.map((el:any)=>
-                <CardsPack key={el._id}
-                           cardsPack={el}
-                           newCardPack={newCardPack}
-                           delPack={delPack}
-                    />
-            )}
-        </div>
-    )
+    // const dispatch = useDispatch()
+    // const cardPack = useSelector<AppRootStateType,any>(state => state.cardsPacks)
+    // debugger
+    // const newCardPack = useCallback((title:string)=>{
+    //     dispatch(setNewCardsPack(title))
+    // },[dispatch])
+    // const delPack = useCallback((id:string)=>{
+    //     dispatch(removeCardPackTC(id))
+    // },[dispatch])
+    // return(
+    //     <div>
+    //         {cardPack.map((el:any)=>
+    //             <CardsPack key={el._id}
+    //                        cardsPack={el}
+    //                        newCardPack={newCardPack}
+    //                        delPack={delPack}
+    //                 />
+    //         )}
+    //     </div>
+    // )
 }
 export default ContainerCardsPack
