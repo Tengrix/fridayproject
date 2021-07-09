@@ -34,17 +34,6 @@ export const authAPI = {
             resetPasswordToken,
         })
     },
-<<<<<<< HEAD
-    setCardsPack(page: number = 1, pageCount: number = 5) {
-        return instance.get<ResponseCardsType>(`cards/pack?page=${page}&pageCount=${pageCount}`)
-    },
-    createCardsPack(name: string) {
-        return instance.post<initCardsPack[]>(`cards/pack`, { cardsPack: { name: name } })
-    },
-    deletePack(id: string) {
-        return instance.delete<ResponseCardsType>(`cards/pack/${id}`)
-    },
-=======
     setCardsPack() {
         return instance.get<ResponseCardsType>(`cards/pack`)
     },
@@ -57,7 +46,6 @@ export const authAPI = {
     updatePack(id: string, name: string) {
         return instance.put<ResponseCardsType>(`cards/pack`, { cardsPack: { _id: id, name: name } })
     },
->>>>>>> origin/master
 }
 
 export type createCardsPackType = {
@@ -73,11 +61,7 @@ export type initCardsPack = {
     updated?: string
 }
 export type ResponseCardsType = {
-<<<<<<< HEAD
-    cardsPack: initCardsPack[]
-=======
     cardPacks: initCardsPack[]
->>>>>>> origin/master
     cardPacksTotalCount: number
     maxCardsCount: number
     minCardsCount: number

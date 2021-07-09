@@ -1,5 +1,3 @@
-import Slider from "rc-slider/lib/Slider"
-import Range from "rc-slider/lib/Range"
 import React from "react"
 import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
@@ -25,7 +23,7 @@ const Packs = () => {
     }, [])
     debugger
     const cardsPacksToMap = useSelector<AppRootStateType, Array<initCardsPack>>(
-        (state) => state.cardsPacks.cardsPack
+        (state) => state.cardsPacks.cardPacks
     )
     const isLogged = useSelector<AppRootStateType, boolean>((state) => state.auth.isLogged)
     // const packs: Array<PacksType> = [
@@ -61,10 +59,6 @@ const Packs = () => {
         <div>
             <div>
                 Search: <input placeholder="cards name" />
-                <div>
-                    <Slider />
-                    <Range />
-                </div>
                 <button>Search</button>
             </div>
             <table cellPadding="7" width="100%">
