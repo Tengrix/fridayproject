@@ -7,6 +7,7 @@ import SignInWithFormik from "../../../n2-features/b2-auth/sign-in-up/SignIn"
 import SignUp from "../../../n2-features/b2-auth/sign-in-up/SignUp"
 import NewPass from "../../../n2-features/b3-pass/Password/NewPass"
 import UpdateProfile from "../../../n2-features/profile/UpdateProfile"
+import CardsPack from "../../../n2-features/b5-cardsPack/CardsPack";
 
 export const PATH = {
     PROFILE: "/profile",
@@ -16,6 +17,7 @@ export const PATH = {
     RENEWAL_PASS: "/renewal-pass",
     ERROR: "/404",
     UPDATE_USER: "/update-user",
+    CARDS_PACK:'/packs'
 }
 export const Routes = () => {
     return (
@@ -29,6 +31,7 @@ export const Routes = () => {
                 <Route path={PATH.NEW_PASS} component={NewPass} />
                 <Route path={PATH.RENEWAL_PASS} component={RenewalPass} />
                 <Route path={PATH.UPDATE_USER} component={UpdateProfile} />
+                <Route path={PATH.CARDS_PACK} component={CardsPack} />
                 <Route path={"/404"} render={() => <h1>404:PAGE NOT FOUND</h1>} />
                 <Redirect from={"*"} to={PATH.ERROR} />
             </Switch>

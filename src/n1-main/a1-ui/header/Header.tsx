@@ -29,6 +29,9 @@ function Header() {
          <div className={s.item}>
             <NavLink to={PATH.UPDATE_USER} activeClassName={s.activeLink} replace><Button variant="outlined"><SettingsIcon/> Settings </Button></NavLink>
         </div>
+           <div className={s.item}>
+            <NavLink to={PATH.CARDS_PACK} activeClassName={s.activeLink} replace><Button variant="outlined"><SettingsIcon/> PACKS </Button></NavLink>
+        </div>
         <Logout/>
        </div>
     </nav> }

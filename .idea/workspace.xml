@@ -1,15 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="25942f89-4376-438a-9786-558d9248c0c7" name="Default Changelist" comment="">
+    <list default="true" id="25942f89-4376-438a-9786-558d9248c0c7" name="Default Changelist" comment="UPDATE">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/n1-main/a1-ui/loading/Loading.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/n1-main/a1-ui/loading/Loading.module.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/n1-main/a1-ui/header/Header.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/n1-main/a1-ui/header/Header.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/n1-main/a1-ui/routes/Routes.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/n1-main/a1-ui/routes/Routes.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/n1-main/a2-bll/store/cardsPackReducer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/n1-main/a2-bll/store/cardsPackReducer.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/n1-main/a2-bll/store/store.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/n1-main/a2-bll/store/store.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/n1-main/a3-dal/mainAPI.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/n1-main/a3-dal/mainAPI.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/n2-features/b5-cardsPack/CardsPack.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/n2-features/b5-cardsPack/CardsPack.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/n2-features/b5-cardsPack/ContainerCardsPack.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/n2-features/b5-cardsPack/ContainerCardsPack.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Merge.Settings">
+    <option name="BRANCH" value="origin/master" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
@@ -28,6 +38,9 @@
     </file-type-list>
   </component>
   <component name="ProjectId" id="1uSTVbKPUMmSG2XfWoYY2zMFpww" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -36,13 +49,25 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/package.json" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="yarn" />
     <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
-    <property name="ts.external.directory.path" value="C:\Program Files\JetBrains\WebStorm 2020.3.2\plugins\JavaScriptLanguage\jsLanguageServicesImpl\external" />
+    <property name="ts.external.directory.path" value="C:\Users\user\WebstormProjects\newProject\fridayproject\node_modules\typescript\lib" />
     <property name="vue.rearranger.settings.migration" value="true" />
+  </component>
+  <component name="RunManager">
+    <configuration name="start" type="js.build_tools.npm" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="start" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -57,6 +82,9 @@
       <workItem from="1625243691347" duration="243000" />
       <workItem from="1625552987634" duration="147000" />
       <workItem from="1625553234793" duration="686000" />
+      <workItem from="1625613265084" duration="6975000" />
+      <workItem from="1625707457377" duration="9393000" />
+      <workItem from="1625786936397" duration="5172000" />
     </task>
     <servers />
   </component>
@@ -74,5 +102,9 @@
       </map>
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="UPDATE" />
+    <option name="LAST_COMMIT_MESSAGE" value="UPDATE" />
   </component>
 </project>
