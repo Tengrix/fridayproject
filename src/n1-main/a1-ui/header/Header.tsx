@@ -34,6 +34,22 @@ function Header() {
                             </NavLink>
                         </div>
                         <div className={s.item}>
+                            <NavLink to={PATH.PACKS} activeClassName={s.activeLink} replace>
+                                <Button variant="outlined">
+                                    <PermIdentityIcon />
+                                    Packs
+                                </Button>
+                            </NavLink>
+                        </div>
+                        <div className={s.item}>
+                            <NavLink to={PATH.CARDS} activeClassName={s.activeLink} replace>
+                                <Button variant="outlined">
+                                    <PermIdentityIcon />
+                                    Cards
+                                </Button>
+                            </NavLink>
+                        </div>
+                        <div className={s.item}>
                             <NavLink to={PATH.NEW_PASS} activeClassName={s.activeLink} replace>
                                 <Button variant="outlined">
                                     <VpnKeyIcon />

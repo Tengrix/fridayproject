@@ -9,6 +9,7 @@ import NewPass from "../../../n2-features/b3-pass/Password/NewPass"
 import UpdateProfile from "../../../n2-features/profile/UpdateProfile"
 import Packs from "../../../n2-features/cards/Packs"
 import Cards from "../../../n2-features/cards/card/Cards"
+import ContainerCardsPack from "../../../n2-features/b5-cardsPack/ContainerCardsPack"
 
 export const PATH = {
     PROFILE: "/profile",
@@ -33,7 +34,7 @@ export const Routes = () => {
                 <Route path={PATH.NEW_PASS} component={NewPass} />
                 <Route path={PATH.RENEWAL_PASS} component={RenewalPass} />
                 <Route path={PATH.UPDATE_USER} component={UpdateProfile} />
-                <Route path={PATH.PACKS} component={Packs} />
+                <Route path={PATH.PACKS} component={ContainerCardsPack} />
                 <Route path={PATH.CARDS} component={Cards} />
                 <Route path={"/404"} render={() => <h1>404:PAGE NOT FOUND</h1>} />
                 <Redirect from={"*"} to={PATH.ERROR} />

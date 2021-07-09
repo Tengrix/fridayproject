@@ -1,7 +1,7 @@
 import axios from "axios"
 
 const instance = axios.create({
-    baseURL: "http://localhost:7542/2.0/",
+    baseURL: "https://neko-back.herokuapp.com/2.0/",
     withCredentials: true,
 })
 
@@ -34,45 +34,44 @@ export const authAPI = {
             resetPasswordToken,
         })
     },
-    setCardsPack(){
-        return instance.get<initCardsPack[]>(`cards/pack` )
+    setCardsPack() {
+        return instance.get<ResponseCardsType>(`cards/pack`)
     },
-    createCardsPack(name:string){
-        return instance.post<initCardsPack[]>(`cards/pack`,{cardsPack:{name:name}})
+    createCardsPack(name: string) {
+        return instance.post<initCardsPack[]>(`cards/pack`, { cardsPack: { name: name } })
     },
-    deletePack(id:string){
+    deletePack(id: string) {
         return instance.delete<ResponseCardsType>(`cards/pack/${id}`)
-    }
+    },
 }
 export type createCardsPackType = {
-        name:string
-        private:boolean
+    name: string
+    private: boolean
 }
 export type initCardsPack = {
-    _id: string;
-    user_id: string;
-    name: string;
-    cardsCount: number;
-    created?: string;
-    updated?: string;
-
+    _id: string
+    user_id: string
+    name: string
+    cardsCount: number
+    created?: string
+    updated?: string
 }
 export type ResponseCardsType = {
-    cardsPack:initCardsPack[]
-    cardPacksTotalCount:number;
-    maxCardsCount:number;
-    minCardsCount:number;
-    page:number;
-    pageCount:number;
+    cardsPack: initCardsPack[]
+    cardPacksTotalCount: number
+    maxCardsCount: number
+    minCardsCount: number
+    page: number
+    pageCount: number
 }
 export type CardsPackType = {
-    packName:string;
-    min:number;
-    max:number;
-    sortPacks:number|string;
-    page:number;
-    pageCount:number;
-    user_id:string
+    packName: string
+    min: number
+    max: number
+    sortPacks: number | string
+    page: number
+    pageCount: number
+    user_id: string
 }
 export type NewUserType = {
     name: string
