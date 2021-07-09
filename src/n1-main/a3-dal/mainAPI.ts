@@ -41,7 +41,7 @@ export const authAPI = {
         return instance.post<ResponseCardsType>(`cards/pack`,{cardsPack:{name:name}})
     },
     deletePack(){
-        return instance.delete<ResponseCardsType>(`cards/pack/?id=60e60d116c427600043dcb65`)
+        return instance.delete<ResponseCardsType>(`cards/pack/?id=60e7c85b945efa0004ea219b`)
     },
     updatePack(id:string,name:string){
         return instance.put<ResponseCardsType>(`cards/pack`,{cardsPack:{_id:id, name:name}})
