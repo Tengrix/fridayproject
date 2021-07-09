@@ -1,20 +1,15 @@
-import {
-    authAPI,
-    createCardsPackType,
-    initCardsPack,
-    ResponseCardsType,
-} from "../../a3-dal/mainAPI"
+import { authAPI, initCardsPack, ResponseCardsType } from "../../a3-dal/mainAPI"
 import { Dispatch } from "redux"
 import { ThunkDispatch } from "redux-thunk"
 import { AppRootStateType } from "./store"
 import { setCommonRegister } from "./mainAuthReducer"
 
-type ActionType = getCardsType
+type ActionType = getCardsType | getCardType
 type getCardsType = ReturnType<typeof getCardsPack>
-type getNewCardPack = ReturnType<typeof newCardPack>
+type getCardType = ReturnType<typeof getCards>
 
 type initStateType = {
-    cardsPack: initCardsPack[]
+    cardPacks: Array<initCardsPack>
     cardPacksTotalCount: number
     maxCardsCount: number
     minCardsCount: number
@@ -22,31 +17,42 @@ type initStateType = {
     pageCount: number
 }
 const initialState: initStateType = {
-    cardsPack: [],
-    cardPacksTotalCount: 0,
-    maxCardsCount: 0,
-    minCardsCount: 0,
+    cardPacks: [
+        {
+            name: "HELLO",
+            _id: "",
+            user_id: "",
+            cardsCount: 5,
+        },
+    ],
+    cardPacksTotalCount: 14,
+    maxCardsCount: 4,
+    minCardsCount: 1,
     page: 0,
-    pageCount: 0,
+    pageCount: 4,
 }
 export const cardsPackReducer = (state = initialState, action: ActionType) => {
     switch (action.type) {
         case "GET-CARDS-PACK":
-            return { ...state, cardsPack: action.cardsPack }
+            return { ...state, cardPacks: action.cardPacks }
+        case "GET-CARD":
+            return { ...state }
+
         default:
-            return state
+            return { ...state }
     }
 }
-const getCardsPack = (cardsPack: initCardsPack[]) => {
+const getCardsPack = (cardPacks: initCardsPack[]) => {
     return {
         type: "GET-CARDS-PACK",
-        cardsPack,
+        cardPacks,
     } as const
 }
-const newCardPack = (newCardPack: createCardsPackType) => {
+
+const getCards = (id: string) => {
     return {
-        type: "NEW-PACK",
-        newCardPack,
+        type: "GET-CARD",
+        id,
     } as const
 }
 
@@ -54,7 +60,7 @@ export const SetPackCards = () => (dispatch: Dispatch) => {
     authAPI
         .setCardsPack()
         .then((res) => {
-            dispatch(getCardsPack(res.data.cardsPack))
+            dispatch(getCardsPack(res.data.cardPacks))
         })
         .catch((e) => {
             const error = e.res ? e.res.data.error : e.message + ", more details in the console"
@@ -79,8 +85,15 @@ export const setNewCardsPack =
             })
     }
 export const removeCardPackTC =
-    (id: string) => (dispatch: ThunkDispatch<ResponseCardsType, AppRootStateType, ActionType>) => {
-        authAPI.deletePack(id).then(() => {
+    (idPack: string) => (dispatch: ThunkDispatch<ResponseCardsType, AppRootStateType, ActionType>) => {
+        authAPI.deletePack(idPack).then(() => {
+            dispatch(SetPackCards())
+        })
+    }
+export const updateCardPack =
+    (id: string, name: string) =>
+    (dispatch: ThunkDispatch<ResponseCardsType, AppRootStateType, ActionType>) => {
+        authAPI.updatePack(id, name).then((res) => {
             dispatch(SetPackCards())
         })
     }

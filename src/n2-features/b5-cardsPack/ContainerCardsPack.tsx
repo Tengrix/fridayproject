@@ -3,37 +3,60 @@ import { useDispatch, useSelector } from "react-redux"
 import {
     removeCardPackTC,
     setNewCardsPack,
-    SetPackCards,
+    updateCardPack,
 } from "../../n1-main/a2-bll/store/cardsPackReducer"
 import { AppRootStateType } from "../../n1-main/a2-bll/store/store"
-import { initCardsPack } from "../../n1-main/a3-dal/mainAPI"
+import { initCardsPack, ResponseCardsType } from "../../n1-main/a3-dal/mainAPI"
 import CardsPack from "./CardsPack"
-import AddNewPack from "./AddNewPack"
-import { useEffect } from "react"
 
 const ContainerCardsPack = () => {
     const dispatch = useDispatch()
-    useEffect(() => {
-        dispatch(SetPackCards())
-    }, [])
-    let cardPack = useSelector<AppRootStateType, initCardsPack[]>(
-        (state) => state.cardsPack.cardsPack
+    const cardPacks = useSelector<AppRootStateType, initCardsPack[]>(
+        (state) => state.cardsPack.cardPacks
     )
+    const updateTitle = (newTitle: string, idPack: string) => {
+        dispatch(updateCardPack(idPack, newTitle))
+    }
     const newCardPack = useCallback(
         (title: string) => {
             dispatch(setNewCardsPack(title))
         },
         [dispatch]
     )
-    const delPack = useCallback(
-        (id: string) => {
-            dispatch(removeCardPackTC(id))
-        },
-        [dispatch]
-    )
+    const delPack = (idPack: string) => {
+        dispatch(removeCardPackTC(idPack))
+    }
+
     return (
         <div>
-            <CardsPack cardsPack={cardPack} newCardPack={newCardPack} delPack={delPack} />
+            <div>
+                Search: <input placeholder="cards name" />
+                <input type="range" max="100" min="0" value="75" />
+                <input type="range" max="100" min="0" value="25" />
+                <button>Search</button>
+            </div>
+            <table cellPadding="7" width="100%">
+                <tr>
+                    <th>Card name</th>
+                    <th>
+                        Cards count
+                        <input type="button" value="Max" />
+                        <input type="button" value="Min" />
+                    </th>
+                    <th>Created</th>
+                    <th>Updated</th>
+                    <th>Control</th>
+                </tr>
+                {cardPacks.map((el) => (
+                    <CardsPack
+                        key={el._id}
+                        cardsPack={el}
+                        newCardPack={newCardPack}
+                        delPack={delPack}
+                        updateTitle={updateTitle}
+                    />
+                ))}
+            </table>
         </div>
     )
 }

@@ -38,12 +38,16 @@ export const authAPI = {
         return instance.get<ResponseCardsType>(`cards/pack`)
     },
     createCardsPack(name: string) {
-        return instance.post<initCardsPack[]>(`cards/pack`, { cardsPack: { name: name } })
+        return instance.post<ResponseCardsType>(`cards/pack`, { cardsPack: { name: name } })
     },
-    deletePack(id: string) {
-        return instance.delete<ResponseCardsType>(`cards/pack/${id}`)
+    deletePack(idPack: string) {
+        return instance.delete<ResponseCardsType>(`cards/pack/?id=${idPack}`)
+    },
+    updatePack(id: string, name: string) {
+        return instance.put<ResponseCardsType>(`cards/pack`, { cardsPack: { _id: id, name: name } })
     },
 }
+
 export type createCardsPackType = {
     name: string
     private: boolean
@@ -57,7 +61,7 @@ export type initCardsPack = {
     updated?: string
 }
 export type ResponseCardsType = {
-    cardsPack: initCardsPack[]
+    cardPacks: initCardsPack[]
     cardPacksTotalCount: number
     maxCardsCount: number
     minCardsCount: number
