@@ -35,6 +35,7 @@ const NewPass = () => {
             return errors
         },
         onSubmit: (values) => {
+            debugger
             dispatch(SetNewPassword(values.password, token))
             formik.resetForm()
         },

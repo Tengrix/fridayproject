@@ -8,7 +8,7 @@ declare global {
 }
 const rootReducer = combineReducers({
     auth:authReducer,
-    pack: cardsPackReducer
+    cardsPack: cardsPackReducer
 })
 // определить автоматически тип всего объекта состояния
 export const store = configureStore({
