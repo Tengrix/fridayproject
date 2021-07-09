@@ -7,58 +7,42 @@ import {ThunkDispatch} from "redux-thunk";
 import {AppRootStateType} from "./store";
 import {setCommonRegister} from "./mainAuthReducer";
 
-type ActionType = getCardsType
-    // |getNewCardPack|delCardPack
+type ActionType = getCardsType|getCardType
 type getCardsType = ReturnType<typeof getCardsPack>
-type getNewCardPack = ReturnType<typeof newCardPack>
-// type delCardPack = ReturnType<typeof removeCardPackAC>
 
 
-// export type cardsPackInitStateType={
-//     data:initCardsPack[],
-//     cardPacksTotalCount:number;
-//     maxCardsCount:number;
-//     minCardsCount:number;
-//     page:number;
-//     pageCount:number;
-//     cardsPack:createCardsPackType
-//
-// }
-// const initialState:cardsPackInitStateType = {
-//     data:[{
-//         _id:'',
-//         user_id:'',
-//         name:'',
-//         cardsCount:25,
-//     }],
-//     cardPacksTotalCount:14,
-//     maxCardsCount:4,
-//     minCardsCount:0,
-//     page:1,
-//     pageCount:0,
-//     cardsPack:{
-//         name:'',
-//         private:false
-//     }
-//
-// }
+type getCardType = ReturnType<typeof getCards>
+
 type initStateType = {
     cardsPack:Array<initCardsPack>
+    cardPacksTotalCount:number;
+    maxCardsCount:number;
+    minCardsCount:number;
+    page:number;
+    pageCount:number;
 }
 const initialState:initStateType = {
-    cardsPack:[]
+    cardsPack:[{
+        name:'HELLO',
+        _id:'',
+        user_id:'',
+        cardsCount:5
+    }],
+    cardPacksTotalCount:14,
+    maxCardsCount:4,
+    minCardsCount:1,
+    page:0,
+    pageCount:4,
 }
 export const cardsPackReducer = (
     state = initialState, action: ActionType) => {
     switch (action.type) {
         case 'GET-CARDS-PACK':
             return {...state, cardsPack:action.cardsPack}
-        // case "NEW-PACK":
-        //     return [{...action.newCardPack},...state]
-        // case "REMOVE-PACK":
-        //     return state.filter(el=>el._id !== action.id)
+        case "GET-CARD":
+            return {...state}
         default:
-            return state
+            return {...state}
     }
 }
 const getCardsPack = (cardsPack: initCardsPack[]) => {
@@ -67,23 +51,18 @@ const getCardsPack = (cardsPack: initCardsPack[]) => {
         cardsPack
     } as const
 }
-const newCardPack = (newCardPack:createCardsPackType) => {
+
+const getCards = (id:string) => {
     return{
-        type:'NEW-PACK',
-        newCardPack
+        type:'GET-CARD',
+        id
     } as const
 }
-// const removeCardPackAC = (id:string) =>{
-//     return{
-//         type:'REMOVE-PACK',
-//         id
-//     } as const
-// }
 
 export const SetPackCards = () => (dispatch: Dispatch) => {
     authAPI.setCardsPack().
     then((res) => {
-        dispatch(getCardsPack(res.data))
+        dispatch(getCardsPack(res.data.cardsPack))
     }).catch((e) => {
         const error = e.res ? e.res.data.error : e.message + ", more details in the console"
         console.log("Error:", {...e})
@@ -98,8 +77,14 @@ export const setNewCardsPack = (name:string) => (dispatch: ThunkDispatch<Respons
         console.log("Error:", {...e})
     })
 }
-export const removeCardPackTC = (id:string) => (dispatch:ThunkDispatch<ResponseCardsType, AppRootStateType, ActionType>) => {
-    authAPI.deletePack(id).then(()=>{
+export const removeCardPackTC = () => (dispatch:ThunkDispatch<ResponseCardsType, AppRootStateType, ActionType>) => {
+    authAPI.deletePack().then(()=>{
         dispatch(SetPackCards())
     })
 }
+export const updateCardPack = (id:string,name:string) => (dispatch:ThunkDispatch<ResponseCardsType, AppRootStateType, ActionType>) =>{
+    authAPI.updatePack(id,name).then((res)=>{
+        dispatch(SetPackCards())
+    })
+}
+
