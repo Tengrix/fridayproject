@@ -2,9 +2,9 @@ import React from "react"
 import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { Redirect } from "react-router-dom"
-import { SetPackCards } from "../../n1-main/a2-bll/store/cardsPackReducer"
+import { getPackCards } from "../../n1-main/a2-bll/store/cardPacksReducer"
 import { AppRootStateType } from "../../n1-main/a2-bll/store/store"
-import { initCardsPack, ResponseCardsType } from "../../n1-main/a3-dal/mainAPI"
+import { initCardPacks, ResponseGetCardPacksType } from "../../n1-main/a3-dal/mainAPI"
 import styles from "./Cards.module.css"
 
 // type PacksType = {
@@ -19,11 +19,11 @@ import styles from "./Cards.module.css"
 const Packs = () => {
     const dispatch = useDispatch()
     useEffect(() => {
-        dispatch(SetPackCards())
+        dispatch(getPackCards())
     }, [])
     debugger
-    const cardsPacksToMap = useSelector<AppRootStateType, Array<initCardsPack>>(
-        (state) => state.cardsPacks.cardPacks
+    const cardsPacksToMap = useSelector<AppRootStateType, Array<initCardPacks>>(
+        (state) => state.cardPacks.cardPacks
     )
     const isLogged = useSelector<AppRootStateType, boolean>((state) => state.auth.isLogged)
     // const packs: Array<PacksType> = [

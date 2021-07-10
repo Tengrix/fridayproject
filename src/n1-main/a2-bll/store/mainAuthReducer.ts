@@ -1,29 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { Dispatch } from "redux"
 import { authAPI, NewUserType, userType } from "../../a3-dal/mainAPI"
-//
-//
-type ActionType =
-    | LogInACType
-    | setUserType
-    | switchIsAuthType
-    | setErrorRegisterType
-    | updatedUserType
-    | setNewPasswordType
-    | isInitializedType
-    | switchFogotType
-//
-//
-type switchIsAuthType = ReturnType<typeof switchIsRegister>
-type setErrorRegisterType = ReturnType<typeof setCommonRegister>
-type LogInACType = ReturnType<typeof logIn>
-type setUserType = ReturnType<typeof setUser>
-type updatedUserType = ReturnType<typeof setUpdateUser>
-type setNewPasswordType = ReturnType<typeof setNewPassword>
-type isInitializedType = ReturnType<typeof isInitialized>
-type switchFogotType = ReturnType<typeof switchFogot>
-//
-//
+import { switchLoadingState, SwitchLoadingStateType } from "./appReducer"
+
+
 type initStateType = {
     isLogged: boolean
     user: userType
@@ -31,7 +11,6 @@ type initStateType = {
     commonError: string
     isUpdatedPassword: boolean
     fogot: boolean
-    isInitialized: boolean
     updatedUser: NewUserType
 }
 //
@@ -39,7 +18,7 @@ type initStateType = {
 let initState: initStateType = {
     isLogged: false,
     user: {
-        id: "",
+        _id: "",
         email: "",
         name: "",
         avatar: "",
@@ -48,7 +27,6 @@ let initState: initStateType = {
     commonError: "",
     isUpdatedPassword: false,
     fogot: false,
-    isInitialized: false,
     updatedUser: {
         name: "",
         avatar: "",
@@ -56,50 +34,61 @@ let initState: initStateType = {
 }
 
 const slice = createSlice({
-    name: 'auth',
+    name: "auth",
     initialState: initState,
     reducers: {
-        switchIsRegister(state, action:PayloadAction<{newValueIsRegister:boolean}>){
-            state.isRegister = action.payload.newValueIsRegister;
+        switchIsRegister(state, action: PayloadAction<{ newValueIsRegister: boolean }>) {
+            state.isRegister = action.payload.newValueIsRegister
         },
-        setCommonRegister(state, action:PayloadAction<{error:any}>){
+        setCommonRegister(state, action: PayloadAction<{ error: any }>) {
             state.commonError = action.payload.error
         },
-        logIn(state,action:PayloadAction<{value:boolean}>){
+        logIn(state, action: PayloadAction<{ value: boolean }>) {
             state.isLogged = action.payload.value
         },
-        setUser(state, action:PayloadAction<{user:{id: string, email: string, name: string, avatar: string}}>){
+        setUser(
+            state,
+            action: PayloadAction<{
+                user: { _id: string; email: string; name: string; avatar: string }
+            }>
+        ) {
+            debugger
             state.user = action.payload.user
         },
-        setUpdateUser(state,action:PayloadAction<{data:NewUserType}>){
+        setUpdateUser(state, action: PayloadAction<{ data: NewUserType }>) {
             state.updatedUser = action.payload.data
         },
-        setNewPassword(state,action:PayloadAction<{isUpPassword: boolean}>){
+        setNewPassword(state, action: PayloadAction<{ isUpPassword: boolean }>) {
             state.isUpdatedPassword = action.payload.isUpPassword
         },
-        isInitialized(state,action:PayloadAction<{value:boolean}>){
-            state.isInitialized = action.payload.value
-        },
-        switchFogot(state,action:PayloadAction<{newFogot: boolean}>){
+        switchFogot(state, action: PayloadAction<{ newFogot: boolean }>) {
             state.fogot = action.payload.newFogot
-        }
-    }
+        },
+    },
 })
 
 export const authReducer = slice.reducer
-export const {switchIsRegister,setCommonRegister,logIn,setUser,setUpdateUser,setNewPassword,isInitialized,switchFogot} = slice.actions
+export const {
+    switchIsRegister,
+    setCommonRegister,
+    logIn,
+    setUser,
+    setUpdateUser,
+    setNewPassword,
+    switchFogot,
+} = slice.actions
 
 //Thunk
 export const signUpTC = (email: string, password: string) => {
     const signUpData = { email, password }
-    return (dispatch: Dispatch<ActionType>) => {
+    return (dispatch: Dispatch) => {
         authAPI
             .signUp(signUpData)
             .then((resp) => {
                 if (resp.data.addedUser) {
-                    dispatch(switchIsRegister({newValueIsRegister:true}))
+                    dispatch(switchIsRegister({ newValueIsRegister: true }))
                 } else {
-                    dispatch(setCommonRegister({error:resp.data.error}))
+                    dispatch(setCommonRegister({ error: resp.data.error }))
                 }
             })
             .catch((e) => {
@@ -110,95 +99,101 @@ export const signUpTC = (email: string, password: string) => {
     }
 }
 export const LoginTC =
-    (email: string, password: string, rememberMe: boolean) => (dispatch: Dispatch<ActionType>) => {
+    (email: string, password: string, rememberMe: boolean) => (dispatch: Dispatch) => {
+        dispatch(switchLoadingState({ valueInLoading: "loading" }))
         authAPI
             .login(email, password, rememberMe)
             .then((res) => {
-                dispatch(logIn({value:true}))
+                dispatch(logIn({ value: true }))
             })
             .catch((e) => {
                 const error = e.res ? e.res.data.error : e.message + ", more details in the console"
                 console.log("Error:", { ...e })
-                dispatch(setCommonRegister({error:error}))
+                dispatch(setCommonRegister({ error: error }))
             })
-            .finally(() => {})
+            .finally(() => {
+                dispatch(switchLoadingState({ valueInLoading: "successed" }))
+            })
     }
 export const LogoutTC = () => (dispatch: Dispatch) => {
+    dispatch(switchLoadingState({ valueInLoading: "loading" }))
     authAPI
         .logout()
         .then((res) => {
             if (res.data.info) {
-                dispatch(logIn({value:false}))
+                dispatch(logIn({ value: false }))
             }
         })
         .catch((e) => {
             const error = e.res ? e.res.data.error : e.message + ", more details in the console"
             console.log("Error:", { ...e })
-            dispatch(setCommonRegister({error:error}))
+            dispatch(setCommonRegister({ error: error }))
+        })
+        .finally(() => {
+            dispatch(switchLoadingState({ valueInLoading: "successed" }))
         })
 }
-export const GetUserTC = () => (dispatch: Dispatch<setUserType>) => {
+export const GetUserTC = () => (dispatch: Dispatch) => {
     authAPI.getProfile().then((res) => {
-        let { id, email, name, avatar } = res.data
-        dispatch(setUser({user:{id, email, name, avatar}}))
+        let { _id, email, name, avatar } = res.data
+        dispatch(setUser({ user: { _id, email, name, avatar } }))
     })
 }
 export const UpdateUserInfo = (data: NewUserType) => (dispatch: Dispatch) => {
+    dispatch(switchLoadingState({ valueInLoading: "loading" }))
     authAPI
         .updateUser(data)
         .then((res) => {
-            dispatch(setUpdateUser({data:data}))
+            dispatch(setUpdateUser({ data: data }))
         })
         .finally(() => {
             console.log("check profile")
+            dispatch(switchLoadingState({ valueInLoading: "successed" }))
         })
         .catch((e) => {
             const error = e.res ? e.res.data.error : e.message + ", more details in the console"
             console.log("Error:", { ...e })
-            dispatch(setCommonRegister({error:error}))
-        })
-}
-export const isInitializedTC = () => (dispatch: Dispatch) => {
-    authAPI
-        .getProfile()
-        .then((res) => {
-            dispatch(logIn({value:true}))
-        })
-        .catch(() => {})
-        .finally(() => {
-            dispatch(isInitialized({value:true}))
+            dispatch(setCommonRegister({ error: error }))
         })
 }
 export const forgot = (email: string, message: string) => (dispatch: Dispatch) => {
+    dispatch(switchLoadingState({ valueInLoading: "loading" }))
     authAPI
         .forgot(email, message)
         .then((res) => {
             if (!res.data.error) {
-                dispatch(switchFogot({newFogot:true}))
+                dispatch(switchFogot({ newFogot: true }))
             } else {
-                dispatch(setCommonRegister({error:res.data.error}))
+                dispatch(setCommonRegister({ error: res.data.error }))
             }
         })
         .catch((e) => {
             const error = e.res ? e.res.data.error : e.message + ", more details in the console"
             console.log("Error:", { ...e })
-            dispatch(setCommonRegister({error:error}))
+            dispatch(setCommonRegister({ error: error }))
+        })
+        .finally(() => {
+            dispatch(switchLoadingState({ valueInLoading: "successed" }))
         })
 }
 export const SetNewPassword =
     (newPassword: string, resetPasswordToken: string) => (dispatch: Dispatch) => {
+        dispatch(switchLoadingState({ valueInLoading: "loading" }))
         authAPI
             .setNewPassword(newPassword, resetPasswordToken)
             .then((res) => {
                 if (!res.data.error) {
-                    dispatch(setNewPassword({isUpPassword:true}))
+                    dispatch(setNewPassword({ isUpPassword: true }))
                 } else {
-                    dispatch(setCommonRegister({error:res.data.error}))
+                    dispatch(setCommonRegister({ error: res.data.error }))
                 }
             })
             .catch((e) => {
                 const error = e.res ? e.res.data.error : e.message + ", more details in the console"
                 console.log("Error:", { ...e })
-                dispatch(setCommonRegister({error:error}))
+                dispatch(setCommonRegister({ error: error }))
+            })
+            .finally(() => {
+                dispatch(switchLoadingState({ valueInLoading: "successed" }))
             })
     }

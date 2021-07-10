@@ -34,25 +34,117 @@ export const authAPI = {
             resetPasswordToken,
         })
     },
-    setCardsPack() {
-        return instance.get<ResponseCardsType>(`cards/pack`)
+}
+export const cardsPacksAPI = {
+    getCardsPacks(getModule: GetCardsPacksModuleType) {
+        return instance.get<ResponseGetCardPacksType>(`cards/pack`, getModule)
     },
     createCardsPack(name: string) {
-        return instance.post<ResponseCardsType>(`cards/pack`, { cardsPack: { name: name } })
+        return instance.post<CreateCardsPackResponceType>(`cards/pack`, {
+            cardsPack: { name: name },
+        })
     },
-    deletePack(idPack: string) {
-        return instance.delete<ResponseCardsType>(`cards/pack/?id=${idPack}`)
+    deleteCardsPack(idPack: string) {
+        return instance.delete<DeleteCardPackResponceType>(`cards/pack/?id=${idPack}`)
     },
-    updatePack(id: string, name: string) {
-        return instance.put<ResponseCardsType>(`cards/pack`, { cardsPack: { _id: id, name: name } })
+    updateCardsPack(id: string, name: string) {
+        return instance.put<UpdateCardsPackResponceType>(`cards/pack`, {
+            cardsPack: { _id: id, name: name },
+        })
     },
 }
-
-export type createCardsPackType = {
+export const cardsAPI = {
+    getCards(cardsPackId: string) {
+        return instance.get<GetCardsResponceType>(`cards/pack?cardsPack_id=${cardsPackId}`)
+    },
+    createCard(createModule: CreateCardModuleType) {
+        return instance.post<CreateCardResponceType>("cards/card", createModule)
+    },
+    updateCard(updateModule: UpdateCardModuleType) {
+        return instance.put<UpdateCardResponceType>("cards/card", updateModule)
+    },
+    deleteCard(cardId: string) {
+        return instance.delete<DeleteCardResponceType>(`cards/card?id=${cardId}`)
+    },
+}
+//
+//
+//
+//
+//
+export type GetCardsPacksModuleType = {
+    params: {
+        min?: number
+        max?: number
+        sortPacks?: number
+        page?: number
+        pageCount?: number
+        user_id?: string
+    }
+}
+export type CreateCardResponceType = {
+    newCard: {}
+}
+export type UpdateCardResponceType = {
+    updateCard: {}
+}
+export type DeleteCardResponceType = {
+    deleteCard: {}
+}
+export type CreateCardsPackResponceType = {
+    newCardsPack: {}
+}
+export type UpdateCardsPackResponceType = {
+    updateCardsPack: {}
+}
+export type DeleteCardPackResponceType = {
+    deleteCardsPack: {}
+}
+export type CardsType = {
+    answer: string
+    question: string
+    cardsPack_id: string
+    grade: number
+    shots: number
+    user_id: string
+    created: string
+    updated: string
+    _id: string
+}
+export type GetCardsResponceType = {
+    cards: Array<CardsType>
+    cardsTotalCount: number
+    maxGrade: number
+    minGrade: number
+    page: number
+    pageCount: number
+    packUserId: string
+}
+export type CreateCardModuleType = {
+    card: {
+        cardsPack_id: string
+        question: string
+        answer: string
+        grade: number
+        shots: number
+        answerImg?: string
+        questionImg?: string
+        questionVideo?: string
+        answerVideo?: string
+        _id: string
+    }
+}
+export type UpdateCardModuleType = {
+    card: {
+        _id: string
+        question?: string
+    }
+}
+export type createCardPackType = {
     name: string
     private: boolean
 }
-export type initCardsPack = {
+export type initCardPacks = {
     _id: string
     user_id: string
     name: string
@@ -60,15 +152,15 @@ export type initCardsPack = {
     created?: string
     updated?: string
 }
-export type ResponseCardsType = {
-    cardPacks: initCardsPack[]
+export type ResponseGetCardPacksType = {
+    cardPacks: Array<initCardPacks>
     cardPacksTotalCount: number
     maxCardsCount: number
     minCardsCount: number
     page: number
     pageCount: number
 }
-export type CardsPackType = {
+export type CardPackType = {
     packName: string
     min: number
     max: number
@@ -93,7 +185,6 @@ type SendNewPassResponseType = {
     info: string
     error: string
 }
-
 type signUpResponseType = {
     addedUser: {}
     error?: string
@@ -102,7 +193,6 @@ type signUpDataType = {
     email: string
     password: string
 }
-
 export type LoginType = {
     email: string
     password: string
@@ -113,7 +203,7 @@ export type SignInType<T = {}> = {
     rememberMe: boolean
 }
 export type userType = {
-    id: string
+    _id: string
     email: string
     name: string
     avatar: string

@@ -1,17 +1,17 @@
 import React, { ChangeEvent, useCallback, useEffect, useState } from "react"
-import { CardsPackType, initCardsPack } from "../../n1-main/a3-dal/mainAPI"
+import { CardPackType, initCardPacks } from "../../n1-main/a3-dal/mainAPI"
 import {
-    removeCardPackTC,
-    setNewCardsPack,
-    SetPackCards,
+    removeCardPack,
+    setNewCardPack,
+    getPackCards,
     updateCardPack,
-} from "../../n1-main/a2-bll/store/cardsPackReducer"
+} from "../../n1-main/a2-bll/store/cardPacksReducer"
 import { useDispatch } from "react-redux"
 import AddNewPack from "./AddNewPack"
 
 type ContainerCardsPackType = {
-    cardsPack: initCardsPack
-    newCardPack: (title: string, pack: CardsPackType) => void
+    cardsPack: initCardPacks
+    newCardPack: (title: string, pack: CardPackType) => void
     delPack: (idPack: string) => void
     updateTitle: (newTitle: string, idPack: string) => void
 }
@@ -19,11 +19,9 @@ type ContainerCardsPackType = {
 const CardsPack = (props: ContainerCardsPackType) => {
     const dispatch = useDispatch()
     const [newTitle, setNewTitle] = useState<string>("")
-    
     const onChangeTitle = (e: ChangeEvent<HTMLInputElement>) => {
         setNewTitle(e.currentTarget.value)
     }
-
     return (
         <tr>
             <td align="center">{props.cardsPack.name}</td>

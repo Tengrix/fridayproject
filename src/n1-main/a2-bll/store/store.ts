@@ -1,8 +1,10 @@
-import { cardsPackReducer } from "./cardsPackReducer"
-import { applyMiddleware, combineReducers, createStore } from "redux"
+import { cardPacksReducer } from "./cardPacksReducer"
+import { combineReducers } from "redux"
 import { authReducer } from "./mainAuthReducer"
 import thunk from "redux-thunk"
 import { configureStore } from "@reduxjs/toolkit"
+import { appReducer } from "./appReducer"
+import { cardsReducer } from "./cardsReducer"
 declare global {
     interface Window {
         store: any
@@ -10,7 +12,9 @@ declare global {
 }
 const rootReducer = combineReducers({
     auth: authReducer,
-    cardsPacks: cardsPackReducer,
+    cardPacks: cardPacksReducer,
+    cards: cardsReducer,
+    app: appReducer,
 })
 // определить автоматически тип всего объекта состояния
 export const store = configureStore({
