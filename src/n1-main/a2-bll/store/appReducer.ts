@@ -1,9 +1,6 @@
-import { createSlice, Dispatch, PayloadAction } from "@reduxjs/toolkit"
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { authAPI } from "../../a3-dal/mainAPI"
-import { logIn } from "./mainAuthReducer"
-
-export type InitializedType = ReturnType<typeof initialized>
-export type SwitchLoadingStateType = ReturnType<typeof switchLoadingState>
+import { logIn, setUser } from "./mainAuthReducer"
 
 type LoadingProgressType = "loading" | "successed"
 type AppReducerStateType = {
@@ -15,35 +12,33 @@ const appReducerState: AppReducerStateType = {
     loadingProgress: "successed",
 }
 
+export const isInitializedTC = createAsyncThunk("app/isInitialized", async (param, thunkAPI) => {
+    //thunkAPI.dispatch(switchLoadingState({ valueInLoading: "loading" }))
+    try {
+        const user = await (await authAPI.getProfile()).data
+        thunkAPI.dispatch(logIn({ value: true }))
+        thunkAPI.dispatch(setUser({ user }))
+        //thunkAPI.dispatch(switchLoadingState({ valueInLoading: "successed" }))
+        return { stateInitialized: true }
+    } catch {}
+})
+
 const slice = createSlice({
     name: "app",
     initialState: appReducerState,
     reducers: {
-        initialized(state, action: PayloadAction<{ stateInitialized: boolean }>) {
-            state.isInitialized = action.payload.stateInitialized
-        },
-        switchLoadingState(
-            state,
-            action: PayloadAction<{ valueInLoading: LoadingProgressType }>
-        ) {
+        switchLoadingState(state, action: PayloadAction<{ valueInLoading: LoadingProgressType }>) {
             state.loadingProgress = action.payload.valueInLoading
         },
+    },
+    extraReducers: (builder) => {
+        builder.addCase(isInitializedTC.fulfilled, (state, action) => {
+            if (action.payload?.stateInitialized) {
+                state.isInitialized = action.payload?.stateInitialized
+            }
+        })
     },
 })
 
 export const appReducer = slice.reducer
-export const {initialized, switchLoadingState} = slice.actions
-
-////////THUNK////////
-
-export const isInitializedTC = () => (dispatch: Dispatch) => {
-    authAPI
-        .getProfile()
-        .then((res) => {
-            dispatch(logIn({value: true}))
-        })
-        .catch(() => {})
-        .finally(() => {
-            dispatch(initialized({stateInitialized: true}))
-        })
-}
+export const { switchLoadingState } = slice.actions

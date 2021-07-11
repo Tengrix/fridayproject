@@ -2,7 +2,7 @@ import React from "react"
 import SuperButton from "../../../n3-MySuperComponents/SuperButton/SuperButton"
 import SuperInputText from "../../../n3-MySuperComponents/SuperInputText/SuperInputText"
 import { useDispatch, useSelector } from "react-redux"
-import { LoginTC } from "../../../n1-main/a2-bll/store/mainAuthReducer"
+import { login } from "../../../n1-main/a2-bll/store/mainAuthReducer"
 import SuperCheckbox from "../../../n3-MySuperComponents/SuperCheckbox/SuperCheckbox"
 import { AppRootStateType } from "../../../n1-main/a2-bll/store/store"
 import { NavLink, Redirect } from "react-router-dom"
@@ -48,7 +48,13 @@ const SignInWithFormik = () => {
             return errors
         },
         onSubmit: (values) => {
-            dispatch(LoginTC(values.email, values.password, values.rememberMe))
+            dispatch(
+                login({
+                    email: values.email,
+                    password: values.password,
+                    rememberMe: values.rememberMe,
+                })
+            )
             formik.resetForm()
         },
     })

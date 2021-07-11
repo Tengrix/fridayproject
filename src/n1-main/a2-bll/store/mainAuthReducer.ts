@@ -1,10 +1,9 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { Dispatch } from "redux"
 import { authAPI, NewUserType, userType } from "../../a3-dal/mainAPI"
-import { switchLoadingState, SwitchLoadingStateType } from "./appReducer"
+import { switchLoadingState } from "./appReducer"
 
-
-type initStateType = {
+type AuthInitStateType = {
     isLogged: boolean
     user: userType
     isRegister: boolean
@@ -13,9 +12,7 @@ type initStateType = {
     fogot: boolean
     updatedUser: NewUserType
 }
-//
-//
-let initState: initStateType = {
+const authInitialState: AuthInitStateType = {
     isLogged: false,
     user: {
         _id: "",
@@ -33,9 +30,61 @@ let initState: initStateType = {
     },
 }
 
+export const signUp = createAsyncThunk(
+    "auth/signUp",
+    async (registsData: { email: string; password: string }, thunkAPI) => {
+        try {
+            const res = await authAPI.signUp(registsData)
+            if (res.data.addedUser) {
+                thunkAPI.dispatch(switchIsRegister({ newValueIsRegister: true }))
+            } else {
+                thunkAPI.dispatch(setCommonRegister({ error: res.data.error }))
+            }
+        } catch (e) {
+            const error = e.res ? e.res.data.error : e.message + ", more details in the console"
+            console.log("Error:", { ...e })
+            thunkAPI.dispatch(setCommonRegister(error))
+        }
+    }
+)
+export const login = createAsyncThunk(
+    "auth/login",
+    async (loginData: { email: string; password: string; rememberMe: boolean }, thunAPI) => {
+        thunAPI.dispatch(switchLoadingState({ valueInLoading: "loading" }))
+        try {
+            await authAPI.login(loginData.email, loginData.password, loginData.rememberMe)
+            thunAPI.dispatch(logIn({ value: true }))
+        } catch (e) {
+            const error = e.res ? e.res.data.error : e.message + ", more details in the console"
+            console.log("Error:", { ...e })
+            thunAPI.dispatch(setCommonRegister({ error: error }))
+        }
+        thunAPI.dispatch(switchLoadingState({ valueInLoading: "successed" }))
+    }
+)
+export const logout = createAsyncThunk("auth/logout", async (logoutData, thunAPI) => {
+    thunAPI.dispatch(switchLoadingState({ valueInLoading: "loading" }))
+    try {
+        const res = await authAPI.logout()
+        if (res.data.info) {
+            thunAPI.dispatch(logIn({ value: false }))
+        }
+    } catch (e) {
+        const error = e.res ? e.res.data.error : e.message + ", more details in the console"
+        console.log("Error:", { ...e })
+        thunAPI.dispatch(setCommonRegister({ error: error }))
+    }
+    thunAPI.dispatch(switchLoadingState({ valueInLoading: "successed" }))
+})
+export const getUser = createAsyncThunk("auth/getUser", async (getUserData, thunAPI) => {
+    const res = await authAPI.getProfile()
+    let { _id, email, name, avatar } = res.data
+    thunAPI.dispatch(setUser({ user: { _id, email, name, avatar } }))
+})
+
 const slice = createSlice({
     name: "auth",
-    initialState: initState,
+    initialState: authInitialState,
     reducers: {
         switchIsRegister(state, action: PayloadAction<{ newValueIsRegister: boolean }>) {
             state.isRegister = action.payload.newValueIsRegister
@@ -52,7 +101,6 @@ const slice = createSlice({
                 user: { _id: string; email: string; name: string; avatar: string }
             }>
         ) {
-            debugger
             state.user = action.payload.user
         },
         setUpdateUser(state, action: PayloadAction<{ data: NewUserType }>) {
@@ -79,66 +127,7 @@ export const {
 } = slice.actions
 
 //Thunk
-export const signUpTC = (email: string, password: string) => {
-    const signUpData = { email, password }
-    return (dispatch: Dispatch) => {
-        authAPI
-            .signUp(signUpData)
-            .then((resp) => {
-                if (resp.data.addedUser) {
-                    dispatch(switchIsRegister({ newValueIsRegister: true }))
-                } else {
-                    dispatch(setCommonRegister({ error: resp.data.error }))
-                }
-            })
-            .catch((e) => {
-                const error = e.res ? e.res.data.error : e.message + ", more details in the console"
-                console.log("Error:", { ...e })
-                dispatch(setCommonRegister(error))
-            })
-    }
-}
-export const LoginTC =
-    (email: string, password: string, rememberMe: boolean) => (dispatch: Dispatch) => {
-        dispatch(switchLoadingState({ valueInLoading: "loading" }))
-        authAPI
-            .login(email, password, rememberMe)
-            .then((res) => {
-                dispatch(logIn({ value: true }))
-            })
-            .catch((e) => {
-                const error = e.res ? e.res.data.error : e.message + ", more details in the console"
-                console.log("Error:", { ...e })
-                dispatch(setCommonRegister({ error: error }))
-            })
-            .finally(() => {
-                dispatch(switchLoadingState({ valueInLoading: "successed" }))
-            })
-    }
-export const LogoutTC = () => (dispatch: Dispatch) => {
-    dispatch(switchLoadingState({ valueInLoading: "loading" }))
-    authAPI
-        .logout()
-        .then((res) => {
-            if (res.data.info) {
-                dispatch(logIn({ value: false }))
-            }
-        })
-        .catch((e) => {
-            const error = e.res ? e.res.data.error : e.message + ", more details in the console"
-            console.log("Error:", { ...e })
-            dispatch(setCommonRegister({ error: error }))
-        })
-        .finally(() => {
-            dispatch(switchLoadingState({ valueInLoading: "successed" }))
-        })
-}
-export const GetUserTC = () => (dispatch: Dispatch) => {
-    authAPI.getProfile().then((res) => {
-        let { _id, email, name, avatar } = res.data
-        dispatch(setUser({ user: { _id, email, name, avatar } }))
-    })
-}
+
 export const UpdateUserInfo = (data: NewUserType) => (dispatch: Dispatch) => {
     dispatch(switchLoadingState({ valueInLoading: "loading" }))
     authAPI
