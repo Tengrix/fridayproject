@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { Dispatch } from "redux"
 import { authAPI, NewUserType, userType } from "../../a3-dal/mainAPI"
 import { switchLoadingState } from "./appReducer"
 
@@ -29,7 +28,7 @@ const authInitialState: AuthInitStateType = {
         avatar: "",
     },
 }
-
+//
 export const signUp = createAsyncThunk(
     "auth/signUp",
     async (registsData: { email: string; password: string }, thunkAPI) => {
@@ -81,7 +80,65 @@ export const getUser = createAsyncThunk("auth/getUser", async (getUserData, thun
     let { _id, email, name, avatar } = res.data
     thunAPI.dispatch(setUser({ user: { _id, email, name, avatar } }))
 })
+export const updateUserInfo = createAsyncThunk(
+    "auth/updateUser",
+    async (updateUserData: { data: NewUserType }, thunkAPI) => {
+        thunkAPI.dispatch(switchLoadingState({ valueInLoading: "loading" }))
+        try {
+            await authAPI.updateUser(updateUserData.data)
+            thunkAPI.dispatch(setUpdateUser({ data: updateUserData.data }))
+        } catch (e) {
+            const error = e.res ? e.res.data.error : e.message + ", more details in the console"
+            console.log("Error:", { ...e })
+            thunkAPI.dispatch(setCommonRegister({ error: error }))
+        }
+        console.log("check profile")
+        thunkAPI.dispatch(switchLoadingState({ valueInLoading: "successed" }))
+    }
+)
+export const forgot = createAsyncThunk(
+    "auth/forgot",
+    async (fogotData: { email: string; message: string }, thunAPI) => {
+        thunAPI.dispatch(switchLoadingState({ valueInLoading: "loading" }))
+        try {
+            const res = await authAPI.forgot(fogotData.email, fogotData.message)
+            if (!res.data.error) {
+                thunAPI.dispatch(switchFogot({ newFogot: true }))
+            } else {
+                thunAPI.dispatch(setCommonRegister({ error: res.data.error }))
+            }
+        } catch (e) {
+            const error = e.res ? e.res.data.error : e.message + ", more details in the console"
+            console.log("Error:", { ...e })
+            thunAPI.dispatch(setCommonRegister({ error: error }))
+        }
+        thunAPI.dispatch(switchLoadingState({ valueInLoading: "successed" }))
+    }
+)
+export const newPassword = createAsyncThunk(
+    "auth/newPassword",
+    async (newPasswordData: { newPassword: string; resetPasswordToken: string }, thunAPI) => {
+        thunAPI.dispatch(switchLoadingState({ valueInLoading: "loading" }))
+        try {
+            const res = await authAPI.setNewPassword(
+                newPasswordData.newPassword,
+                newPasswordData.resetPasswordToken
+            )
+            if (!res.data.error) {
+                thunAPI.dispatch(setNewPassword({ isUpPassword: true }))
+            } else {
+                thunAPI.dispatch(setCommonRegister({ error: res.data.error }))
+            }
+        } catch (e) {
+            const error = e.res ? e.res.data.error : e.message + ", more details in the console"
+            console.log("Error:", { ...e })
+            thunAPI.dispatch(setCommonRegister({ error: error }))
+        }
 
+        thunAPI.dispatch(switchLoadingState({ valueInLoading: "successed" }))
+    }
+)
+//
 const slice = createSlice({
     name: "auth",
     initialState: authInitialState,
@@ -125,64 +182,3 @@ export const {
     setNewPassword,
     switchFogot,
 } = slice.actions
-
-//Thunk
-
-export const UpdateUserInfo = (data: NewUserType) => (dispatch: Dispatch) => {
-    dispatch(switchLoadingState({ valueInLoading: "loading" }))
-    authAPI
-        .updateUser(data)
-        .then((res) => {
-            dispatch(setUpdateUser({ data: data }))
-        })
-        .finally(() => {
-            console.log("check profile")
-            dispatch(switchLoadingState({ valueInLoading: "successed" }))
-        })
-        .catch((e) => {
-            const error = e.res ? e.res.data.error : e.message + ", more details in the console"
-            console.log("Error:", { ...e })
-            dispatch(setCommonRegister({ error: error }))
-        })
-}
-export const forgot = (email: string, message: string) => (dispatch: Dispatch) => {
-    dispatch(switchLoadingState({ valueInLoading: "loading" }))
-    authAPI
-        .forgot(email, message)
-        .then((res) => {
-            if (!res.data.error) {
-                dispatch(switchFogot({ newFogot: true }))
-            } else {
-                dispatch(setCommonRegister({ error: res.data.error }))
-            }
-        })
-        .catch((e) => {
-            const error = e.res ? e.res.data.error : e.message + ", more details in the console"
-            console.log("Error:", { ...e })
-            dispatch(setCommonRegister({ error: error }))
-        })
-        .finally(() => {
-            dispatch(switchLoadingState({ valueInLoading: "successed" }))
-        })
-}
-export const SetNewPassword =
-    (newPassword: string, resetPasswordToken: string) => (dispatch: Dispatch) => {
-        dispatch(switchLoadingState({ valueInLoading: "loading" }))
-        authAPI
-            .setNewPassword(newPassword, resetPasswordToken)
-            .then((res) => {
-                if (!res.data.error) {
-                    dispatch(setNewPassword({ isUpPassword: true }))
-                } else {
-                    dispatch(setCommonRegister({ error: res.data.error }))
-                }
-            })
-            .catch((e) => {
-                const error = e.res ? e.res.data.error : e.message + ", more details in the console"
-                console.log("Error:", { ...e })
-                dispatch(setCommonRegister({ error: error }))
-            })
-            .finally(() => {
-                dispatch(switchLoadingState({ valueInLoading: "successed" }))
-            })
-    }

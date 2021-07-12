@@ -207,6 +207,7 @@ export type userType = {
     email: string
     name: string
     avatar: string
+    error?: string
 }
 export type ResponseType<T = {}> = {
     error?: string

@@ -3,7 +3,7 @@ import { useFormik } from "formik"
 import React from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { Redirect, useParams } from "react-router-dom"
-import { SetNewPassword } from "../../../n1-main/a2-bll/store/mainAuthReducer"
+import { newPassword } from "../../../n1-main/a2-bll/store/mainAuthReducer"
 import { AppRootStateType } from "../../../n1-main/a2-bll/store/store"
 import styles from "../../../utils/styles/CommonStylesForAuth.module.css"
 
@@ -35,8 +35,7 @@ const NewPass = () => {
             return errors
         },
         onSubmit: (values) => {
-            debugger
-            dispatch(SetNewPassword(values.password, token))
+            dispatch(newPassword({ newPassword: values.password, resetPasswordToken: token }))
             formik.resetForm()
         },
     })
@@ -47,7 +46,7 @@ const NewPass = () => {
         <div className={styles.authBlock}>
             <form onSubmit={formik.handleSubmit} className={styles.inputBlock}>
                 <TextField
-                 variant="outlined"
+                    variant="outlined"
                     placeholder="Password:"
                     name="password"
                     type="password"
@@ -55,7 +54,7 @@ const NewPass = () => {
                     value={formik.values.password}
                 />
                 <TextField
-                variant="outlined"
+                    variant="outlined"
                     placeholder="Confirm password:"
                     name="confPass"
                     type="password"
@@ -65,7 +64,9 @@ const NewPass = () => {
                 {formik.errors.password && (
                     <div style={{ color: "red" }}>{formik.errors.password}</div>
                 )}
-                <Button variant="contained" color="secondary" type={"submit"}>Change password</Button>
+                <Button variant="contained" color="secondary" type={"submit"}>
+                    Change password
+                </Button>
                 <div style={{ color: "red" }}>{commonError}</div>
             </form>
         </div>

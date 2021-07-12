@@ -1,3 +1,4 @@
+import { FormatColorResetRounded } from "@material-ui/icons"
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { authAPI } from "../../a3-dal/mainAPI"
 import { logIn, setUser } from "./mainAuthReducer"
@@ -15,12 +16,17 @@ const appReducerState: AppReducerStateType = {
 export const isInitializedTC = createAsyncThunk("app/isInitialized", async (param, thunkAPI) => {
     //thunkAPI.dispatch(switchLoadingState({ valueInLoading: "loading" }))
     try {
-        const user = await (await authAPI.getProfile()).data
-        thunkAPI.dispatch(logIn({ value: true }))
-        thunkAPI.dispatch(setUser({ user }))
+        const res = await await authAPI.getProfile()
+        if (!res.data.error) {
+            const user = res.data
+            thunkAPI.dispatch(logIn({ value: true }))
+            thunkAPI.dispatch(setUser({ user }))
+        } else {
+            thunkAPI.dispatch(logIn({ value: false }))
+        }
         //thunkAPI.dispatch(switchLoadingState({ valueInLoading: "successed" }))
-        return { stateInitialized: true }
     } catch {}
+    return { stateInitialized: true }
 })
 
 const slice = createSlice({

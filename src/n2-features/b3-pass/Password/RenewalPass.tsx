@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { forgot } from "../../../n1-main/a2-bll/store/mainAuthReducer"
 import { AppRootStateType } from "../../../n1-main/a2-bll/store/store"
 import styles from "../../../utils/styles/CommonStylesForAuth.module.css"
-import KeyboardReturnIcon from '@material-ui/icons/KeyboardReturn';
+import KeyboardReturnIcon from "@material-ui/icons/KeyboardReturn"
 import { NavLink } from "react-router-dom"
 import { PATH } from "../../../n1-main/a1-ui/routes/Routes"
 
@@ -33,7 +33,7 @@ const RenewalPass = () => {
             return errors
         },
         onSubmit: (values) => {
-            dispatch(forgot(values.email, message))
+            dispatch(forgot({ email: values.email, message }))
             formik.resetForm()
         },
     })
@@ -42,7 +42,11 @@ const RenewalPass = () => {
             <div className={styles.authBlock}>
                 <div>Checked your email!</div>
                 <div>
-                <NavLink to={PATH.SIGN_IN}><Button variant="outlined"><KeyboardReturnIcon/></Button></NavLink>
+                    <NavLink to={PATH.SIGN_IN}>
+                        <Button variant="outlined">
+                            <KeyboardReturnIcon />
+                        </Button>
+                    </NavLink>
                 </div>
             </div>
         )
@@ -57,8 +61,14 @@ const RenewalPass = () => {
                     onChange={formik.handleChange}
                     value={formik.values.email}
                 />
-                <Button type="submit" variant="contained" color="secondary">Send message</Button>
-                <NavLink to={PATH.SIGN_IN}><Button variant="outlined"><KeyboardReturnIcon/></Button></NavLink>
+                <Button type="submit" variant="contained" color="secondary">
+                    Send message
+                </Button>
+                <NavLink to={PATH.SIGN_IN}>
+                    <Button variant="outlined">
+                        <KeyboardReturnIcon />
+                    </Button>
+                </NavLink>
                 {formik.errors.email && <div style={{ color: "red" }}>{formik.errors.email}</div>}
                 {commonError && <div style={{ color: "red" }}>{commonError}</div>}
             </form>
