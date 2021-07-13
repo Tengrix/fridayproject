@@ -6,8 +6,9 @@ import {
     updateCardPack,
 } from "../../n1-main/a2-bll/store/cardsPackReducer"
 import { AppRootStateType } from "../../n1-main/a2-bll/store/store"
-import { initCardsPack, ResponseCardsType } from "../../n1-main/a3-dal/mainAPI"
+import { initCardsPack } from "../../n1-main/a3-dal/mainAPI"
 import CardsPack from "./CardsPack"
+import CardsPackTest from "./CardsPackTest"
 
 const ContainerCardsPack = () => {
     const dispatch = useDispatch()
@@ -48,7 +49,7 @@ const ContainerCardsPack = () => {
                     <th>Control</th>
                 </tr>
                 {cardPacks.map((el) => (
-                    <CardsPack
+                    <CardsPackTest
                         key={el._id}
                         cardsPack={el}
                         newCardPack={newCardPack}

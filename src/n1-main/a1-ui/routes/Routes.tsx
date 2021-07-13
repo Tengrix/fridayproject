@@ -20,7 +20,7 @@ export const PATH = {
     ERROR: "/404",
     UPDATE_USER: "/update-user",
     PACKS: "/packs",
-    CARDS: "/cards",
+    CARDS: "/cards/card",
     PACKS_RAW: "/packs-raw",
 }
 export const Routes = () => {
