@@ -68,6 +68,7 @@ export const SetPackCards = () => (dispatch: Dispatch) => {
             dispatch(setCommonRegister(error))
         })
 }
+
 export const setNewCardsPack =
     (name: string) =>
     (
@@ -85,7 +86,8 @@ export const setNewCardsPack =
             })
     }
 export const removeCardPackTC =
-    (idPack: string) => (dispatch: ThunkDispatch<ResponseCardsType, AppRootStateType, ActionType>) => {
+    (idPack: string) =>
+    (dispatch: ThunkDispatch<ResponseCardsType, AppRootStateType, ActionType>) => {
         authAPI.deletePack(idPack).then(() => {
             dispatch(SetPackCards())
         })

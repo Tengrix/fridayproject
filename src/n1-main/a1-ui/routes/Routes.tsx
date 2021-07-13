@@ -9,7 +9,8 @@ import NewPass from "../../../n2-features/b3-pass/Password/NewPass"
 import UpdateProfile from "../../../n2-features/profile/UpdateProfile"
 import Cards from "../../../n2-features/cards/card/Cards"
 import CardsPack from "../../../n2-features/b5-cardsPack/CardsPack"
-import ContainerCardsPack from "../../../n2-features/b5-cardsPack/ContainerCardsPack"
+import CardPacksPage from "../../../n2-features/b5-cardsPack/CardPacksPage"
+import LearnPage from "../../../n2-features/cards/Learn/Learn"
 
 export const PATH = {
     PROFILE: "/profile",
@@ -20,8 +21,8 @@ export const PATH = {
     ERROR: "/404",
     UPDATE_USER: "/update-user",
     PACKS: "/packs",
-    CARDS: "/cards/card",
-    PACKS_RAW: "/packs-raw",
+    CARDS: "/cards",
+    QUIZ:'/quiz'
 }
 export const Routes = () => {
     return (
@@ -35,9 +36,9 @@ export const Routes = () => {
                 <Route path={PATH.NEW_PASS} component={NewPass} />
                 <Route path={PATH.RENEWAL_PASS} component={RenewalPass} />
                 <Route path={PATH.UPDATE_USER} component={UpdateProfile} />
-                <Route path={PATH.PACKS} component={ContainerCardsPack} />
+                <Route path={PATH.PACKS} component={CardPacksPage} />
                 <Route path={PATH.CARDS} component={Cards} />
-                <Route path={PATH.PACKS_RAW} component={CardsPack} />
+                <Route path={PATH.QUIZ} component={LearnPage} />
                 <Route path={"/404"} render={() => <h1>404:PAGE NOT FOUND</h1>} />
                 <Redirect from={"*"} to={PATH.ERROR} />
             </Switch>
