@@ -8,9 +8,9 @@ import {
 import { Dispatch } from "redux"
 import { ThunkDispatch } from "redux-thunk"
 import { AppRootStateType } from "./store"
-import { setCommonRegister } from "./mainAuthReducer"
+import { AuthInitStateType, setCommonRegister } from "./mainAuthReducer"
 import { switchLoadingState } from "./appReducer"
-import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 
 type initStateType = {
     cardPacks: Array<initCardPacks>
@@ -20,6 +20,7 @@ type initStateType = {
     page: number
     pageCount: number
     showMyCardsPacks: boolean
+    newPageForShow: number
 }
 const cardPacksInitialState: initStateType = {
     cardPacks: [],
@@ -29,76 +30,95 @@ const cardPacksInitialState: initStateType = {
     page: 0,
     pageCount: 4,
     showMyCardsPacks: false,
+    newPageForShow: 1,
 }
-
-const slice = createSlice({
-    name: "cardPacks",
-    initialState: cardPacksInitialState,
-    reducers: {
-        getCardPacks(state, action: PayloadAction<{ cardPacks: Array<initCardPacks> }>) {
-            state.cardPacks = action.payload.cardPacks
+export const getPackCards = createAsyncThunk("cardPacks/get", async (getPacksData, thunkAPI) => {
+    const module: GetCardsPacksModuleType = {
+        params: {
+            pageCount: 10,
         },
-        showMyCardsPacks(state, action: PayloadAction<{ isShow: boolean }>) {
-            state.showMyCardsPacks = action.payload.isShow
-        },
-    },
-})
-
-export const cardPacksReducer = slice.reducer
-export const { getCardPacks, showMyCardsPacks } = slice.actions
-
-////////THUNKS/////////
-
-export const getPackCards = () => (dispatch: Dispatch, getState: any) => {
-    const module: GetCardsPacksModuleType = { params: {} }
-    const userId = getState().auth.user._id
-    const showMyCardsPacks = getState().cardPacks.showMyCardsPacks
-    if (showMyCardsPacks) {
+    }
+    const { auth } = thunkAPI.getState() as { auth: AuthInitStateType }
+    const userId = auth.user._id
+    const { cardPacks } = thunkAPI.getState() as { cardPacks: initStateType }
+    const newPageForShow = cardPacks.newPageForShow
+    module.params.page = newPageForShow
+    if (cardPacks.showMyCardsPacks) {
         module.params.user_id = userId
     } else {
         module.params.user_id = ""
     }
 
-    dispatch(switchLoadingState({ valueInLoading: "loading" }))
-    cardsPacksAPI
-        .getCardsPacks(module)
-        .then((res) => {
-            dispatch(getCardPacks({ cardPacks: res.data.cardPacks }))
-        })
-        .catch((e) => {
+    thunkAPI.dispatch(switchLoadingState({ valueInLoading: "loading" }))
+
+    try {
+        const res = await cardsPacksAPI.getCardsPacks(module)
+        thunkAPI.dispatch(getCardPacks({ newState: res.data }))
+    } catch (e) {
+        const error = e.res ? e.res.data.error : e.message + ", more details in the console"
+        console.log("Error:", { ...e })
+        thunkAPI.dispatch(setCommonRegister(error))
+    }
+    thunkAPI.dispatch(switchLoadingState({ valueInLoading: "successed" }))
+})
+export const removeCardPack = createAsyncThunk(
+    "cardPacks/removeCardPack",
+    async (removePackData: { idPack: string }, thunkAPI) => {
+        try {
+            await cardsPacksAPI.deleteCardsPack(removePackData.idPack)
+            thunkAPI.dispatch(getPackCards())
+        } catch (e) {
             const error = e.res ? e.res.data.error : e.message + ", more details in the console"
             console.log("Error:", { ...e })
-            dispatch(setCommonRegister(error))
-        })
-        .finally(() => dispatch(switchLoadingState({ valueInLoading: "successed" })))
-}
-export const setNewCardPack =
-    (name: string) =>
-    (
-        dispatch: ThunkDispatch<ResponseGetCardPacksType, AppRootStateType, any>,
-        getState: () => AppRootStateType
-    ) => {
-        cardsPacksAPI
-            .createCardsPack(name)
-            .then((res) => {
-                dispatch(getPackCards())
-            })
-            .catch((e) => {
-                const error = e.res ? e.res.data.error : e.message + ", more details in the console"
-                console.log("Error:", { ...e })
-            })
+            thunkAPI.dispatch(setCommonRegister(error))
+        }
     }
-export const removeCardPack =
-    (idPack: string) =>
-    (dispatch: ThunkDispatch<ResponseGetCardPacksType, AppRootStateType, any>) => {
-        cardsPacksAPI.deleteCardsPack(idPack).then(() => {
-            dispatch(getPackCards())
-        })
+)
+export const setNewCardPack = createAsyncThunk(
+    "cardPacks/setNewCardPack",
+    async (createData: { newName: string }, thunkAPI) => {
+        try {
+            await cardsPacksAPI.createCardsPack(createData.newName)
+            thunkAPI.dispatch(getPackCards())
+        } catch (e) {
+            const error = e.res ? e.res.data.error : e.message + ", more details in the console"
+            console.log("Error:", { ...e })
+        }
     }
-export const updateCardPack =
-    (id: string, name: string) =>
-    (dispatch: ThunkDispatch<ResponseGetCardPacksType, AppRootStateType, any>) => {
-        cardsPacksAPI.updateCardsPack(id, name).then((res) => {
-            dispatch(getPackCards())
-        })
+)
+export const updateCardPack = createAsyncThunk(
+    "cardPacks/update",
+    async (updateData: { idPack: string; newTitle: string }, thunkAPI) => {
+        try {
+            await cardsPacksAPI.updateCardsPack(updateData.idPack, updateData.newTitle)
+            thunkAPI.dispatch(getPackCards())
+        } catch (e) {
+            const error = e.res ? e.res.data.error : e.message + ", more details in the console"
+            console.log("Error:", { ...e })
+        }
     }
+)
+
+const slice = createSlice({
+    name: "cardPacks",
+    initialState: cardPacksInitialState,
+    reducers: {
+        getCardPacks(state, action: PayloadAction<{ newState: ResponseGetCardPacksType }>) {
+            state.cardPacks = action.payload.newState.cardPacks
+            state.cardPacksTotalCount = action.payload.newState.cardPacksTotalCount
+            state.maxCardsCount = action.payload.newState.maxCardsCount
+            state.minCardsCount = action.payload.newState.minCardsCount
+            state.page = action.payload.newState.page
+            state.pageCount = action.payload.newState.pageCount
+        },
+        showMyCardsPacks(state, action: PayloadAction<{ isShow: boolean }>) {
+            state.showMyCardsPacks = action.payload.isShow
+        },
+        changeNewPageForShow(state, action: PayloadAction<{ newShowPage: number }>) {
+            state.newPageForShow = action.payload.newShowPage
+        },
+    },
+})
+
+export const cardPacksReducer = slice.reducer
+export const { getCardPacks, showMyCardsPacks, changeNewPageForShow } = slice.actions

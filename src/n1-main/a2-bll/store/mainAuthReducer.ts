@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { authAPI, NewUserType, userType } from "../../a3-dal/mainAPI"
 import { switchLoadingState } from "./appReducer"
 
-type AuthInitStateType = {
+export type AuthInitStateType = {
     isLogged: boolean
     user: userType
     isRegister: boolean

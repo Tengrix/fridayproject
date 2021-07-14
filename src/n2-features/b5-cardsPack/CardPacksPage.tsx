@@ -8,9 +8,16 @@ import {
     getPackCards,
     updateCardPack,
     showMyCardsPacks,
+    changeNewPageForShow,
 } from "../../n1-main/a2-bll/store/cardPacksReducer"
 import { AppRootStateType } from "../../n1-main/a2-bll/store/store"
-import { initCardPacks, ResponseGetCardPacksType } from "../../n1-main/a3-dal/mainAPI"
+import {
+    cardsAPI,
+    cardsPacksAPI,
+    initCardPacks,
+    ResponseGetCardPacksType,
+} from "../../n1-main/a3-dal/mainAPI"
+import SuperPaginator from "../../n3-MySuperComponents/SuperPaginator/SuperPaginator"
 import CardsPack from "./CardsPack"
 
 const CardPacksPage = () => {
@@ -23,16 +30,16 @@ const CardPacksPage = () => {
     )
 
     const updateTitle = (newTitle: string, idPack: string) => {
-        dispatch(updateCardPack(idPack, newTitle))
+        dispatch(updateCardPack({ idPack, newTitle }))
     }
     const newCardPack = useCallback(
-        (title: string) => {
-            dispatch(setNewCardPack(title))
+        (newName: string) => {
+            dispatch(setNewCardPack({ newName }))
         },
         [dispatch]
     )
     const delPack = (idPack: string) => {
-        dispatch(removeCardPack(idPack))
+        dispatch(removeCardPack({ idPack }))
     }
     const [nameCP, setNameCP] = useState("")
     const onChangeNameCP = (e: ChangeEvent<HTMLInputElement>) => {
@@ -49,6 +56,10 @@ const CardPacksPage = () => {
     const loadingProgress = useSelector<AppRootStateType, "loading" | "successed">(
         (state) => state.app.loadingProgress
     )
+    const clickToPaginator = (newShowPage: number) => {
+        dispatch(changeNewPageForShow({ newShowPage }))
+        dispatch(getPackCards())
+    }
 
     if (loadingProgress === "loading") return <Loading />
     return (
@@ -85,7 +96,13 @@ const CardPacksPage = () => {
                     />
                 ))}
             </table>
-            <div>1,2,3,4...5</div>
+            <SuperPaginator
+                pageSize={10}
+                totalItemsCount={100}
+                currentPage={1}
+                onClickToPage={clickToPaginator}
+                portionSize={5}
+            />
         </div>
     )
 }

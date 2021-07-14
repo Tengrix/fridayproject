@@ -52,6 +52,9 @@ export const cardsPacksAPI = {
             cardsPack: { _id: id, name: name },
         })
     },
+    updateGrade(card_id: string, grade: number) {
+        return instance.put<CardType>("cards/grade", { card_id, grade })
+    },
 }
 export const cardsAPI = {
     getCards(cardsPackId: string) {
@@ -72,6 +75,14 @@ export const cardsAPI = {
 //
 //
 //
+export type CardType = {
+    _id: string
+    cardsPack_id: string
+    grade: number
+    shots: number
+    user_id: string
+    card_id: string
+}
 export type GetCardsPacksModuleType = {
     params: {
         min?: number

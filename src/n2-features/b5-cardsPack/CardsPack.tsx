@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useCallback, useEffect, useState } from "react"
-import { CardPackType, initCardPacks } from "../../n1-main/a3-dal/mainAPI"
+import { CardPackType, cardsAPI, cardsPacksAPI, initCardPacks } from "../../n1-main/a3-dal/mainAPI"
 import {
     removeCardPack,
     setNewCardPack,
@@ -22,6 +22,15 @@ const CardsPack = (props: ContainerCardsPackType) => {
     const onChangeTitle = (e: ChangeEvent<HTMLInputElement>) => {
         setNewTitle(e.currentTarget.value)
     }
+
+    // //
+    // let balabala = []
+    // cardsAPI.getCards(props.cardsPack._id).then(res=> {
+    //     balabala = res.data.cards})
+    // cardsPacksAPI.updateGrade("60ee184077f55e000491c760", 2).then( res => {
+    // })
+    // //
+
     return (
         <tr>
             <td align="center">{props.cardsPack.name}</td>

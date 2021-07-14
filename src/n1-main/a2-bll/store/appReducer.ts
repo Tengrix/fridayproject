@@ -12,7 +12,6 @@ const appReducerState: AppReducerStateType = {
     isInitialized: false,
     loadingProgress: "successed",
 }
-
 export const isInitializedTC = createAsyncThunk("app/isInitialized", async (param, thunkAPI) => {
     //thunkAPI.dispatch(switchLoadingState({ valueInLoading: "loading" }))
     try {
