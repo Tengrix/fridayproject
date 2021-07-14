@@ -1,4 +1,7 @@
-import React, { useState } from 'react'
+import React, {useEffect, useState} from 'react'
+import {useDispatch, useSelector} from "react-redux";
+import {getGradeTC} from "../../../n1-main/a2-bll/store/cardsGradeReducer";
+import {AppRootStateType} from "../../../n1-main/a2-bll/store/store";
 
 type LearnPageType = {
     question: string;
@@ -19,17 +22,21 @@ const LearnPage = () => {
         'A closure is the combination of a function bundled together (enclosed) with references to its surrounding ' +
         'state (the lexical environment).', 'FUNCTIONAL!'
     ]);
+    const dispatch = useDispatch();
+    let grades = useSelector<AppRootStateType,number>(state => state.cardsGrade.updatedGrade.grade)
+    let id = useSelector<AppRootStateType,string>(state => state.cardsGrade.updatedGrade.card_id)
     const [numQA, setNumQA] = useState<number>(0);
     const [numQ, setNumQ] = useState<number>(0);
     const [countA, setCountA] = useState<number>(1);
     const [grade, setGrade] = useState<string[]>(['1','2','3','4','5']);
     const [show, setShow] = useState<boolean>(false);
-
+    useEffect(()=>{
+        dispatch(getGradeTC(grades,id))
+    })
     const showAnswer = () =>{
         setShow(!show)
     }
     const nextQuestion = () =>{
-
         setNumQA(numQA+1)
         setCountA(countA+1)
         if(numQ===1){

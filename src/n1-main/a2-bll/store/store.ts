@@ -3,12 +3,14 @@ import {applyMiddleware, combineReducers,createStore} from 'redux';
 import {authReducer} from "./mainAuthReducer";
 import thunk from "redux-thunk";
 import { configureStore} from '@reduxjs/toolkit';
+import {gradeReducer} from "./cardsGradeReducer";
 declare global {
     interface Window {store: any}
 }
 const rootReducer = combineReducers({
     auth:authReducer,
-    cardsPack: cardsPackReducer
+    cardsPack: cardsPackReducer,
+    cardsGrade:gradeReducer
 })
 // определить автоматически тип всего объекта состояния
 export const store = configureStore({
