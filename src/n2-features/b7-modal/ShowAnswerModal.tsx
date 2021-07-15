@@ -7,7 +7,6 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { getCardsTC, updateGradeTc } from '../../n1-main/a2-bll/store/cardsReducer';
 
-
 type ShowAnswerModalType = {
   name:string
 }
@@ -41,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
 export default function ShowAnswerModal(props:ShowAnswerModalType) {
   const classes = useStyles();
   const dispatch = useDispatch()
-  
+
   const [modalStyle] = React.useState(getModalStyle);
   const [open, setOpen] = React.useState(false);
   

@@ -15,8 +15,6 @@ const Cards = () => {
     const isLogged = useSelector<AppRootStateType, boolean>((state) => state.auth.isLogged)
     const cards = useSelector<AppRootStateType, Array<CardsType>>(state => state.cards.cards)
     
-    console.log(cards);
-    
     useEffect(() => {
         dispatch(getCardsTC("60abbfbd6a39d35b188ef6f2"))
     }, [])

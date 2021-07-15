@@ -20,7 +20,7 @@ const CardPacksPage = () => {
     const cardPacks = useSelector<AppRootStateType, initCardsPack[]>(
         (state) => state.cardsPack.cardPacks
     )
-    const idIsProfile = useSelector<AppRootStateType, string>((state) => state.auth.user.id)
+    const idIsProfile = useSelector<AppRootStateType, string>((state) => state.auth.user._id)
     const updateTitle = (newTitle: string, idPack: string) => {
         dispatch(updateCardPack(idPack, newTitle))
     }
