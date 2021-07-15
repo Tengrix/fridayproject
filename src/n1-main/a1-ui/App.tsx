@@ -6,7 +6,7 @@ import Header from "./header/Header"
 import { useDispatch, useSelector } from "react-redux"
 import { AppRootStateType } from "../a2-bll/store/store"
 import Loading from "./loading/Loading"
-import {isInitializedTC} from "../a2-bll/store/appReducer"
+import { isInitializedTC } from "../a2-bll/store/appReducer"
 
 function App() {
     const dispatch = useDispatch()
