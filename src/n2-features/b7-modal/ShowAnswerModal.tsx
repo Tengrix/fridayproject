@@ -86,9 +86,6 @@ export default function ShowAnswerModal(props: ShowAnswerModalType) {
     const [countA, setCountA] = useState<number>(1)
     const [grade, setGrade] = useState<string[]>(["1", "2", "3", "4", "5"])
     const [show, setShow] = useState<boolean>(false)
-    useEffect(() => {
-        dispatch(getGradeTC(grades, id))
-    })
     const showAnswer = () => {
         setShow(!show)
     }
@@ -120,8 +117,8 @@ export default function ShowAnswerModal(props: ShowAnswerModalType) {
         setNumQ(1)
         setCountA(1)
     }
-    const newGradesForQuestions = (i: number, id: string) => {
-        dispatch(getGradeTC(i, id))
+    const newGradesForQuestions = (i: number, id: string, shots: number) => {
+        dispatch(getGradeTC(i, id, shots))
     }
     const body = (
         <div style={modalStyle} className={classes.paper}>
@@ -158,7 +155,7 @@ export default function ShowAnswerModal(props: ShowAnswerModalType) {
                 <h4>Rate Yourself</h4>
 
                 {grade.map((el, i) => (
-                    <Button key={"grade-" + i} onClick={() => newGradesForQuestions(i, id)}>
+                    <Button key={"grade-" + i} onClick={() => newGradesForQuestions(i, id, 4)}>
                         {el}
                     </Button>
                 ))}
