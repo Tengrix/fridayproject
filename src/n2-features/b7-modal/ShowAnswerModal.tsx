@@ -4,7 +4,6 @@ import Modal from '@material-ui/core/Modal';
 import { Button, Checkbox, ListItem } from '@material-ui/core';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getCardsTC, updateGradeTc } from '../../n1-main/a2-bll/store/cardsReducer';
 import { AppRootStateType } from '../../n1-main/a2-bll/store/store';
 import { useState } from 'react';
 import { getGradeTC } from '../../n1-main/a2-bll/store/cardsGradeReducer';
@@ -47,9 +46,9 @@ export default function ShowAnswerModal(props:ShowAnswerModalType) {
   const [modalStyle] = React.useState(getModalStyle);
   const [open, setOpen] = React.useState(false);
   
-  useEffect(() => {
-    dispatch(updateGradeTc(4, "60abbfbd6a39d35b188ef6f2"))
-}, [dispatch])
+//   useEffect(() => {
+//     dispatch(updateGradeTc(4, "60abbfbd6a39d35b188ef6f2"))
+// }, [dispatch])
 
   const handleOpen = () => {
     setOpen(true);
