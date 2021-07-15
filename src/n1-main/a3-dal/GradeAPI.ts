@@ -8,6 +8,9 @@ const instance = axios.create({
 export const gradeAPI = {
     grades(grade:number, card_id:string){
         return instance.put<gradeResponseType>('cards/grade',{grade,card_id})
+    },
+    shots(shot:number){
+        return instance.put<gradeResponseType>('cards/grade',{shot})
     }
 
 }
