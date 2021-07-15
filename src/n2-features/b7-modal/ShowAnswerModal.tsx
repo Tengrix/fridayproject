@@ -120,8 +120,9 @@ export default function ShowAnswerModal(props: ShowAnswerModalType) {
         setNumQ(1)
         setCountA(1)
     }
-    const newGradesForQuestions = () => {}
-
+    const newGradesForQuestions = (i: number, id: string) => {
+        dispatch(getGradeTC(i, id))
+    }
     const body = (
         <div style={modalStyle} className={classes.paper}>
             <h2 id="simple-modal-title">Learn "Pack Name"</h2>
@@ -157,12 +158,7 @@ export default function ShowAnswerModal(props: ShowAnswerModalType) {
                 <h4>Rate Yourself</h4>
 
                 {grade.map((el, i) => (
-                    <Button
-                        key={"grade-" + i}
-                        onClick={() => {
-                            dispatch(getGradeTC(i, id))
-                        }}
-                    >
+                    <Button key={"grade-" + i} onClick={() => newGradesForQuestions(i, id)}>
                         {el}
                     </Button>
                 ))}
