@@ -53,25 +53,23 @@ const LearnPage = () => {
             //     }
             // }
             // return questions[questions.length-1]
+
             setNumQA(Math.floor(Math.random()*questions.length))
             setCountA(countA+1)
         }else{
         }
-        // setQuestion(questions[questions.length-1])
+            // setQuestion(questions[questions.length-1])
     }
     const startAgain = () => {
         setNumQ(1)
         setCountA(1)
     }
-    const newGradesForQuestions = () => {
-
-    }
+    const newGradesForQuestions = () => {}
+    
     return(
-
         <div>
             <span>Question number: {countA}/5 {countA===5 && <button onClick={()=>{startAgain()}}>start again</button>}</span>
             <div>
-                {/*{numQA}<br></br>*/}
                 {questions[0+numQA]}
                 {countA===5?<button disabled={true} onClick={() => {
                     startAgain()
