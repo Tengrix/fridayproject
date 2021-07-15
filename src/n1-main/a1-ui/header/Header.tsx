@@ -56,6 +56,13 @@ function Header() {
                                 </Button>
                             </NavLink>
                         </div>
+                        <div className={s.item}>
+                            <NavLink to={PATH.QUIZ} activeClassName={s.activeLink} replace>
+                                <Button variant="outlined">
+                                    <SettingsIcon /> PACKS{" "}
+                                </Button>
+                            </NavLink>
+                        </div>
                         <Logout />
                     </div>
                 </nav>
