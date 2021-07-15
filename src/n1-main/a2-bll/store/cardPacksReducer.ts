@@ -54,7 +54,6 @@ export const getPackCards = createAsyncThunk("cardPacks/get", async (getPacksDat
     //
     thunkAPI.dispatch(switchLoadingState({ valueInLoading: "loading" }))
     try {
-        debugger
         const res = await cardsPacksAPI.getCardsPacks(module)
         thunkAPI.dispatch(getCardPacks({ newState: res.data }))
     } catch (e) {

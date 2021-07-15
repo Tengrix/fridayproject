@@ -99,7 +99,7 @@ const CardPacksPage = () => {
                 </div>
                 <table cellPadding="7" width="100%">
                     <tr>
-                        <th>Card name</th>
+                        <th>Cards pack name</th>
                         <th>
                             Cards count
                             <input

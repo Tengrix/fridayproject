@@ -1,61 +1,28 @@
-import React from "react"
-import { useSelector } from "react-redux"
-import { Redirect } from "react-router-dom"
+import React, { useEffect } from "react"
+import { useDispatch, useSelector } from "react-redux"
+import { Redirect, useParams } from "react-router-dom"
+import Loading from "../../../n1-main/a1-ui/loading/Loading"
+import { getCardsForCardsPack } from "../../../n1-main/a2-bll/store/cardsReducer"
 import { AppRootStateType } from "../../../n1-main/a2-bll/store/store"
-
-type CardsType ={
-    answer: string,
-    question: string,
-    cardsPack_id: string,
-    grade: number,
-    shots: number,
-    user_id: string,
-    created: string,
-    updated: string,
-    _id: string,
-}
+import { CardsType } from "../../../n1-main/a3-dal/mainAPI"
 
 const Cards = () => {
+    const {userID} = useParams<{userID: string}>()
+    const dispatch = useDispatch()
+    useEffect(()=>{
+        dispatch(getCardsForCardsPack({userID}))
+    }, [])
     const isLogged = useSelector<AppRootStateType, boolean>((state) => state.auth.isLogged)
-    const cards: Array<CardsType> = [
-        {
-            answer: "fgdfgdgd efgdf df",
-            question: "sgdsgg?",
-            cardsPack_id: "no name",
-            grade: 4.98,
-            shots: 1,
-            user_id: "1",
-            created: "1",
-            updated: "1",
-            _id: "1",
-        },
-        {
-            answer: "fgdfgdgd efgdf df",
-            question: "sgdsgg?",
-            cardsPack_id: "no name",
-            grade: 4.98,
-            shots: 1,
-            user_id: "1",
-            created: "1",
-            updated: "1",
-            _id: "2",
-        },
-        {
-            answer: "fgdfgdgd efgdf df",
-            question: "sgdsgg?",
-            cardsPack_id: "no name",
-            grade: 4.98,
-            shots: 1,
-            user_id: "1",
-            created: "1",
-            updated: "1",
-            _id: "3",
-        },
-        
-    ]
+    const loadingProgress = useSelector<AppRootStateType, "loading" | "successed">(
+        (state) => state.app.loadingProgress
+    )
+    let cards = useSelector<AppRootStateType, CardsType[]>(
+        (state) => state.cards.cards
+    )
     if (!isLogged) {
         return <Redirect to={"/sign-in"} />
     }
+    if (loadingProgress === "loading") return <Loading />
     return (
         <div>
             <table cellPadding="7" width="100%">
@@ -63,15 +30,15 @@ const Cards = () => {
                     <th>Qustion</th>
                     <th>Answer</th>
                     <th>Grade</th>
-                    <th>Updated</th>
+                    <th>Created</th>
                     <th><button>add card</button></th>
                 </tr>
-                {cards.map((c) => (
+                {cards.length && cards.map((c) => (
                     <tr>
                         <td align="center">{c.question}</td>
                         <td align="center">{c.answer}</td>
                         <td align="center">{c.grade}</td>
-                        <td align="center">{c.updated}</td>
+                        <td align="center">{c.created}</td>
                         <td align="center">
                             <button>show answer</button>
                         </td>

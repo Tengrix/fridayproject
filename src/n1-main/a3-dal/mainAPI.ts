@@ -57,8 +57,8 @@ export const cardsPacksAPI = {
     },
 }
 export const cardsAPI = {
-    getCards(cardsPackId: string) {
-        return instance.get<GetCardsResponceType>(`cards/pack?cardsPack_id=${cardsPackId}`)
+    getCards(getCardsModule: GetCardsModuleType) {
+        return instance.get<GetCardsResponceType>(`cards/card`, getCardsModule)
     },
     createCard(createModule: CreateCardModuleType) {
         return instance.post<CreateCardResponceType>("cards/card", createModule)
@@ -75,6 +75,16 @@ export const cardsAPI = {
 //
 //
 //
+export type GetCardsModuleType = {
+    params: {
+        cardsPack_id: string
+        min?: number
+        max?: number
+        sortCards?: "0grade"
+        page?: number
+        pageCount?: number
+    }
+}
 export type CardType = {
     _id: string
     cardsPack_id: string

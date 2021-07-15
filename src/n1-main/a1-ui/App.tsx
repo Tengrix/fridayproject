@@ -16,7 +16,6 @@ function App() {
         dispatch(isInitializedTC())
     }, [])
     if (!isInitialized) return <Loading />
-
     return (
         <HashRouter>
             {!isLogged && <Redirect to={PATH.SIGN_IN} />}
