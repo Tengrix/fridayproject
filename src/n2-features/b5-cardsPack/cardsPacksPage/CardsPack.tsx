@@ -1,7 +1,8 @@
 import React, { ChangeEvent, useState } from "react"
 import { CardPackType, initCardPacks } from "../../../n1-main/a3-dal/mainAPI"
 import { useDispatch } from "react-redux"
-import { NavLink } from "react-router-dom"
+import { NavLink, Redirect } from "react-router-dom"
+import ShowAnswerModal from "../../b7-modal/ShowAnswerModal"
 
 type ContainerCardsPackType = {
     cardsPack: initCardPacks
@@ -20,7 +21,7 @@ const CardsPack = (props: ContainerCardsPackType) => {
             <td align="center">{props.cardsPack.created}</td>
             <td align="center">{props.cardsPack.updated}</td>
             <td align="center">
-                <button>learn</button>
+                <ShowAnswerModal name="learn" />
                 {props.userId === props.cardsPack.user_id && <button>rename</button>}
                 {props.userId === props.cardsPack.user_id && (
                     <button onClick={() => props.delPack(props.cardsPack._id)}>delete</button>
