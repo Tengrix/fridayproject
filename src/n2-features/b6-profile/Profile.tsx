@@ -1,7 +1,7 @@
 import React, { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { AppRootStateType } from "../../n1-main/a2-bll/store/store"
-import { GetUserTC } from "../../n1-main/a2-bll/store/mainAuthReducer"
+import { getUser } from "../../n1-main/a2-bll/store/mainAuthReducer"
 import { Redirect } from "react-router-dom"
 import { PATH } from "../../n1-main/a1-ui/routes/Routes"
 import Card from "@material-ui/core/Card"
@@ -22,7 +22,7 @@ const Profile = () => {
     )
     const isLogged = useSelector<AppRootStateType, boolean>((state) => state.auth.isLogged)
     useEffect(() => {
-        dispatch(GetUserTC())
+        dispatch(getUser())
     }, [dispatch])
 
     if (!isLogged) {
