@@ -8,7 +8,7 @@ import {
 } from "../../n1-main/a2-bll/store/cardsPackReducer"
 import { useDispatch } from "react-redux"
 import AddNewPack from "./AddNewPack"
-import SimpleModal from "../b7-modal/SimpleModal"
+import ShowAnswerModal from "../b7-modal/ShowAnswerModal"
 
 type ContainerCardsPackType = {
     cardsPack: initCardsPack
@@ -34,7 +34,7 @@ const CardsPackTest = (props: ContainerCardsPackType) => {
             <td align="center">{props.cardsPack.created}</td>
             <td align="center">{props.cardsPack.updated}</td>
             <td align="center">
-                <SimpleModal name={"learn"}/>
+                <ShowAnswerModal name={"learn"}/>
                 <button>update</button>
                 <button>delete</button>
             </td>

@@ -4,11 +4,10 @@ import { Redirect, useParams } from "react-router-dom"
 import { createCardsTC, deleteCardsTC, getCardsTC, updateCardsTc } from "../../../n1-main/a2-bll/store/cardsReducer"
 import { AppRootStateType } from "../../../n1-main/a2-bll/store/store"
 import { CardsType } from "../../../n1-main/a3-dal/mainAPI"
-import SimpleModal from "../../b7-modal/SimpleModal"
 
 
 const Cards = () => {
-    const dispatch = useDispatch()
+   /* const dispatch = useDispatch()
 
     const {cardsPack_id} = useParams<{cardsPack_id:string}>()
 
@@ -23,9 +22,9 @@ const Cards = () => {
 
     if (!isLogged) {
         return <Redirect to={"/sign-in"} />
-    }
+    }*/
     return (
-        <div>
+        /*<div>
             <table cellPadding="7" width="100%">
                 <tr>
                     <th>Qustion</th>
@@ -50,6 +49,9 @@ const Cards = () => {
                 ))}
             </table>
             <div>1,2,3,4...5</div>
+        </div>*/
+        <div>
+            
         </div>
     )
 }

@@ -70,7 +70,6 @@ const LearnPage = () => {
         <div>
             <span>Question number: {countA}/5 {countA===5 && <button onClick={()=>{startAgain()}}>start again</button>}</span>
             <div>
-                {/*{numQA}<br></br>*/}
                 {questions[0+numQA]}
                 {countA===5?<button disabled={true} onClick={() => {
                     startAgain()
