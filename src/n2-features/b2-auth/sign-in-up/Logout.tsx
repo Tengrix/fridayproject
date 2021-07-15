@@ -1,14 +1,14 @@
 import { Button } from '@material-ui/core';
 import React, { useCallback } from 'react'
 import { useDispatch } from 'react-redux';
-import { LogoutTC } from '../../../n1-main/a2-bll/store/mainAuthReducer';
+import { logout } from '../../../n1-main/a2-bll/store/mainAuthReducer';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 const Logout = () => {
     const dispatch = useDispatch()
 
     const logoutHandler = useCallback(() => {
-        dispatch(LogoutTC())
+        dispatch(logout())
     }, [dispatch])
 
     return (

@@ -1,5 +1,5 @@
 import React from "react"
-import { signUpTC } from "../../../n1-main/a2-bll/store/mainAuthReducer"
+import { signUp } from "../../../n1-main/a2-bll/store/mainAuthReducer"
 import Avatar from '@material-ui/core/Avatar';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -24,7 +24,7 @@ const SignUp = () => {
     const commonError = useSelector<AppRootStateType, string>((state) => state.auth.commonError)
     const dispatch = useDispatch()
     const sendDataToRegister = (email: string, password: string) => {
-        dispatch(signUpTC(email, password))
+        dispatch(signUp({email, password}))
     }
     const formik = useFormik({
         initialValues: {
