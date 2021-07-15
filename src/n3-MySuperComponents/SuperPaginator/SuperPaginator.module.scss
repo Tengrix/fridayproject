@@ -1,0 +1,17 @@
+.paginatorBody{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 5px;
+    .numberPageStyle{
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+    .pageActive{
+        font-weight: bold;
+    }
+    .buttons{
+        width: 35px;
+        margin: 2px;
+    }
+}

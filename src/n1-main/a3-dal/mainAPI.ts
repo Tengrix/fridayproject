@@ -87,7 +87,7 @@ export type GetCardsPacksModuleType = {
     params: {
         min?: number
         max?: number
-        sortPacks?: number
+        sortPacks?: "0updated" | "1updated" | "0cardsCount" | "1cardsCount"
         page?: number
         pageCount?: number
         user_id?: string

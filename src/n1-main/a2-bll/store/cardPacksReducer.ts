@@ -1,13 +1,9 @@
 import {
-    authAPI,
     cardsPacksAPI,
     GetCardsPacksModuleType,
     initCardPacks,
     ResponseGetCardPacksType,
 } from "../../a3-dal/mainAPI"
-import { Dispatch } from "redux"
-import { ThunkDispatch } from "redux-thunk"
-import { AppRootStateType } from "./store"
 import { AuthInitStateType, setCommonRegister } from "./mainAuthReducer"
 import { switchLoadingState } from "./appReducer"
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
@@ -21,6 +17,8 @@ type initStateType = {
     pageCount: number
     showMyCardsPacks: boolean
     newPageForShow: number
+    currentPortionToPaginator: number
+    sortCardsPacks: "0updated" | "1updated" | "0cardsCount" | "1cardsCount"
 }
 const cardPacksInitialState: initStateType = {
     cardPacks: [],
@@ -31,27 +29,32 @@ const cardPacksInitialState: initStateType = {
     pageCount: 4,
     showMyCardsPacks: false,
     newPageForShow: 1,
+    currentPortionToPaginator: 1,
+    sortCardsPacks: "0cardsCount",
 }
 export const getPackCards = createAsyncThunk("cardPacks/get", async (getPacksData, thunkAPI) => {
     const module: GetCardsPacksModuleType = {
         params: {
             pageCount: 10,
+            sortPacks: "0cardsCount",
         },
     }
     const { auth } = thunkAPI.getState() as { auth: AuthInitStateType }
-    const userId = auth.user._id
     const { cardPacks } = thunkAPI.getState() as { cardPacks: initStateType }
-    const newPageForShow = cardPacks.newPageForShow
-    module.params.page = newPageForShow
+    //
+    module.params.page = cardPacks.newPageForShow
+    module.params.min = cardPacks.minCardsCount
+    module.params.max = cardPacks.maxCardsCount
+    module.params.sortPacks = cardPacks.sortCardsPacks
     if (cardPacks.showMyCardsPacks) {
-        module.params.user_id = userId
+        module.params.user_id = auth.user._id
     } else {
         module.params.user_id = ""
     }
-
+    //
     thunkAPI.dispatch(switchLoadingState({ valueInLoading: "loading" }))
-
     try {
+        debugger
         const res = await cardsPacksAPI.getCardsPacks(module)
         thunkAPI.dispatch(getCardPacks({ newState: res.data }))
     } catch (e) {
@@ -64,6 +67,7 @@ export const getPackCards = createAsyncThunk("cardPacks/get", async (getPacksDat
 export const removeCardPack = createAsyncThunk(
     "cardPacks/removeCardPack",
     async (removePackData: { idPack: string }, thunkAPI) => {
+        thunkAPI.dispatch(switchLoadingState({ valueInLoading: "loading" }))
         try {
             await cardsPacksAPI.deleteCardsPack(removePackData.idPack)
             thunkAPI.dispatch(getPackCards())
@@ -72,11 +76,13 @@ export const removeCardPack = createAsyncThunk(
             console.log("Error:", { ...e })
             thunkAPI.dispatch(setCommonRegister(error))
         }
+        thunkAPI.dispatch(switchLoadingState({ valueInLoading: "successed" }))
     }
 )
-export const setNewCardPack = createAsyncThunk(
+export const createCardPack = createAsyncThunk(
     "cardPacks/setNewCardPack",
     async (createData: { newName: string }, thunkAPI) => {
+        thunkAPI.dispatch(switchLoadingState({ valueInLoading: "loading" }))
         try {
             await cardsPacksAPI.createCardsPack(createData.newName)
             thunkAPI.dispatch(getPackCards())
@@ -84,11 +90,13 @@ export const setNewCardPack = createAsyncThunk(
             const error = e.res ? e.res.data.error : e.message + ", more details in the console"
             console.log("Error:", { ...e })
         }
+        thunkAPI.dispatch(switchLoadingState({ valueInLoading: "successed" }))
     }
 )
 export const updateCardPack = createAsyncThunk(
     "cardPacks/update",
     async (updateData: { idPack: string; newTitle: string }, thunkAPI) => {
+        thunkAPI.dispatch(switchLoadingState({ valueInLoading: "loading" }))
         try {
             await cardsPacksAPI.updateCardsPack(updateData.idPack, updateData.newTitle)
             thunkAPI.dispatch(getPackCards())
@@ -96,6 +104,7 @@ export const updateCardPack = createAsyncThunk(
             const error = e.res ? e.res.data.error : e.message + ", more details in the console"
             console.log("Error:", { ...e })
         }
+        thunkAPI.dispatch(switchLoadingState({ valueInLoading: "successed" }))
     }
 )
 
@@ -117,8 +126,30 @@ const slice = createSlice({
         changeNewPageForShow(state, action: PayloadAction<{ newShowPage: number }>) {
             state.newPageForShow = action.payload.newShowPage
         },
+        changePortion(state, action: PayloadAction<{ currentPortion: number }>) {
+            state.currentPortionToPaginator = action.payload.currentPortion
+        },
+        changeMaxMinCards(state, action: PayloadAction<{ newValue: number[] }>) {
+            state.minCardsCount = action.payload.newValue[0]
+            state.maxCardsCount = action.payload.newValue[1]
+        },
+        changeSort(
+            state,
+            action: PayloadAction<{
+                newValue: "0updated" | "1updated" | "0cardsCount" | "1cardsCount"
+            }>
+        ) {
+            state.sortCardsPacks = action.payload.newValue
+        },
     },
 })
 
 export const cardPacksReducer = slice.reducer
-export const { getCardPacks, showMyCardsPacks, changeNewPageForShow } = slice.actions
+export const {
+    getCardPacks,
+    showMyCardsPacks,
+    changeNewPageForShow,
+    changePortion,
+    changeMaxMinCards,
+    changeSort,
+} = slice.actions

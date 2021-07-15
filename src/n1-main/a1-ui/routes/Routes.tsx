@@ -1,15 +1,16 @@
 import { Redirect, Route, Switch } from "react-router-dom"
-import Profile from "../../../n2-features/profile/Profile"
+import Profile from "../../../n2-features/b6-profile/Profile"
 import Error from "../../../n2-features/b4-errors/error/Error"
 import React from "react"
 import RenewalPass from "../../../n2-features/b3-pass/Password/RenewalPass"
 import SignInWithFormik from "../../../n2-features/b2-auth/sign-in-up/SignIn"
 import SignUp from "../../../n2-features/b2-auth/sign-in-up/SignUp"
 import NewPass from "../../../n2-features/b3-pass/Password/NewPass"
-import UpdateProfile from "../../../n2-features/profile/UpdateProfile"
-import Cards from "../../../n2-features/cards/card/Cards"
-import CardsPack from "../../../n2-features/b5-cardsPack/CardsPack"
-import CardPacksPage from "../../../n2-features/b5-cardsPack/CardPacksPage"
+import UpdateProfile from "../../../n2-features/b6-profile/UpdateProfile"
+import Cards from "../../../n2-features/b5-cardsPack/Cards/Cards"
+import CardPacksPage from "../../../n2-features/b5-cardsPack/cardsPacksPage/CardPacksPage"
+import CardsPack from "../../../n2-features/b5-cardsPack/cardsPacksPage/CardsPack"
+
 
 export const PATH = {
     PROFILE: "/profile",

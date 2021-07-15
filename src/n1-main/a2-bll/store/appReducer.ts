@@ -1,6 +1,7 @@
 import { FormatColorResetRounded } from "@material-ui/icons"
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { authAPI } from "../../a3-dal/mainAPI"
+import { getPackCards } from "./cardPacksReducer"
 import { logIn, setUser } from "./mainAuthReducer"
 
 type LoadingProgressType = "loading" | "successed"
@@ -13,17 +14,18 @@ const appReducerState: AppReducerStateType = {
     loadingProgress: "successed",
 }
 export const isInitializedTC = createAsyncThunk("app/isInitialized", async (param, thunkAPI) => {
-    //thunkAPI.dispatch(switchLoadingState({ valueInLoading: "loading" }))
+    thunkAPI.dispatch(switchLoadingState({ valueInLoading: "loading" }))
     try {
         const res = await await authAPI.getProfile()
         if (!res.data.error) {
             const user = res.data
+            await thunkAPI.dispatch(getPackCards())
             thunkAPI.dispatch(logIn({ value: true }))
             thunkAPI.dispatch(setUser({ user }))
         } else {
             thunkAPI.dispatch(logIn({ value: false }))
         }
-        //thunkAPI.dispatch(switchLoadingState({ valueInLoading: "successed" }))
+        thunkAPI.dispatch(switchLoadingState({ valueInLoading: "successed" }))
     } catch {}
     return { stateInitialized: true }
 })
