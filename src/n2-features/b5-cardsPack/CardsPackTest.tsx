@@ -8,6 +8,7 @@ import {
 } from "../../n1-main/a2-bll/store/cardsPackReducer"
 import { useDispatch } from "react-redux"
 import AddNewPack from "./AddNewPack"
+import ShowAnswerModal from "../b7-modal/ShowAnswerModal"
 
 type ContainerCardsPackType = {
     cardsPack: initCardsPack
@@ -16,10 +17,12 @@ type ContainerCardsPackType = {
     updateTitle: (newTitle: string, idPack: string) => void
 }
 
-const CardsPack = (props: ContainerCardsPackType) => {
+const CardsPackTest = (props: ContainerCardsPackType) => {
     const dispatch = useDispatch()
     const [newTitle, setNewTitle] = useState<string>("")
-    
+    useEffect(() => {
+        dispatch(SetPackCards())
+    }, [])
     const onChangeTitle = (e: ChangeEvent<HTMLInputElement>) => {
         setNewTitle(e.currentTarget.value)
     }
@@ -31,13 +34,13 @@ const CardsPack = (props: ContainerCardsPackType) => {
             <td align="center">{props.cardsPack.created}</td>
             <td align="center">{props.cardsPack.updated}</td>
             <td align="center">
-                <button>learn</button>
-                <button onClick={() => props.updateTitle(newTitle, props.cardsPack._id)}>
-                    rename
-                </button>
-                <button onClick={() => props.delPack(props.cardsPack._id)}>delete</button>
+                <ShowAnswerModal name={"learn"}/>
+                <button>update</button>
+                <button>delete</button>
             </td>
         </tr>
     )
 }
-export default CardsPack
+export default CardsPackTest
+
+

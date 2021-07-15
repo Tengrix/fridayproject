@@ -50,14 +50,6 @@ function Header() {
                             </NavLink>
                         </div>
                         <div className={s.item}>
-                            <NavLink to={PATH.NEW_PASS} activeClassName={s.activeLink} replace>
-                                <Button variant="outlined">
-                                    <VpnKeyIcon />
-                                    New Password
-                                </Button>
-                            </NavLink>
-                        </div>
-                        <div className={s.item}>
                             <NavLink to={PATH.UPDATE_USER} activeClassName={s.activeLink} replace>
                                 <Button variant="outlined">
                                     <SettingsIcon /> Settings{" "}
@@ -65,16 +57,9 @@ function Header() {
                             </NavLink>
                         </div>
                         <div className={s.item}>
-                            <NavLink to={PATH.PACKS} activeClassName={s.activeLink} replace>
+                            <NavLink to={PATH.QUIZ} activeClassName={s.activeLink} replace>
                                 <Button variant="outlined">
                                     <SettingsIcon /> PACKS{" "}
-                                </Button>
-                            </NavLink>
-                        </div>
-                        <div className={s.item}>
-                            <NavLink to={PATH.PACKS_RAW} activeClassName={s.activeLink} replace>
-                                <Button variant="outlined">
-                                    <SettingsIcon /> PACKS-RAW{" "}
                                 </Button>
                             </NavLink>
                         </div>

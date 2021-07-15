@@ -1,84 +1,57 @@
-import React from "react"
-import { useSelector } from "react-redux"
-import { Redirect } from "react-router-dom"
+import React, { useEffect } from "react"
+import { useDispatch, useSelector } from "react-redux"
+import { Redirect, useParams } from "react-router-dom"
+import { createCardsTC, deleteCardsTC, getCardsTC, updateCardsTc } from "../../../n1-main/a2-bll/store/cardsReducer"
 import { AppRootStateType } from "../../../n1-main/a2-bll/store/store"
+import { CardsType } from "../../../n1-main/a3-dal/mainAPI"
 
-type CardsType ={
-    answer: string,
-    question: string,
-    cardsPack_id: string,
-    grade: number,
-    shots: number,
-    user_id: string,
-    created: string,
-    updated: string,
-    _id: string,
-}
 
 const Cards = () => {
+   /* const dispatch = useDispatch()
+
+    const {cardsPack_id} = useParams<{cardsPack_id:string}>()
+
     const isLogged = useSelector<AppRootStateType, boolean>((state) => state.auth.isLogged)
-    const cards: Array<CardsType> = [
-        {
-            answer: "fgdfgdgd efgdf df",
-            question: "sgdsgg?",
-            cardsPack_id: "no name",
-            grade: 4.98,
-            shots: 1,
-            user_id: "1",
-            created: "1",
-            updated: "1",
-            _id: "1",
-        },
-        {
-            answer: "fgdfgdgd efgdf df",
-            question: "sgdsgg?",
-            cardsPack_id: "no name",
-            grade: 4.98,
-            shots: 1,
-            user_id: "1",
-            created: "1",
-            updated: "1",
-            _id: "2",
-        },
-        {
-            answer: "fgdfgdgd efgdf df",
-            question: "sgdsgg?",
-            cardsPack_id: "no name",
-            grade: 4.98,
-            shots: 1,
-            user_id: "1",
-            created: "1",
-            updated: "1",
-            _id: "3",
-        },
-        
-    ]
+    const cards = useSelector<AppRootStateType, Array<CardsType>>(state => state.cards.cards)
+    
+    useEffect(() => {
+        dispatch(getCardsTC("60abbfbd6a39d35b188ef6f2"))
+    }, [])
+    
+
+
     if (!isLogged) {
         return <Redirect to={"/sign-in"} />
-    }
+    }*/
     return (
-        <div>
+        /*<div>
             <table cellPadding="7" width="100%">
                 <tr>
                     <th>Qustion</th>
                     <th>Answer</th>
                     <th>Grade</th>
                     <th>Updated</th>
-                    <th><button>add card</button></th>
+                    <th><button onClick={()=>dispatch(createCardsTC(cardsPack_id))}>add card</button></th>
                 </tr>
                 {cards.map((c) => (
-                    <tr>
+                   <tbody>
+                        <tr>
                         <td align="center">{c.question}</td>
                         <td align="center">{c.answer}</td>
                         <td align="center">{c.grade}</td>
                         <td align="center">{c.updated}</td>
                         <td align="center">
-                            <button>show answer</button>
+                            <button onClick={()=>dispatch(updateCardsTc(c._id,c.cardsPack_id))}>update</button>
+                            <button onClick={()=>dispatch(deleteCardsTC(c._id,c.cardsPack_id))}>del</button>
                         </td>
                     </tr>
+                   </tbody>
                 ))}
             </table>
             <div>1,2,3,4...5</div>
+        </div>*/
+        <div>
+            
         </div>
     )
 }

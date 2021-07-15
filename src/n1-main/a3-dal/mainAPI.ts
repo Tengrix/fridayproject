@@ -46,6 +46,50 @@ export const authAPI = {
     updatePack(id: string, name: string) {
         return instance.put<ResponseCardsType>(`cards/pack`, { cardsPack: { _id: id, name: name } })
     },
+    getCards(cardsPack_id:string){
+        return instance.get(`cards/card`,{params:{cardsPack_id:cardsPack_id}})
+    },
+    setCards(cardsPack_id: string) {
+        return instance.post("cards/card", { card: { cardsPack_id } })
+    },
+    deleteCards(id: string) {
+        return instance.delete("cards/card", { params: { id } })
+    },
+    updateCards(_id: string) {
+        return instance.put("cards/card", { card: { _id } })
+    },
+    updateGrade(card_id:string, grade:number){
+        return instance.put<CardType>("cards/grade", { card_id, grade})
+    }
+}
+
+export type responseCardType = {
+    cards: Array<CardsType>
+    cardsTotalCount: number	
+    maxGrade: number
+    minGrade: number	
+    page: number	
+    pageCount: number	
+    packUserId: string	
+}
+export type CardsType ={
+    _id: string
+    answer: string	
+    question: string	
+    cardsPack_id: string		
+    grade: number		
+    shots: number		
+    user_id: string		
+    created: string	
+    updated: string	
+}
+export type CardType ={
+    _id: string	
+    cardsPack_id: string		
+    grade: number		
+    shots: number		
+    user_id: string
+    card_id: string
 }
 
 export type createCardsPackType = {
@@ -113,7 +157,7 @@ export type SignInType<T = {}> = {
     rememberMe: boolean
 }
 export type userType = {
-    id: string
+    _id: string
     email: string
     name: string
     avatar: string

@@ -39,7 +39,7 @@ type initStateType = {
 let initState: initStateType = {
     isLogged: false,
     user: {
-        id: "",
+        _id: "",
         email: "",
         name: "",
         avatar: "",
@@ -68,7 +68,7 @@ const slice = createSlice({
         logIn(state,action:PayloadAction<{value:boolean}>){
             state.isLogged = action.payload.value
         },
-        setUser(state, action:PayloadAction<{user:{id: string, email: string, name: string, avatar: string}}>){
+        setUser(state, action:PayloadAction<{user:{_id: string, email: string, name: string, avatar: string}}>){
             state.user = action.payload.user
         },
         setUpdateUser(state,action:PayloadAction<{data:NewUserType}>){
@@ -139,8 +139,8 @@ export const LogoutTC = () => (dispatch: Dispatch) => {
 }
 export const GetUserTC = () => (dispatch: Dispatch<setUserType>) => {
     authAPI.getProfile().then((res) => {
-        let { id, email, name, avatar } = res.data
-        dispatch(setUser({user:{id, email, name, avatar}}))
+        let { _id, email, name, avatar } = res.data
+        dispatch(setUser({user:{_id, email, name, avatar}}))
     })
 }
 export const UpdateUserInfo = (data: NewUserType) => (dispatch: Dispatch) => {
