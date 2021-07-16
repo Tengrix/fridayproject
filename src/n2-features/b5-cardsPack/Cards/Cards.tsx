@@ -20,43 +20,66 @@ import styles from "./Cards.module.scss"
 
 const Cards = () => {
     const { packID } = useParams<{ packID: string }>()
+
     const dispatch = useDispatch()
+
     useEffect(() => {
         dispatch(getCardsForCardsPack({ packID }))
     }, [])
+
     const isLogged = useSelector<AppRootStateType, boolean>((state) => state.auth.isLogged)
+
     const userId = useSelector<AppRootStateType, string>((state) => state.auth.user._id)
+
     const loadingProgress = useSelector<AppRootStateType, "loading" | "successed">(
         (state) => state.app.loadingProgress
     )
+
     let cards = useSelector<AppRootStateType, CardsType[]>((state) => state.cards.cards)
+
     const cardsState = useSelector<AppRootStateType, CardsInitialStateType>((state) => state.cards)
+
     const NamePack = useSelector<AppRootStateType, initCardPacks | undefined>((state) =>
         state.cardPacks.cardPacks.find((p) => p._id === packID)
     )?.name
+
     const deletedPack = useSelector<AppRootStateType, boolean>(
         (state) => state.cardPacks.packDeleted
     )
+
     const clickToPaginator = (newShowPage: number, currentPortion: number) => {
         dispatch(changeNewPageForShowCards({ newShowPage }))
         dispatch(changePortionCards({ currentPortion }))
         dispatch(getCardsForCardsPack({ packID }))
     }
+
     const history = useHistory()
+
     const backToPreviousPage = () => {
         history.push(PATH.PACKS)
     }
+
     const delPack = () => {
         const idPack = packID
         dispatch(removeCardPack({ idPack }))
     }
+
     if (!isLogged) {
         return <Redirect to={PATH.SIGN_IN} />
     }
+
     if (deletedPack) {
         return <Redirect to={PATH.PACKS} />
     }
+
     if (loadingProgress === "loading") return <Loading />
+    const bodyAddCard = (
+        <div>
+            <input />
+            <input />
+            <button>Create</button>
+        </div>
+    )
     return (
         <div className={styles.cardsBlock}>
             <div className={styles.body}>
@@ -64,7 +87,7 @@ const Cards = () => {
                     <div className={styles.namePack}>{NamePack}</div>
                     <div className={styles.buttonBlock}>
                         {userId === cardsState.packUserId && (
-                            <div>
+                            <div className={styles.userControl}>
                                 <Button
                                     variant="outlined"
                                     color="primary"
@@ -73,14 +96,12 @@ const Cards = () => {
                                 >
                                     Delete pack
                                 </Button>
-                                <SuperModal nameButton="Rename" body={(<div>Hello</div>)} />
-                                <Button variant="outlined" color="primary" type="button">
-                                    Add card
-                                </Button>
+
+                                <SuperModal nameButton="Add card" body={bodyAddCard} />
+                                <SuperModal nameButton="Rename" body={<div>Hello</div>} />
                             </div>
                         )}
-
-                        <ShowAnswerModal name="learn" />
+                        <ShowAnswerModal name="learn" disabled={!cards.length} />
                         <Button
                             variant="outlined"
                             color="primary"
@@ -105,16 +126,7 @@ const Cards = () => {
                             <tr>
                                 <td align="center">{c.question}</td>
                                 <td align="center">
-                                    <Button
-                                        variant="outlined"
-                                        color="primary"
-                                        type="button"
-                                        onClick={() => {
-                                            alert(c.answer)
-                                        }}
-                                    >
-                                        Show answer
-                                    </Button>
+                                <SuperModal nameButton="Show answer" body={c.answer} />
                                 </td>
                                 <td align="center">{c.grade}</td>
                                 <td align="center">{c.shots}</td>

@@ -12,6 +12,7 @@ import { CardsType } from "../../n1-main/a3-dal/mainAPI"
 
 type ShowAnswerModalType = {
     name: string
+    disabled?: any
 }
 
 function rand() {
@@ -191,7 +192,7 @@ export default function ShowAnswerModal(props: ShowAnswerModalType) {
     )
     return (
         <div>
-            <Button variant="outlined" color="primary" type="button" onClick={handleOpen}>
+            <Button variant="outlined" color="primary" type="button" onClick={handleOpen} disabled={props.disabled}>
                 {props.name}
             </Button>
             <Modal

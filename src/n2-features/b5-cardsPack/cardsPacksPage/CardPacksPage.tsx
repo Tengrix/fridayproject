@@ -24,24 +24,32 @@ const CardPacksPage = () => {
     useEffect(() => {
         dispatch(getPackCards())
     }, [])
+
     const dispatch = useDispatch()
+
     const cardPacksState = useSelector<AppRootStateType, initCardsPacksStateType>(
         (state) => state.cardPacks
     )
+
     const userId = useSelector<AppRootStateType, string>((state) => state.auth.user._id)
+
     const updateTitle = (newTitle: string, idPack: string) => {
         dispatch(updateCardPack({ idPack, newTitle }))
     }
+
     const delPack = (idPack: string) => {
         dispatch(removeCardPack({ idPack }))
     }
+
     const [checked, setChecked] = useState(cardPacksState.showMyCardsPacks)
+
     const showMyCardPacks = (e: ChangeEvent<HTMLInputElement>) => {
         const newIsDoneValue = e.currentTarget.checked
         setChecked(newIsDoneValue)
         dispatch(showMyCardsPacks({ isShow: newIsDoneValue }))
         dispatch(getPackCards())
     }
+
     const changeMaxMinRange = (newValue: number[]) => {
         dispatch(changeMaxMinCards({ newValue }))
         dispatch(getPackCards())
@@ -50,15 +58,18 @@ const CardPacksPage = () => {
     const loadingProgress = useSelector<AppRootStateType, "loading" | "successed">(
         (state) => state.app.loadingProgress
     )
+
     const [value, setValue] = React.useState<number[]>([
         cardPacksState.minCardsCount,
         cardPacksState.maxCardsCount,
     ])
+
     const clickToPaginator = (newShowPage: number, currentPortion: number) => {
         dispatch(changeNewPageForShowPacks({ newShowPage }))
         dispatch(changePortionPacks({ currentPortion }))
         dispatch(getPackCards())
     }
+
     const changeSortCardsPacks = (
         newValue: "0updated" | "1updated" | "0cardsCount" | "1cardsCount"
     ) => {
@@ -67,6 +78,7 @@ const CardPacksPage = () => {
     }
 
     if (loadingProgress === "loading") return <Loading />
+    
     return (
         <div className={styles.cardsPacksBlock}>
             <div className={styles.body}>

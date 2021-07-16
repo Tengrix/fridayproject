@@ -33,6 +33,12 @@
             flex-direction: row;
             justify-content: flex-end;
             align-items: center;
+            width: 40%;
+            .userControl{
+                display: flex;
+                justify-content: flex-end;
+                width: 70%;
+            }
         }
     }   
 }

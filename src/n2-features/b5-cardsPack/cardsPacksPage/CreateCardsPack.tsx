@@ -2,6 +2,7 @@ import { useFormik } from "formik"
 import React, { useCallback } from "react"
 import { useDispatch } from "react-redux"
 import { createCardPack } from "../../../n1-main/a2-bll/store/cardPacksReducer"
+import SuperModal from "../../../n3-MySuperComponents/SuperModal/SuperModal"
 
 const CreateCardsPack = () => {
     const dispatch = useDispatch()
@@ -20,18 +21,21 @@ const CreateCardsPack = () => {
         },
     })
     return (
-        <div>
-            <form onSubmit={formik.handleSubmit}>
-                <input
-                    id="NameNewCardsPack"
-                    name="NameNewCardsPack"
-                    placeholder="Name new pack"
-                    onChange={formik.handleChange}
-                    value={formik.values.NameNewCardsPack}
-                />
-                <button>Create</button>
-            </form>
-        </div>
+        <SuperModal
+            nameButton="Create card pack"
+            body={
+                <form onSubmit={formik.handleSubmit}>
+                    <input
+                        id="NameNewCardsPack"
+                        name="NameNewCardsPack"
+                        placeholder="Name new pack"
+                        onChange={formik.handleChange}
+                        value={formik.values.NameNewCardsPack}
+                    />
+                    <button>Create</button>
+                </form>
+            }
+        />
     )
 }
 
