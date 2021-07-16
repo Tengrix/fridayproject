@@ -1,7 +1,8 @@
-.cardsPacksBlock{
+.cardsBlock{
     height: 89vh;
     width: 100%;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     border:1px solid red;
@@ -14,12 +15,24 @@
         height: 100%;
         border:1px solid red;
     }
-    .searchBlock{
+    .controlBlock{
         display: flex;
         flex-direction: row;
-        justify-content: space-evenly;
+        justify-content: space-between;
         align-items: center;
         width: 100%;
         border:1px solid red;
-    }
+        .namePack{
+            width: 30%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .buttonBlock{
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-end;
+            align-items: center;
+        }
+    }   
 }

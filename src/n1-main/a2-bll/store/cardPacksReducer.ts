@@ -8,7 +8,7 @@ import { AuthInitStateType, setCommonRegister } from "./mainAuthReducer"
 import { switchLoadingState } from "./appReducer"
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 
-type initStateType = {
+export type initCardsPacksStateType = {
     cardPacks: Array<initCardPacks>
     cardPacksTotalCount: number
     maxCardsCount: number
@@ -19,8 +19,9 @@ type initStateType = {
     newPageForShow: number
     currentPortionToPaginator: number
     sortCardsPacks: "0updated" | "1updated" | "0cardsCount" | "1cardsCount"
+    packDeleted: boolean
 }
-const cardPacksInitialState: initStateType = {
+const cardPacksInitialState: initCardsPacksStateType = {
     cardPacks: [],
     cardPacksTotalCount: 14,
     maxCardsCount: 4,
@@ -31,6 +32,7 @@ const cardPacksInitialState: initStateType = {
     newPageForShow: 1,
     currentPortionToPaginator: 1,
     sortCardsPacks: "0cardsCount",
+    packDeleted: false,
 }
 export const getPackCards = createAsyncThunk("cardPacks/get", async (getPacksData, thunkAPI) => {
     const module: GetCardsPacksModuleType = {
@@ -40,7 +42,7 @@ export const getPackCards = createAsyncThunk("cardPacks/get", async (getPacksDat
         },
     }
     const { auth } = thunkAPI.getState() as { auth: AuthInitStateType }
-    const { cardPacks } = thunkAPI.getState() as { cardPacks: initStateType }
+    const { cardPacks } = thunkAPI.getState() as { cardPacks: initCardsPacksStateType }
     //
     module.params.page = cardPacks.newPageForShow
     module.params.min = cardPacks.minCardsCount
@@ -69,7 +71,9 @@ export const removeCardPack = createAsyncThunk(
         thunkAPI.dispatch(switchLoadingState({ valueInLoading: "loading" }))
         try {
             await cardsPacksAPI.deleteCardsPack(removePackData.idPack)
+            thunkAPI.dispatch(deletedPack({ deleted: true }))
             thunkAPI.dispatch(getPackCards())
+            thunkAPI.dispatch(deletedPack({ deleted: false }))
         } catch (e) {
             const error = e.res ? e.res.data.error : e.message + ", more details in the console"
             console.log("Error:", { ...e })
@@ -122,10 +126,10 @@ const slice = createSlice({
         showMyCardsPacks(state, action: PayloadAction<{ isShow: boolean }>) {
             state.showMyCardsPacks = action.payload.isShow
         },
-        changeNewPageForShow(state, action: PayloadAction<{ newShowPage: number }>) {
+        changeNewPageForShowPacks(state, action: PayloadAction<{ newShowPage: number }>) {
             state.newPageForShow = action.payload.newShowPage
         },
-        changePortion(state, action: PayloadAction<{ currentPortion: number }>) {
+        changePortionPacks(state, action: PayloadAction<{ currentPortion: number }>) {
             state.currentPortionToPaginator = action.payload.currentPortion
         },
         changeMaxMinCards(state, action: PayloadAction<{ newValue: number[] }>) {
@@ -140,6 +144,9 @@ const slice = createSlice({
         ) {
             state.sortCardsPacks = action.payload.newValue
         },
+        deletedPack(state, action: PayloadAction<{ deleted: boolean }>) {
+            state.packDeleted = action.payload.deleted
+        },
     },
 })
 
@@ -147,8 +154,9 @@ export const cardPacksReducer = slice.reducer
 export const {
     getCardPacks,
     showMyCardsPacks,
-    changeNewPageForShow,
-    changePortion,
+    changeNewPageForShowPacks,
+    changePortionPacks,
     changeMaxMinCards,
     changeSort,
+    deletedPack,
 } = slice.actions

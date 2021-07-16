@@ -3,6 +3,7 @@ import { CardPackType, initCardPacks } from "../../../n1-main/a3-dal/mainAPI"
 import { useDispatch } from "react-redux"
 import { NavLink, Redirect } from "react-router-dom"
 import ShowAnswerModal from "../../b7-modal/ShowAnswerModal"
+import { Button } from "@material-ui/core"
 
 type ContainerCardsPackType = {
     cardsPack: initCardPacks
@@ -14,18 +15,16 @@ type ContainerCardsPackType = {
 const CardsPack = (props: ContainerCardsPackType) => {
     return (
         <tr>
-            <NavLink to={"/cards/" + props.cardsPack._id}>
-                <td align="center">{props.cardsPack.name}</td>
-            </NavLink>
+            <td align="center">{props.cardsPack.name}</td>
             <td align="center">{props.cardsPack.cardsCount}</td>
             <td align="center">{props.cardsPack.created}</td>
             <td align="center">{props.cardsPack.updated}</td>
             <td align="center">
-                <ShowAnswerModal name="learn" />
-                {props.userId === props.cardsPack.user_id && <button>rename</button>}
-                {props.userId === props.cardsPack.user_id && (
-                    <button onClick={() => props.delPack(props.cardsPack._id)}>delete</button>
-                )}
+                <NavLink to={"/cards/" + props.cardsPack._id}>
+                    <Button variant="outlined" color="primary" type="button">
+                        Watch
+                    </Button>
+                </NavLink>
             </td>
         </tr>
     )
