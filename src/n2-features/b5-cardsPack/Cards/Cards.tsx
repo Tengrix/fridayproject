@@ -13,6 +13,7 @@ import {
 } from "../../../n1-main/a2-bll/store/cardsReducer"
 import { AppRootStateType } from "../../../n1-main/a2-bll/store/store"
 import { CardsType, initCardPacks } from "../../../n1-main/a3-dal/mainAPI"
+import SuperModal from "../../../n3-MySuperComponents/SuperModal/SuperModal"
 import SuperPaginator from "../../../n3-MySuperComponents/SuperPaginator/SuperPaginator"
 import ShowAnswerModal from "../../b7-modal/ShowAnswerModal"
 import styles from "./Cards.module.scss"
@@ -72,9 +73,7 @@ const Cards = () => {
                                 >
                                     Delete pack
                                 </Button>
-                                <Button variant="outlined" color="primary" type="button">
-                                    Rename pack
-                                </Button>
+                                <SuperModal nameButton="Rename" body={(<div>Hello</div>)} />
                                 <Button variant="outlined" color="primary" type="button">
                                     Add card
                                 </Button>

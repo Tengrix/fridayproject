@@ -8,7 +8,7 @@ import { AppRootStateType } from "../../n1-main/a2-bll/store/store"
 import { useState } from "react"
 import { getGradeTC } from "../../n1-main/a2-bll/store/cardsGradeReducer"
 import { ListItemText } from "@material-ui/core"
-import {CardsType} from "../../n1-main/a3-dal/mainAPI";
+import { CardsType } from "../../n1-main/a3-dal/mainAPI"
 
 type ShowAnswerModalType = {
     name: string
@@ -89,7 +89,7 @@ export default function ShowAnswerModal(props: ShowAnswerModalType) {
         setShow(!show)
     }
     const nextQuestion = () => {
-        cards.map(el=>el.question + 1)
+        cards.map((el) => el.question + 1)
         setNumQA(numQA + 1)
         setCountA(countA + 1)
         if (numQ === 1) {
@@ -117,8 +117,7 @@ export default function ShowAnswerModal(props: ShowAnswerModalType) {
         setNumQ(1)
         setCountA(1)
     }
-    const newGradesForQuestions = (i: number,id:string) => {
-
+    const newGradesForQuestions = (i: number, id: string) => {
         dispatch(getGradeTC(i, id))
     }
     const body = (
@@ -139,7 +138,7 @@ export default function ShowAnswerModal(props: ShowAnswerModalType) {
                         </Button>
                     )}
                 </span>
-                <div>{cards.map(el=>el.question[numQA])}</div>
+                <div>{cards.map((el) => el.question[numQA])}</div>
                 <div>
                     <Button
                         color="primary"
@@ -150,12 +149,12 @@ export default function ShowAnswerModal(props: ShowAnswerModalType) {
                         show answer
                     </Button>
                 </div>
-                <div>{show ? cards.map(el=>el.answer[numQA]) : ""}</div>
+                <div>{show ? cards.map((el) => el.answer[numQA]) : ""}</div>
             </div>
             <div>
                 <h4>Rate Yourself</h4>
                 {grade.map((el, i) => (
-                    <Button key={"grade-" + i} onClick={() => newGradesForQuestions(i,id)}>
+                    <Button key={"grade-" + i} onClick={() => newGradesForQuestions(i, id)}>
                         {el}
                     </Button>
                 ))}
