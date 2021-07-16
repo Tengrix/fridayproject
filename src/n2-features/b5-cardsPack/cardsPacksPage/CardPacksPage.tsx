@@ -6,10 +6,11 @@ import {
     getPackCards,
     updateCardPack,
     showMyCardsPacks,
-    changeNewPageForShow,
-    changePortion,
     changeMaxMinCards,
     changeSort,
+    initCardsPacksStateType,
+    changeNewPageForShowPacks,
+    changePortionPacks,
 } from "../../../n1-main/a2-bll/store/cardPacksReducer"
 import { AppRootStateType } from "../../../n1-main/a2-bll/store/store"
 import { initCardPacks } from "../../../n1-main/a3-dal/mainAPI"
@@ -24,33 +25,17 @@ const CardPacksPage = () => {
         dispatch(getPackCards())
     }, [])
     const dispatch = useDispatch()
-    const cardPacks = useSelector<AppRootStateType, initCardPacks[]>(
-        (state) => state.cardPacks.cardPacks
+    const cardPacksState = useSelector<AppRootStateType, initCardsPacksStateType>(
+        (state) => state.cardPacks
     )
-    const cardPacksTotalCount = useSelector<AppRootStateType, number>(
-        (state) => state.cardPacks.cardPacksTotalCount
-    )
-    const currentPage = useSelector<AppRootStateType, number>((state) => state.cardPacks.page)
-    const currentPortion = useSelector<AppRootStateType, number>(
-        (state) => state.cardPacks.currentPortionToPaginator
-    )
-    const minCountSearch = useSelector<AppRootStateType, number>(
-        (state) => state.cardPacks.minCardsCount
-    )
-    const maxCountSearch = useSelector<AppRootStateType, number>(
-        (state) => state.cardPacks.maxCardsCount
-    )
-    const userId = useSelector<AppRootStateType, string>(
-        (state) => state.auth.user._id
-    )
-
+    const userId = useSelector<AppRootStateType, string>((state) => state.auth.user._id)
     const updateTitle = (newTitle: string, idPack: string) => {
         dispatch(updateCardPack({ idPack, newTitle }))
     }
     const delPack = (idPack: string) => {
         dispatch(removeCardPack({ idPack }))
     }
-    const [checked, setChecked] = useState(false)
+    const [checked, setChecked] = useState(cardPacksState.showMyCardsPacks)
     const showMyCardPacks = (e: ChangeEvent<HTMLInputElement>) => {
         const newIsDoneValue = e.currentTarget.checked
         setChecked(newIsDoneValue)
@@ -65,10 +50,13 @@ const CardPacksPage = () => {
     const loadingProgress = useSelector<AppRootStateType, "loading" | "successed">(
         (state) => state.app.loadingProgress
     )
-    const [value, setValue] = React.useState<number[]>([minCountSearch, maxCountSearch])
+    const [value, setValue] = React.useState<number[]>([
+        cardPacksState.minCardsCount,
+        cardPacksState.maxCardsCount,
+    ])
     const clickToPaginator = (newShowPage: number, currentPortion: number) => {
-        dispatch(changeNewPageForShow({ newShowPage }))
-        dispatch(changePortion({ currentPortion }))
+        dispatch(changeNewPageForShowPacks({ newShowPage }))
+        dispatch(changePortionPacks({ currentPortion }))
         dispatch(getPackCards())
     }
     const changeSortCardsPacks = (
@@ -84,8 +72,8 @@ const CardPacksPage = () => {
             <div className={styles.body}>
                 <div className={styles.searchBlock}>
                     <SearchPack
-                        minCount={minCountSearch}
-                        maxCount={maxCountSearch}
+                        minCount={cardPacksState.minCardsCount}
+                        maxCount={cardPacksState.maxCardsCount}
                         changeMaxMinRange={changeMaxMinRange}
                         setValue={setValue}
                         value={value}
@@ -129,7 +117,7 @@ const CardPacksPage = () => {
                         <th>Updated</th>
                         <th>Control</th>
                     </tr>
-                    {cardPacks.map((el) => (
+                    {cardPacksState.cardPacks.map((el) => (
                         <CardsPack
                             key={el._id}
                             cardsPack={el}
@@ -141,11 +129,11 @@ const CardPacksPage = () => {
                 </table>
                 <SuperPaginator
                     pageSize={10}
-                    totalItemsCount={cardPacksTotalCount}
-                    currentPage={currentPage}
+                    totalItemsCount={cardPacksState.cardPacksTotalCount}
+                    currentPage={cardPacksState.page}
                     onClickToPage={clickToPaginator}
                     portionSize={5}
-                    currentPortion={currentPortion}
+                    currentPortion={cardPacksState.currentPortionToPaginator}
                 />
             </div>
         </div>

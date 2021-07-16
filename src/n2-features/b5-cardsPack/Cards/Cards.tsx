@@ -1,52 +1,138 @@
-import React, { useEffect } from "react"
+import { Button, Modal } from "@material-ui/core"
+import React, { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { Redirect, useParams } from "react-router-dom"
+import { Redirect, useHistory, useParams } from "react-router-dom"
 import Loading from "../../../n1-main/a1-ui/loading/Loading"
-import { getCardsForCardsPack } from "../../../n1-main/a2-bll/store/cardsReducer"
+import { PATH } from "../../../n1-main/a1-ui/routes/Routes"
+import { getPackCards, removeCardPack } from "../../../n1-main/a2-bll/store/cardPacksReducer"
+import {
+    CardsInitialStateType,
+    changeNewPageForShowCards,
+    changePortionCards,
+    getCardsForCardsPack,
+} from "../../../n1-main/a2-bll/store/cardsReducer"
 import { AppRootStateType } from "../../../n1-main/a2-bll/store/store"
-import { CardsType } from "../../../n1-main/a3-dal/mainAPI"
+import { CardsType, initCardPacks } from "../../../n1-main/a3-dal/mainAPI"
+import SuperPaginator from "../../../n3-MySuperComponents/SuperPaginator/SuperPaginator"
+import ShowAnswerModal from "../../b7-modal/ShowAnswerModal"
+import styles from "./Cards.module.scss"
 
 const Cards = () => {
-    const {userID} = useParams<{userID: string}>()
+    const { packID } = useParams<{ packID: string }>()
     const dispatch = useDispatch()
-    useEffect(()=>{
-        dispatch(getCardsForCardsPack({userID}))
+    useEffect(() => {
+        dispatch(getCardsForCardsPack({ packID }))
     }, [])
     const isLogged = useSelector<AppRootStateType, boolean>((state) => state.auth.isLogged)
+    const userId = useSelector<AppRootStateType, string>((state) => state.auth.user._id)
     const loadingProgress = useSelector<AppRootStateType, "loading" | "successed">(
         (state) => state.app.loadingProgress
     )
-    let cards = useSelector<AppRootStateType, CardsType[]>(
-        (state) => state.cards.cards
+    let cards = useSelector<AppRootStateType, CardsType[]>((state) => state.cards.cards)
+    const cardsState = useSelector<AppRootStateType, CardsInitialStateType>((state) => state.cards)
+    const NamePack = useSelector<AppRootStateType, initCardPacks | undefined>((state) =>
+        state.cardPacks.cardPacks.find((p) => p._id === packID)
+    )?.name
+    const deletedPack = useSelector<AppRootStateType, boolean>(
+        (state) => state.cardPacks.packDeleted
     )
+    const clickToPaginator = (newShowPage: number, currentPortion: number) => {
+        dispatch(changeNewPageForShowCards({ newShowPage }))
+        dispatch(changePortionCards({ currentPortion }))
+        dispatch(getCardsForCardsPack({ packID }))
+    }
+    const history = useHistory()
+    const backToPreviousPage = () => {
+        history.push(PATH.PACKS)
+    }
+    const delPack = () => {
+        const idPack = packID
+        dispatch(removeCardPack({ idPack }))
+    }
     if (!isLogged) {
-        return <Redirect to={"/sign-in"} />
+        return <Redirect to={PATH.SIGN_IN} />
+    }
+    if (deletedPack) {
+        return <Redirect to={PATH.PACKS} />
     }
     if (loadingProgress === "loading") return <Loading />
     return (
-        <div>
-            <table cellPadding="7" width="100%">
-                <tr>
-                    <th>Qustion</th>
-                    <th>Answer</th>
-                    <th>Grade</th>
-                    <th>Created</th>
-                    <th><button>add card</button></th>
-                </tr>
-                {cards.length && cards.map((c) => (
+        <div className={styles.cardsBlock}>
+            <div className={styles.body}>
+                <div className={styles.controlBlock}>
+                    <div className={styles.namePack}>{NamePack}</div>
+                    <div className={styles.buttonBlock}>
+                        {userId === cardsState.packUserId && (
+                            <div>
+                                <Button
+                                    variant="outlined"
+                                    color="primary"
+                                    type="button"
+                                    onClick={delPack}
+                                >
+                                    Delete pack
+                                </Button>
+                                <Button variant="outlined" color="primary" type="button">
+                                    Rename pack
+                                </Button>
+                                <Button variant="outlined" color="primary" type="button">
+                                    Add card
+                                </Button>
+                            </div>
+                        )}
+
+                        <ShowAnswerModal name="learn" />
+                        <Button
+                            variant="outlined"
+                            color="primary"
+                            type="button"
+                            onClick={backToPreviousPage}
+                        >
+                            Back
+                        </Button>
+                    </div>
+                </div>
+                <table cellPadding="7" width="100%">
                     <tr>
-                        <td align="center">{c.question}</td>
-                        <td align="center">{c.answer}</td>
-                        <td align="center">{c.grade}</td>
-                        <td align="center">{c.created}</td>
-                        <td align="center">{c._id}</td>
-                        <td align="center">
-                            <button>show answer</button>
-                        </td>
+                        <th>Qustion</th>
+                        <th>Answer</th>
+                        <th>Grade</th>
+                        <th>Shots</th>
+                        <th>Created</th>
+                        <th>Updated</th>
                     </tr>
-                ))}
-            </table>
-            <div>1,2,3,4...5</div>
+                    {cards.length &&
+                        cards.map((c) => (
+                            <tr>
+                                <td align="center">{c.question}</td>
+                                <td align="center">
+                                    <Button
+                                        variant="outlined"
+                                        color="primary"
+                                        type="button"
+                                        onClick={() => {
+                                            alert(c.answer)
+                                        }}
+                                    >
+                                        Show answer
+                                    </Button>
+                                </td>
+                                <td align="center">{c.grade}</td>
+                                <td align="center">{c.shots}</td>
+                                <td align="center">{c.created}</td>
+                                <td align="center">{c.updated}</td>
+                            </tr>
+                        ))}
+                </table>
+                <SuperPaginator
+                    currentPage={cardsState.page}
+                    pageSize={cardsState.pageCount}
+                    portionSize={5}
+                    currentPortion={cardsState.currentPortionToPaginator}
+                    totalItemsCount={cardsState.cardsTotalCount}
+                    onClickToPage={clickToPaginator}
+                />
+            </div>
         </div>
     )
 }

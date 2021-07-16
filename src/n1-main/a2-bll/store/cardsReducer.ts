@@ -1,14 +1,9 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
-import {
-    cardsAPI,
-    CardsType,
-    GetCardsModuleType,
-    GetCardsResponceType,
-} from "../../a3-dal/mainAPI"
+import { cardsAPI, CardsType, GetCardsModuleType, GetCardsResponceType } from "../../a3-dal/mainAPI"
 import { switchLoadingState } from "./appReducer"
 import { setCommonRegister } from "./mainAuthReducer"
 
-type CardsInitialStateType = {
+export type CardsInitialStateType = {
     cards: Array<CardsType>
     cardsTotalCount: number
     maxGrade: number
@@ -16,6 +11,8 @@ type CardsInitialStateType = {
     page: number
     pageCount: number
     packUserId: string
+    currentPortionToPaginator: number
+    newPageForShow: number
 }
 const cardsInitialState: CardsInitialStateType = {
     cards: [],
@@ -25,18 +22,20 @@ const cardsInitialState: CardsInitialStateType = {
     page: 1,
     pageCount: 10,
     packUserId: "",
+    currentPortionToPaginator: 1,
+    newPageForShow: 1,
 }
 
 export const getCardsForCardsPack = createAsyncThunk(
     "cardPacks/get",
-    async (getPacksData: { userID: string }, thunkAPI) => {
+    async (getPacksData: { packID: string }, thunkAPI) => {
         thunkAPI.dispatch(switchLoadingState({ valueInLoading: "loading" }))
         try {
             const { cards } = thunkAPI.getState() as { cards: CardsInitialStateType }
             const module: GetCardsModuleType = {
                 params: {
-                    cardsPack_id: getPacksData.userID,
-                    page: cards.page,
+                    cardsPack_id: getPacksData.packID,
+                    page: cards.newPageForShow,
                     pageCount: cards.pageCount,
                 },
             }
@@ -50,7 +49,10 @@ export const getCardsForCardsPack = createAsyncThunk(
         thunkAPI.dispatch(switchLoadingState({ valueInLoading: "successed" }))
     }
 )
-
+// export const createCard = createAsyncThunk(
+//     "cardPacks/createCard",
+//     async (createCardData: {}, thunkAPI) => {}
+// )
 const slice = createSlice({
     name: "cardPacks",
     initialState: cardsInitialState,
@@ -64,8 +66,14 @@ const slice = createSlice({
             state.page = action.payload.response.page
             state.pageCount = action.payload.response.pageCount
         },
+        changeNewPageForShowCards(state, action: PayloadAction<{ newShowPage: number }>) {
+            state.newPageForShow = action.payload.newShowPage
+        },
+        changePortionCards(state, action: PayloadAction<{ currentPortion: number }>) {
+            state.currentPortionToPaginator = action.payload.currentPortion
+        },
     },
 })
 
 export const cardsReducer = slice.reducer
-export const { getCards } = slice.actions
+export const { getCards, changeNewPageForShowCards, changePortionCards } = slice.actions

@@ -11,7 +11,6 @@ import Cards from "../../../n2-features/b5-cardsPack/Cards/Cards"
 import CardPacksPage from "../../../n2-features/b5-cardsPack/cardsPacksPage/CardPacksPage"
 import ShowAnswerModal from "../../../n2-features/b7-modal/ShowAnswerModal"
 
-
 export const PATH = {
     PROFILE: "/profile",
     SIGN_IN: "/sign-in",
@@ -21,9 +20,9 @@ export const PATH = {
     ERROR: "/404",
     UPDATE_USER: "/update-user",
     PACKS: "/packs",
-    CARDS: "/cards/:userID?",
+    CARDS: "/cards/:packID?",
     PACKS_RAW: "/packs-raw",
-    QUIZ: "/learn"
+    QUIZ: "/learn",
 }
 export const Routes = () => {
     return (
