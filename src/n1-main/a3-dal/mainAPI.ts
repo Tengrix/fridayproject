@@ -70,11 +70,9 @@ export const cardsAPI = {
         return instance.delete<DeleteCardResponceType>(`cards/card?id=${cardId}`)
     },
 }
-//
-//
-//
-//
-//
+
+
+
 export type GetCardsModuleType = {
     params: {
         cardsPack_id: string

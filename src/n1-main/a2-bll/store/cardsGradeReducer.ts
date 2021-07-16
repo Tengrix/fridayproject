@@ -12,7 +12,7 @@ let initialState:initialStateType = {
         cardsPack_id:'',
         card_id:'5eea471c77e2080004b2dd39',
         user_id:'',
-        grade:1,
+        grade:5,
         shots:0
     }
 }
@@ -29,7 +29,7 @@ export const gradeReducer = (state=initialState, action:ActionType) => {
 const getGradeAC = (grade:number) => {
     return{
         type:'GET-GRADE',
-        grade,
+        grade
     }as const
 }
 const getShotsAC = (shots:number) => {
@@ -38,9 +38,9 @@ const getShotsAC = (shots:number) => {
         shots
     }as const
 }
-export const getGradeTC = (grade:number, card_id:string, shots:number) =>  (dispatch:Dispatch) =>{
+export const getGradeTC = (grade:number, card_id:string) =>  (dispatch:Dispatch) =>{
    gradeAPI.grades(grade, card_id).then((res)=>{
-       dispatch(getGradeAC(grade))
+       dispatch(getGradeAC(res.data.grade))
    })
 }
 

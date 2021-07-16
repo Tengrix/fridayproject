@@ -39,6 +39,7 @@ const Cards = () => {
                         <td align="center">{c.answer}</td>
                         <td align="center">{c.grade}</td>
                         <td align="center">{c.created}</td>
+                        <td align="center">{c._id}</td>
                         <td align="center">
                             <button>show answer</button>
                         </td>
