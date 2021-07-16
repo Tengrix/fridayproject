@@ -19,17 +19,17 @@ let initialState:initialStateType = {
 export const gradeReducer = (state=initialState, action:ActionType) => {
     switch (action.type){
         case "GET-GRADE":
-            return{...state, grade: action.grade}
+            return{...state, grade: action.grade, id:action.id}
         case "GET-SHOTS":
         default:
             return state
     }
 }
 
-const getGradeAC = (grade:number) => {
+const getGradeAC = (grade:number, id:string) => {
     return{
         type:'GET-GRADE',
-        grade
+        grade,id
     }as const
 }
 const getShotsAC = (shots:number) => {
@@ -40,7 +40,7 @@ const getShotsAC = (shots:number) => {
 }
 export const getGradeTC = (grade:number, card_id:string) =>  (dispatch:Dispatch) =>{
    gradeAPI.grades(grade, card_id).then((res)=>{
-       dispatch(getGradeAC(res.data.grade))
+       dispatch(getGradeAC(res.data.grade, res.data.card_id))
    })
 }
 

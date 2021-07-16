@@ -8,6 +8,7 @@ import { AppRootStateType } from "../../n1-main/a2-bll/store/store"
 import { useState } from "react"
 import { getGradeTC } from "../../n1-main/a2-bll/store/cardsGradeReducer"
 import { ListItemText } from "@material-ui/core"
+import {CardsType} from "../../n1-main/a3-dal/mainAPI";
 
 type ShowAnswerModalType = {
     name: string
@@ -57,29 +58,27 @@ export default function ShowAnswerModal(props: ShowAnswerModalType) {
     const handleClose = () => {
         setOpen(false)
     }
-    const [questions, setQuestion] = useState<any>([
-        ["What is React?", 0],
-        ["What is Redux?", 0],
-        ["What is promises?", 0],
-        ["What is closure?", 0],
-        ["Functional or Class?", 0],
-    ])
-    const [answers, setAnswers] = useState<string[]>([
-        "React is a declarative, efficient, " +
-            "and flexible JavaScript library for building user interfaces. " +
-            "It lets you compose complex UIs from small and isolated pieces of code called “components”.",
-        "Redux is a predictable state container designed to help you write JavaScript apps that behave " +
-            "consistently across client, server, and native environments and are easy to test.",
-        "A Promise is a proxy for a value not necessarily known when the promise is created. It allows " +
-            "you to associate handlers with an asynchronous action's eventual success value or failure reason.",
-        "A closure is the combination of a function bundled together (enclosed) with references to its surrounding " +
-            "state (the lexical environment).",
-        "FUNCTIONAL!",
-    ])
+    // const [questions, setQuestion] = useState<any>([
+    //     ["What is React?", 0],
+    //     ["What is Redux?", 0],
+    //     ["What is promises?", 0],
+    //     ["What is closure?", 0],
+    //     ["Functional or Class?", 0],
+    // ])
+    // const [answers, setAnswers] = useState<string[]>([
+    //     "React is a declarative, efficient, " +
+    //         "and flexible JavaScript library for building user interfaces. " +
+    //         "It lets you compose complex UIs from small and isolated pieces of code called “components”.",
+    //     "Redux is a predictable state container designed to help you write JavaScript apps that behave " +
+    //         "consistently across client, server, and native environments and are easy to test.",
+    //     "A Promise is a proxy for a value not necessarily known when the promise is created. It allows " +
+    //         "you to associate handlers with an asynchronous action's eventual success value or failure reason.",
+    //     "A closure is the combination of a function bundled together (enclosed) with references to its surrounding " +
+    //         "state (the lexical environment).",
+    //     "FUNCTIONAL!",
+    // ])
+    let cards = useSelector<AppRootStateType, CardsType[]>((state) => state.cards.cards)
 
-    let grades = useSelector<AppRootStateType, number>(
-        (state) => state.cardsGrade.updatedGrade.grade
-    )
     let id = useSelector<AppRootStateType, string>((state) => state.cardsGrade.updatedGrade.card_id)
     const [numQA, setNumQA] = useState<number>(0)
     const [numQ, setNumQ] = useState<number>(0)
@@ -90,6 +89,7 @@ export default function ShowAnswerModal(props: ShowAnswerModalType) {
         setShow(!show)
     }
     const nextQuestion = () => {
+        cards.map(el=>el.question + 1)
         setNumQA(numQA + 1)
         setCountA(countA + 1)
         if (numQ === 1) {
@@ -107,7 +107,7 @@ export default function ShowAnswerModal(props: ShowAnswerModalType) {
             // }
             // return questions[questions.length-1]
 
-            setNumQA(Math.floor(Math.random() * questions.length))
+            setNumQA(Math.floor(Math.random() * cards.length))
             setCountA(countA + 1)
         } else {
         }
@@ -117,16 +117,17 @@ export default function ShowAnswerModal(props: ShowAnswerModalType) {
         setNumQ(1)
         setCountA(1)
     }
-    const newGradesForQuestions = (i: number, id: string, shots: number) => {
-        dispatch(getGradeTC(i, id, shots))
+    const newGradesForQuestions = (i: number,id:string) => {
+
+        dispatch(getGradeTC(i, id))
     }
     const body = (
         <div style={modalStyle} className={classes.paper}>
             <h2 id="simple-modal-title">Learn "Pack Name"</h2>
             <div id="simple-modal-description">
                 <span>
-                    Question number: {countA}/5{" "}
-                    {countA === 5 && (
+                    Question number: {countA}/{cards.length}{" "}
+                    {countA === cards.length && (
                         <Button
                             color="secondary"
                             variant={"outlined"}
@@ -138,7 +139,7 @@ export default function ShowAnswerModal(props: ShowAnswerModalType) {
                         </Button>
                     )}
                 </span>
-                <div>{questions[0 + numQA]}</div>
+                <div>{cards.map(el=>el.question[numQA])}</div>
                 <div>
                     <Button
                         color="primary"
@@ -149,13 +150,12 @@ export default function ShowAnswerModal(props: ShowAnswerModalType) {
                         show answer
                     </Button>
                 </div>
-                <div>{show ? answers[0 + numQA] : ""}</div>
+                <div>{show ? cards.map(el=>el.answer[numQA]) : ""}</div>
             </div>
             <div>
                 <h4>Rate Yourself</h4>
-
                 {grade.map((el, i) => (
-                    <Button key={"grade-" + i} onClick={() => newGradesForQuestions(i, id, 4)}>
+                    <Button key={"grade-" + i} onClick={() => newGradesForQuestions(i,id)}>
                         {el}
                     </Button>
                 ))}
@@ -163,7 +163,7 @@ export default function ShowAnswerModal(props: ShowAnswerModalType) {
             <Button color="secondary" variant="outlined" onClick={handleClose}>
                 Cancel
             </Button>
-            {countA === 5 ? (
+            {countA === cards.length ? (
                 <Button
                     color="primary"
                     variant={"outlined"}
