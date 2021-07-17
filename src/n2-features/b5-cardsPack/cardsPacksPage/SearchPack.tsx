@@ -1,4 +1,4 @@
-import { Slider, Typography } from "@material-ui/core"
+import { Button, Slider, Typography } from "@material-ui/core"
 import { useFormik } from "formik"
 import React from "react"
 
@@ -39,7 +39,6 @@ const SearchPack = (props: PropsType) => {
                 getAriaValueText={valuetext}
                 min={minValue}
                 max={maxValue}
-                
             />
             <form onSubmit={formik.handleSubmit}>
                 <input
@@ -49,7 +48,14 @@ const SearchPack = (props: PropsType) => {
                     onChange={formik.handleChange}
                     value={formik.values.namePack}
                 />
-                <button>Search</button>
+                <Button
+                    variant="outlined"
+                    color="primary"
+                    type="button"
+                    onClick={formik.submitForm}
+                >
+                    Search
+                </Button>
             </form>
         </div>
     )

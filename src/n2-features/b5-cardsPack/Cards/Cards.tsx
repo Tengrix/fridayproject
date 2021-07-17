@@ -9,6 +9,7 @@ import {
     CardsInitialStateType,
     changeNewPageForShowCards,
     changePortionCards,
+    deleteCard,
     getCardsForCardsPack,
 } from "../../../n1-main/a2-bll/store/cardsReducer"
 import { AppRootStateType } from "../../../n1-main/a2-bll/store/store"
@@ -17,6 +18,10 @@ import SuperModal from "../../../n3-MySuperComponents/SuperModal/SuperModal"
 import SuperPaginator from "../../../n3-MySuperComponents/SuperPaginator/SuperPaginator"
 import ShowAnswerModal from "../../b7-modal/ShowAnswerModal"
 import styles from "./Cards.module.scss"
+import CreateCard from "./CreateCard"
+import DeleteCardPack from "./DeletePack"
+import RenameCardPack from "./RenameCardPack"
+import UpdateCard from "./UpdateCard"
 
 const Cards = () => {
     const { packID } = useParams<{ packID: string }>()
@@ -59,9 +64,9 @@ const Cards = () => {
         history.push(PATH.PACKS)
     }
 
-    const delPack = () => {
-        const idPack = packID
-        dispatch(removeCardPack({ idPack }))
+    const delCard = (idCard: string) => {
+        const cardsPackId = packID
+        dispatch(deleteCard({ idCard, cardsPackId }))
     }
 
     if (!isLogged) {
@@ -73,13 +78,7 @@ const Cards = () => {
     }
 
     if (loadingProgress === "loading") return <Loading />
-    const bodyAddCard = (
-        <div>
-            <input />
-            <input />
-            <button>Create</button>
-        </div>
-    )
+
     return (
         <div className={styles.cardsBlock}>
             <div className={styles.body}>
@@ -88,17 +87,18 @@ const Cards = () => {
                     <div className={styles.buttonBlock}>
                         {userId === cardsState.packUserId && (
                             <div className={styles.userControl}>
-                                <Button
-                                    variant="outlined"
-                                    color="primary"
-                                    type="button"
-                                    onClick={delPack}
-                                >
-                                    Delete pack
-                                </Button>
-
-                                <SuperModal nameButton="Add card" body={bodyAddCard} />
-                                <SuperModal nameButton="Rename" body={<div>Hello</div>} />
+                                <SuperModal
+                                    nameButton="Delete pack"
+                                    body={<DeleteCardPack idPack={packID} />}
+                                />
+                                <SuperModal
+                                    nameButton="Add card"
+                                    body={<CreateCard packID={packID} />}
+                                />
+                                <SuperModal
+                                    nameButton="Rename"
+                                    body={<RenameCardPack idPack={packID} namePack={NamePack} />}
+                                />
                             </div>
                         )}
                         <ShowAnswerModal name="learn" disabled={!cards.length} />
@@ -120,18 +120,42 @@ const Cards = () => {
                         <th>Shots</th>
                         <th>Created</th>
                         <th>Updated</th>
+                        {userId === cardsState.packUserId && <th>Control</th>}
                     </tr>
                     {cards.length &&
                         cards.map((c) => (
                             <tr>
                                 <td align="center">{c.question}</td>
                                 <td align="center">
-                                <SuperModal nameButton="Show answer" body={c.answer} />
+                                    <SuperModal nameButton="Show answer" body={c.answer} />
                                 </td>
                                 <td align="center">{c.grade}</td>
                                 <td align="center">{c.shots}</td>
                                 <td align="center">{c.created}</td>
                                 <td align="center">{c.updated}</td>
+                                {userId === cardsState.packUserId && (
+                                    <td align="center">
+                                        <Button
+                                            variant="outlined"
+                                            color="primary"
+                                            type="button"
+                                            onClick={() => delCard(c._id)}
+                                        >
+                                            Delete
+                                        </Button>
+                                        <SuperModal
+                                            nameButton="Update"
+                                            body={
+                                                <UpdateCard
+                                                    answer={c.answer}
+                                                    question={c.question}
+                                                    idCard={c._id}
+                                                    idPack={packID}
+                                                />
+                                            }
+                                        />
+                                    </td>
+                                )}
                             </tr>
                         ))}
                 </table>

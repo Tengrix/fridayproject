@@ -1,7 +1,14 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { cardsAPI, CardsType, GetCardsModuleType, GetCardsResponceType } from "../../a3-dal/mainAPI"
+import {
+    cardsAPI,
+    CardsType,
+    CreateCardModuleType,
+    GetCardsModuleType,
+    GetCardsResponceType,
+    UpdateCardModuleType,
+} from "../../a3-dal/mainAPI"
 import { switchLoadingState } from "./appReducer"
-import { setCommonRegister } from "./mainAuthReducer"
+import { AuthInitStateType, setCommonRegister } from "./mainAuthReducer"
 
 export type CardsInitialStateType = {
     cards: Array<CardsType>
@@ -45,14 +52,69 @@ export const getCardsForCardsPack = createAsyncThunk(
             const error = e.res ? e.res.data.error : e.message + ", more details in the console"
             console.log("Error:", { ...e })
             thunkAPI.dispatch(setCommonRegister(error))
+        } finally {
+            thunkAPI.dispatch(switchLoadingState({ valueInLoading: "successed" }))
         }
-        thunkAPI.dispatch(switchLoadingState({ valueInLoading: "successed" }))
     }
 )
-// export const createCard = createAsyncThunk(
-//     "cardPacks/createCard",
-//     async (createCardData: {}, thunkAPI) => {}
-// )
+export const createCard = createAsyncThunk(
+    "cardPacks/createCard",
+    async (createCardData: { question: string; answer: string; cardsPackId: string }, thunkAPI) => {
+        const { auth } = thunkAPI.getState() as { auth: AuthInitStateType }
+        let createModule: CreateCardModuleType = {
+            card: {
+                _id: auth.user._id,
+                cardsPack_id: createCardData.cardsPackId,
+                question: createCardData.question,
+                answer: createCardData.answer,
+            },
+        }
+        thunkAPI.dispatch(switchLoadingState({ valueInLoading: "loading" }))
+        try {
+            await cardsAPI.createCard(createModule)
+            await thunkAPI.dispatch(getCardsForCardsPack({ packID: createCardData.cardsPackId }))
+        } catch (e) {
+        } finally {
+            thunkAPI.dispatch(switchLoadingState({ valueInLoading: "successed" }))
+        }
+    }
+)
+export const deleteCard = createAsyncThunk(
+    "cardPacks/deleteCard",
+    async (deleteData: { idCard: string; cardsPackId: string }, thunkAPI) => {
+        thunkAPI.dispatch(switchLoadingState({ valueInLoading: "loading" }))
+        try {
+            await cardsAPI.deleteCard(deleteData.idCard)
+            await thunkAPI.dispatch(getCardsForCardsPack({ packID: deleteData.cardsPackId }))
+        } catch (e) {
+        } finally {
+            thunkAPI.dispatch(switchLoadingState({ valueInLoading: "successed" }))
+        }
+    }
+)
+export const updateCard = createAsyncThunk(
+    "cardPacks/updateCard",
+    async (
+        updateData: { idCard: string; question: string; answer: string; packID: string },
+        thunkAPI
+    ) => {
+        let createModule: UpdateCardModuleType = {
+            card: {
+                _id: updateData.idCard,
+                question: updateData.question,
+                answer: updateData.answer,
+            },
+        }
+        thunkAPI.dispatch(switchLoadingState({ valueInLoading: "loading" }))
+        try {
+            await cardsAPI.updateCard(createModule)
+            await thunkAPI.dispatch(getCardsForCardsPack({ packID: updateData.packID }))
+        } catch (e) {
+        } finally {
+            thunkAPI.dispatch(switchLoadingState({ valueInLoading: "successed" }))
+        }
+    }
+)
 const slice = createSlice({
     name: "cardPacks",
     initialState: cardsInitialState,

@@ -144,8 +144,8 @@ export type CreateCardModuleType = {
         cardsPack_id: string
         question: string
         answer: string
-        grade: number
-        shots: number
+        grade?: number
+        shots?: number
         answerImg?: string
         questionImg?: string
         questionVideo?: string
@@ -157,6 +157,7 @@ export type UpdateCardModuleType = {
     card: {
         _id: string
         question?: string
+        answer?: string
     }
 }
 export type createCardPackType = {

@@ -88,7 +88,7 @@ export const createCardPack = createAsyncThunk(
         thunkAPI.dispatch(switchLoadingState({ valueInLoading: "loading" }))
         try {
             await cardsPacksAPI.createCardsPack(createData.newName)
-            thunkAPI.dispatch(getPackCards())
+            await thunkAPI.dispatch(getPackCards())
         } catch (e) {
             const error = e.res ? e.res.data.error : e.message + ", more details in the console"
             console.log("Error:", { ...e })

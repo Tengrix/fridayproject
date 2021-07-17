@@ -13,7 +13,6 @@ import {
     changePortionPacks,
 } from "../../../n1-main/a2-bll/store/cardPacksReducer"
 import { AppRootStateType } from "../../../n1-main/a2-bll/store/store"
-import { initCardPacks } from "../../../n1-main/a3-dal/mainAPI"
 import SuperPaginator from "../../../n3-MySuperComponents/SuperPaginator/SuperPaginator"
 import CardsPack from "./CardsPack"
 import CreateCardsPack from "./CreateCardsPack"
@@ -78,7 +77,7 @@ const CardPacksPage = () => {
     }
 
     if (loadingProgress === "loading") return <Loading />
-    
+
     return (
         <div className={styles.cardsPacksBlock}>
             <div className={styles.body}>
@@ -90,7 +89,6 @@ const CardPacksPage = () => {
                         setValue={setValue}
                         value={value}
                     />
-
                     <CreateCardsPack />
                     <div>
                         <input type="checkbox" checked={checked} onChange={showMyCardPacks} />

@@ -1,3 +1,4 @@
+import { Button } from "@material-ui/core"
 import { useFormik } from "formik"
 import React, { useCallback } from "react"
 import { useDispatch } from "react-redux"
@@ -24,15 +25,34 @@ const CreateCardsPack = () => {
         <SuperModal
             nameButton="Create card pack"
             body={
-                <form onSubmit={formik.handleSubmit}>
+                <form
+                    onSubmit={formik.handleSubmit}
+                    style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "space-evenly",
+                        height: "60%",
+                        width: "50%",
+                    }}
+                >
                     <input
                         id="NameNewCardsPack"
                         name="NameNewCardsPack"
                         placeholder="Name new pack"
                         onChange={formik.handleChange}
                         value={formik.values.NameNewCardsPack}
+                        style={{
+                            height: "15%",
+                        }}
                     />
-                    <button>Create</button>
+                    <Button
+                        variant="outlined"
+                        color="secondary"
+                        type="button"
+                        onClick={formik.submitForm}
+                    >
+                        Create
+                    </Button>
                 </form>
             }
         />

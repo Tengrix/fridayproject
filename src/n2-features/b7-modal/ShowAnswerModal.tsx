@@ -78,6 +78,7 @@ export default function ShowAnswerModal(props: ShowAnswerModalType) {
     //         "state (the lexical environment).",
     //     "FUNCTIONAL!",
     // ])
+    debugger
     let cards = useSelector<AppRootStateType, CardsType[]>((state) => state.cards.cards)
 
     let id = useSelector<AppRootStateType, string>((state) => state.cardsGrade.updatedGrade.card_id)
