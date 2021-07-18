@@ -13,7 +13,7 @@ import {
     getCardsForCardsPack,
 } from "../../../n1-main/a2-bll/store/cardsReducer"
 import { AppRootStateType } from "../../../n1-main/a2-bll/store/store"
-import { CardsType, initCardPacks } from "../../../n1-main/a3-dal/mainAPI"
+import {CardsType, CardType, initCardPacks} from "../../../n1-main/a3-dal/mainAPI"
 import SuperModal from "../../../n3-MySuperComponents/SuperModal/SuperModal"
 import SuperPaginator from "../../../n3-MySuperComponents/SuperPaginator/SuperPaginator"
 import ShowAnswerModal from "../../b7-modal/ShowAnswerModal"
@@ -41,9 +41,8 @@ const Cards = () => {
     )
 
     let cards = useSelector<AppRootStateType, CardsType[]>((state) => state.cards.cards)
-
+    let grade = useSelector<AppRootStateType, number>((state) => state.cards.updatedGrade.grade)
     const cardsState = useSelector<AppRootStateType, CardsInitialStateType>((state) => state.cards)
-
     const NamePack = useSelector<AppRootStateType, initCardPacks | undefined>((state) =>
         state.cardPacks.cardPacks.find((p) => p._id === packID)
     )?.name
@@ -101,7 +100,7 @@ const Cards = () => {
                                 />
                             </div>
                         )}
-                        <ShowAnswerModal name="learn" disabled={!cards.length} />
+                        <ShowAnswerModal grade={grade} name="learn" disabled={!cards.length}/>
                         <Button
                             variant="outlined"
                             color="primary"

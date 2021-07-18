@@ -6,13 +6,13 @@ import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { AppRootStateType } from "../../n1-main/a2-bll/store/store"
 import { useState } from "react"
-import { getGradeTC } from "../../n1-main/a2-bll/store/cardsGradeReducer"
-import { ListItemText } from "@material-ui/core"
-import { CardsType } from "../../n1-main/a3-dal/mainAPI"
+import {CardsType, CardType} from "../../n1-main/a3-dal/mainAPI"
+import {getGradeTC} from "../../n1-main/a2-bll/store/cardsReducer";
 
 type ShowAnswerModalType = {
     name: string
     disabled?: any
+    grade:number
 }
 
 function rand() {
@@ -48,10 +48,6 @@ export default function ShowAnswerModal(props: ShowAnswerModalType) {
     const [modalStyle] = React.useState(getModalStyle)
     const [open, setOpen] = React.useState(false)
 
-    //   useEffect(() => {
-    //     dispatch(updateGradeTc(4, "60abbfbd6a39d35b188ef6f2"))
-    // }, [dispatch])
-
     const handleOpen = () => {
         setOpen(true)
     }
@@ -59,29 +55,7 @@ export default function ShowAnswerModal(props: ShowAnswerModalType) {
     const handleClose = () => {
         setOpen(false)
     }
-    // const [questions, setQuestion] = useState<any>([
-    //     ["What is React?", 0],
-    //     ["What is Redux?", 0],
-    //     ["What is promises?", 0],
-    //     ["What is closure?", 0],
-    //     ["Functional or Class?", 0],
-    // ])
-    // const [answers, setAnswers] = useState<string[]>([
-    //     "React is a declarative, efficient, " +
-    //         "and flexible JavaScript library for building user interfaces. " +
-    //         "It lets you compose complex UIs from small and isolated pieces of code called “components”.",
-    //     "Redux is a predictable state container designed to help you write JavaScript apps that behave " +
-    //         "consistently across client, server, and native environments and are easy to test.",
-    //     "A Promise is a proxy for a value not necessarily known when the promise is created. It allows " +
-    //         "you to associate handlers with an asynchronous action's eventual success value or failure reason.",
-    //     "A closure is the combination of a function bundled together (enclosed) with references to its surrounding " +
-    //         "state (the lexical environment).",
-    //     "FUNCTIONAL!",
-    // ])
-    debugger
     let cards = useSelector<AppRootStateType, CardsType[]>((state) => state.cards.cards)
-
-    let id = useSelector<AppRootStateType, string>((state) => state.cardsGrade.updatedGrade.card_id)
     const [numQA, setNumQA] = useState<number>(0)
     const [numQ, setNumQ] = useState<number>(0)
     const [countA, setCountA] = useState<number>(1)
@@ -90,28 +64,31 @@ export default function ShowAnswerModal(props: ShowAnswerModalType) {
     const showAnswer = () => {
         setShow(!show)
     }
+    let getAllQuestion:Array<string> = []
+    let getAllAnswers:Array<string|number> = []
+    let getIdOfQuestion:Array<string> = []
+    cards.map((el) => getAllQuestion.push(el.question) )
+    cards.map((el)=>getAllAnswers.push(el.answer))
+    cards.map((el)=>getIdOfQuestion.push(el._id))
     const nextQuestion = () => {
-        cards.map((el) => el.question + 1)
         setNumQA(numQA + 1)
         setCountA(countA + 1)
         if (numQ === 1) {
-            // let sum = 0;
-            // for(let i = 0; i < questions.length; i++){
-            //     sum += +questions[i][1];
-            // }
-            // let threshold = Math.random() * sum;
-            // let total = 0;
-            // for(let i = 0; i < questions.length; i++){
-            //     total += +questions[i][1]
-            //     if(total >= threshold){
-            //         return questions[i][0]
-            //     }
-            // }
-            // return questions[questions.length-1]
-
-            setNumQA(Math.floor(Math.random() * cards.length))
+            let temp = 0
+            let sum = 0;
+            for(let i = 0; i < getAllQuestion.length; i++){
+                sum += props.grade;
+            }
+            let threshold = Math.random() * sum;
+            let total = 0;
+            for(let i = 0; i < getAllQuestion.length; i++){
+                total += props.grade
+                if(total >= threshold){
+                    temp = props.grade
+                }
+            }
+            setNumQA(temp)
             setCountA(countA + 1)
-        } else {
         }
         // setQuestion(questions[questions.length-1])
     }
@@ -140,7 +117,7 @@ export default function ShowAnswerModal(props: ShowAnswerModalType) {
                         </Button>
                     )}
                 </span>
-                <div>{cards.map((el) => el.question[numQA])}</div>
+                <div>{getAllQuestion[numQA]}</div>
                 <div>
                     <Button
                         color="primary"
@@ -151,12 +128,12 @@ export default function ShowAnswerModal(props: ShowAnswerModalType) {
                         show answer
                     </Button>
                 </div>
-                <div>{show ? cards.map((el) => el.answer[numQA]) : ""}</div>
+                <div>{show ? getAllAnswers[numQA] : ""}</div>
             </div>
             <div>
                 <h4>Rate Yourself</h4>
                 {grade.map((el, i) => (
-                    <Button key={"grade-" + i} onClick={() => newGradesForQuestions(i, id)}>
+                    <Button key={"grade-" + i} onClick={() => newGradesForQuestions(i+1, getIdOfQuestion[numQA])}>
                         {el}
                     </Button>
                 ))}

@@ -4,7 +4,6 @@ import thunk from "redux-thunk"
 import { configureStore } from "@reduxjs/toolkit"
 import { appReducer } from "./appReducer"
 import { cardsReducer } from "./cardsReducer"
-import { gradeReducer } from "./cardsGradeReducer"
 import { authReducer } from "./mainAuthReducer"
 declare global {
     interface Window {
@@ -14,7 +13,6 @@ declare global {
 const rootReducer = combineReducers({
     auth: authReducer,
     cardPacks: cardPacksReducer,
-    cardsGrade: gradeReducer,
     app: appReducer,
     cards: cardsReducer,
 })

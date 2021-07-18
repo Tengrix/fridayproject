@@ -9,6 +9,8 @@ import {
 } from "../../a3-dal/mainAPI"
 import { switchLoadingState } from "./appReducer"
 import { AuthInitStateType, setCommonRegister } from "./mainAuthReducer"
+import {gradeAPI, gradeResponseType} from "../../a3-dal/GradeAPI";
+import {Dispatch} from "redux";
 
 export type CardsInitialStateType = {
     cards: Array<CardsType>
@@ -20,6 +22,7 @@ export type CardsInitialStateType = {
     packUserId: string
     currentPortionToPaginator: number
     newPageForShow: number
+    updatedGrade: gradeResponseType
 }
 const cardsInitialState: CardsInitialStateType = {
     cards: [],
@@ -31,6 +34,14 @@ const cardsInitialState: CardsInitialStateType = {
     packUserId: "",
     currentPortionToPaginator: 1,
     newPageForShow: 1,
+    updatedGrade:{
+        _id:'',
+        cardsPack_id:'string',
+        card_id:'',
+        user_id:'',
+        grade:0,
+        shots:0
+    }
 }
 
 export const getCardsForCardsPack = createAsyncThunk(
@@ -136,6 +147,10 @@ const slice = createSlice({
         },
     },
 })
+export const getGradeTC = (grade:number, card_id:string) =>  (dispatch:Dispatch) =>{
+    gradeAPI.grades(grade, card_id).then((res)=>{
 
+    })
+}
 export const cardsReducer = slice.reducer
 export const { getCards, changeNewPageForShowCards, changePortionCards } = slice.actions
