@@ -2,7 +2,7 @@ import React, { ChangeEvent, useState } from "react"
 import { CardPackType, initCardPacks } from "../../../n1-main/a3-dal/mainAPI"
 import { useDispatch } from "react-redux"
 import { NavLink, Redirect } from "react-router-dom"
-import ShowAnswerModal from "../../b7-modal/ShowAnswerModal"
+import SmartLearn from "../../b7-learn/SmartLearn"
 import { Button } from "@material-ui/core"
 
 type ContainerCardsPackType = {

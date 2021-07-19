@@ -1,18 +1,22 @@
 import React from "react"
 import { makeStyles } from "@material-ui/core/styles"
 import Modal from "@material-ui/core/Modal"
-import { Button, Checkbox, ListItem } from "@material-ui/core"
-import { useEffect } from "react"
+import { Button } from "@material-ui/core"
 import { useDispatch, useSelector } from "react-redux"
 import { AppRootStateType } from "../../n1-main/a2-bll/store/store"
 import { useState } from "react"
-import {CardsType, CardType} from "../../n1-main/a3-dal/mainAPI"
-import {getGradeTC} from "../../n1-main/a2-bll/store/cardsReducer";
+import { CardsType } from "../../n1-main/a3-dal/mainAPI"
+import {
+    getCardsForCardsPack,
+    getGradeTC,
+    switchLearnMode,
+} from "../../n1-main/a2-bll/store/cardsReducer"
 
 type ShowAnswerModalType = {
     name: string
     disabled?: any
-    grade:number
+    grade: number
+    packId: string
 }
 
 function rand() {
@@ -41,21 +45,31 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-export default function ShowAnswerModal(props: ShowAnswerModalType) {
+export default function SmartLearn(props: ShowAnswerModalType) {
     const classes = useStyles()
     const dispatch = useDispatch()
 
     const [modalStyle] = React.useState(getModalStyle)
     const [open, setOpen] = React.useState(false)
 
+    const getCardsForLearn = () => {
+        dispatch(switchLearnMode({ newValue: true }))
+        dispatch(getCardsForCardsPack({ packID: props.packId }))
+    }
+    const learnModeOff = () => {
+        dispatch(switchLearnMode({ newValue: false }))
+        dispatch(getCardsForCardsPack({ packID: props.packId }))
+    }
     const handleOpen = () => {
         setOpen(true)
+        getCardsForLearn()
     }
-
     const handleClose = () => {
         setOpen(false)
+        learnModeOff()
     }
-    let cards = useSelector<AppRootStateType, CardsType[]>((state) => state.cards.cards)
+
+    let cards = useSelector<AppRootStateType, CardsType[]>((state) => state.cards.cardsToLearn)
     const [numQA, setNumQA] = useState<number>(0)
     const [numQ, setNumQ] = useState<number>(0)
     const [countA, setCountA] = useState<number>(1)
@@ -64,26 +78,26 @@ export default function ShowAnswerModal(props: ShowAnswerModalType) {
     const showAnswer = () => {
         setShow(!show)
     }
-    let getAllQuestion:Array<string> = []
-    let getAllAnswers:Array<string|number> = []
-    let getIdOfQuestion:Array<string> = []
-    cards.map((el) => getAllQuestion.push(el.question) )
-    cards.map((el)=>getAllAnswers.push(el.answer))
-    cards.map((el)=>getIdOfQuestion.push(el._id))
+    let getAllQuestion: Array<string> = []
+    let getAllAnswers: Array<string | number> = []
+    let getIdOfQuestion: Array<string> = []
+    cards.map((el) => getAllQuestion.push(el.question))
+    cards.map((el) => getAllAnswers.push(el.answer))
+    cards.map((el) => getIdOfQuestion.push(el._id))
     const nextQuestion = () => {
         setNumQA(numQA + 1)
         setCountA(countA + 1)
         if (numQ === 1) {
             let temp = 0
-            let sum = 0;
-            for(let i = 0; i < getAllQuestion.length; i++){
-                sum += props.grade;
+            let sum = 0
+            for (let i = 0; i < getAllQuestion.length; i++) {
+                sum += props.grade
             }
-            let threshold = Math.random() * sum;
-            let total = 0;
-            for(let i = 0; i < getAllQuestion.length; i++){
+            let threshold = Math.random() * sum
+            let total = 0
+            for (let i = 0; i < getAllQuestion.length; i++) {
                 total += props.grade
-                if(total >= threshold){
+                if (total >= threshold) {
                     temp = props.grade
                 }
             }
@@ -133,7 +147,10 @@ export default function ShowAnswerModal(props: ShowAnswerModalType) {
             <div>
                 <h4>Rate Yourself</h4>
                 {grade.map((el, i) => (
-                    <Button key={"grade-" + i} onClick={() => newGradesForQuestions(i+1, getIdOfQuestion[numQA])}>
+                    <Button
+                        key={"grade-" + i}
+                        onClick={() => newGradesForQuestions(i + 1, getIdOfQuestion[numQA])}
+                    >
                         {el}
                     </Button>
                 ))}
@@ -170,7 +187,13 @@ export default function ShowAnswerModal(props: ShowAnswerModalType) {
     )
     return (
         <div>
-            <Button variant="outlined" color="primary" type="button" onClick={handleOpen} disabled={props.disabled}>
+            <Button
+                variant="outlined"
+                color="primary"
+                type="button"
+                onClick={handleOpen}
+                disabled={props.disabled}
+            >
                 {props.name}
             </Button>
             <Modal

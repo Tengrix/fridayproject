@@ -18,12 +18,9 @@ import CardsPack from "./CardsPack"
 import CreateCardsPack from "./CreateCardsPack"
 import SearchPack from "./SearchPack"
 import styles from "./CardsPacks.module.scss"
+import CardsPacksControl from "./CardsPacksControl"
 
 const CardPacksPage = () => {
-    useEffect(() => {
-        dispatch(getPackCards())
-    }, [])
-
     const dispatch = useDispatch()
 
     const cardPacksState = useSelector<AppRootStateType, initCardsPacksStateType>(
@@ -58,11 +55,6 @@ const CardPacksPage = () => {
         (state) => state.app.loadingProgress
     )
 
-    const [value, setValue] = React.useState<number[]>([
-        cardPacksState.minCardsCount,
-        cardPacksState.maxCardsCount,
-    ])
-
     const clickToPaginator = (newShowPage: number, currentPortion: number) => {
         dispatch(changeNewPageForShowPacks({ newShowPage }))
         dispatch(changePortionPacks({ currentPortion }))
@@ -81,20 +73,13 @@ const CardPacksPage = () => {
     return (
         <div className={styles.cardsPacksBlock}>
             <div className={styles.body}>
-                <div className={styles.searchBlock}>
-                    <SearchPack
-                        minCount={cardPacksState.minCardsCount}
-                        maxCount={cardPacksState.maxCardsCount}
-                        changeMaxMinRange={changeMaxMinRange}
-                        setValue={setValue}
-                        value={value}
-                    />
-                    <CreateCardsPack />
-                    <div>
-                        <input type="checkbox" checked={checked} onChange={showMyCardPacks} />
-                        My cardPacks
-                    </div>
-                </div>
+                <CardsPacksControl
+                    cangeMaxMinRange={changeMaxMinRange}
+                    showMyCardPacks={showMyCardPacks}
+                    checked={checked}
+                    maxCcount={cardPacksState.maxCardsCount}
+                    minCCount={cardPacksState.minCardsCount}
+                />
                 <table cellPadding="7" width="100%">
                     <tr>
                         <th>Cards pack name</th>
