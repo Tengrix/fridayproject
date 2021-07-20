@@ -75,39 +75,36 @@ export default function SmartLearn(props: ShowAnswerModalType) {
     const [countA, setCountA] = useState<number>(1)
     const [grade, setGrade] = useState<string[]>(["1", "2", "3", "4", "5"])
     const [show, setShow] = useState<boolean>(false)
+    const [randomQ, setRandomQ] = useState<boolean>(false)
     const showAnswer = () => {
         setShow(!show)
     }
-    let getAllQuestion: Array<string> = []
-    let getAllAnswers: Array<string | number> = []
-    let getIdOfQuestion: Array<string> = []
-    cards.map((el) => getAllQuestion.push(el.question))
-    cards.map((el) => getAllAnswers.push(el.answer))
-    cards.map((el) => getIdOfQuestion.push(el._id))
+
+    let getAllQuestion:Array<any> = []
+    let getAllRandomQuestion:Array<any> = []
+    let getAllAnswers:Array<string|number> = []
+    let getIdOfQuestion:Array<string> = []
+    let out:Array<number> = [];
+    cards.map((el) => (getAllQuestion.push([el.question]), getAllAnswers.push(el.answer),
+        getIdOfQuestion.push(el._id), getAllRandomQuestion.push([el.question])) )
+    cards.map((el,i)=>getAllQuestion[i].push(el.grade))
+    for (let i = 0; i < getAllQuestion.length; ++i) {
+        for (let j = 0; j < getAllQuestion[i][1]; ++j) {
+            out.push(getAllQuestion[i][0]);
+        }
+    }
     const nextQuestion = () => {
         setNumQA(numQA + 1)
         setCountA(countA + 1)
-        if (numQ === 1) {
-            let temp = 0
-            let sum = 0
-            for (let i = 0; i < getAllQuestion.length; i++) {
-                sum += props.grade
-            }
-            let threshold = Math.random() * sum
-            let total = 0
-            for (let i = 0; i < getAllQuestion.length; i++) {
-                total += props.grade
-                if (total >= threshold) {
-                    temp = props.grade
-                }
-            }
-            setNumQA(temp)
+        if (randomQ) {
+            setNumQA(out[Math.floor(Math.random() * out.length)])
+            console.log(out[Math.floor(Math.random() * out.length)])
             setCountA(countA + 1)
         }
-        // setQuestion(questions[questions.length-1])
     }
+    console.log(out)
     const startAgain = () => {
-        setNumQ(1)
+        setRandomQ(true)
         setCountA(1)
     }
     const newGradesForQuestions = (i: number, id: string) => {
@@ -131,7 +128,7 @@ export default function SmartLearn(props: ShowAnswerModalType) {
                         </Button>
                     )}
                 </span>
-                <div>{getAllQuestion[numQA]}</div>
+                <div>{randomQ?out[Math.floor(Math.random() * out.length)]: getAllRandomQuestion[numQA] }</div>
                 <div>
                     <Button
                         color="primary"

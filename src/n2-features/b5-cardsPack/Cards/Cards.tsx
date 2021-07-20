@@ -83,7 +83,7 @@ const Cards = () => {
                     packUserId={cardsState.packUserId}
                     namePack={NamePack ? NamePack : ""}
                     grade={grade}
-                    disLearn={packID === cardsState.packUserId ? false : true}
+                    disLearn={cardsState.cards.length ? false : true}
                 />
                 <table cellPadding="7" width="100%">
                     <tr>

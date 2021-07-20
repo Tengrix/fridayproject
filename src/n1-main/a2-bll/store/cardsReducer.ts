@@ -80,7 +80,10 @@ export const getCardsForCardsPack = createAsyncThunk(
 )
 export const createCard = createAsyncThunk(
     "cardPacks/createCard",
-    async (createCardData: { question: string; answer: string; cardsPackId: string }, thunkAPI) => {
+    async (
+        createCardData: { question: string; answer: string; cardsPackId: string; grade: number },
+        thunkAPI
+    ) => {
         const { auth } = thunkAPI.getState() as { auth: AuthInitStateType }
         let createModule: CreateCardModuleType = {
             card: {
@@ -88,6 +91,7 @@ export const createCard = createAsyncThunk(
                 cardsPack_id: createCardData.cardsPackId,
                 question: createCardData.question,
                 answer: createCardData.answer,
+                grade: createCardData.grade,
             },
         }
         thunkAPI.dispatch(switchLoadingState({ valueInLoading: "loading" }))

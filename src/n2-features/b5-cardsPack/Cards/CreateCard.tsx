@@ -17,6 +17,7 @@ const CreateCard = (props: { packID: string }) => {
                     question: values.question,
                     answer: values.answer,
                     cardsPackId: props.packID,
+                    grade: 3,
                 })
             )
             formik.resetForm()
