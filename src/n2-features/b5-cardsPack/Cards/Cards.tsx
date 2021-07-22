@@ -1,10 +1,8 @@
-import { Button, Modal } from "@material-ui/core"
-import React, { useEffect, useState } from "react"
+import React, { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { Redirect, useHistory, useParams } from "react-router-dom"
 import Loading from "../../../n1-main/a1-ui/loading/Loading"
 import { PATH } from "../../../n1-main/a1-ui/routes/Routes"
-import { getPackCards, removeCardPack } from "../../../n1-main/a2-bll/store/cardPacksReducer"
 import {
     CardsInitialStateType,
     changeNewPageForShowCards,
@@ -13,15 +11,11 @@ import {
     getCardsForCardsPack,
 } from "../../../n1-main/a2-bll/store/cardsReducer"
 import { AppRootStateType } from "../../../n1-main/a2-bll/store/store"
-import {CardsType, CardType, initCardPacks} from "../../../n1-main/a3-dal/mainAPI"
-import SuperModal from "../../../n3-MySuperComponents/SuperModal/SuperModal"
+import { initCardPacks } from "../../../n1-main/a3-dal/mainAPI"
 import SuperPaginator from "../../../n3-MySuperComponents/SuperPaginator/SuperPaginator"
-import ShowAnswerModal from "../../b7-modal/ShowAnswerModal"
+import Card from "./Card"
 import styles from "./Cards.module.scss"
-import CreateCard from "./CreateCard"
-import DeleteCardPack from "./DeletePack"
-import RenameCardPack from "./RenameCardPack"
-import UpdateCard from "./UpdateCard"
+import CardsControl from "./CardsControl"
 
 const Cards = () => {
     const { packID } = useParams<{ packID: string }>()
@@ -40,9 +34,10 @@ const Cards = () => {
         (state) => state.app.loadingProgress
     )
 
-    let cards = useSelector<AppRootStateType, CardsType[]>((state) => state.cards.cards)
-    let grade = useSelector<AppRootStateType, number>((state) => state.cards.updatedGrade.grade)
+    const grade = useSelector<AppRootStateType, number>((state) => state.cards.updatedGrade.grade)
+
     const cardsState = useSelector<AppRootStateType, CardsInitialStateType>((state) => state.cards)
+
     const NamePack = useSelector<AppRootStateType, initCardPacks | undefined>((state) =>
         state.cardPacks.cardPacks.find((p) => p._id === packID)
     )?.name
@@ -76,41 +71,20 @@ const Cards = () => {
         return <Redirect to={PATH.PACKS} />
     }
 
-    if (loadingProgress === "loading") return <Loading />
+    if (loadingProgress === "loading" && !cardsState.learnMode) return <Loading />
 
     return (
         <div className={styles.cardsBlock}>
             <div className={styles.body}>
-                <div className={styles.controlBlock}>
-                    <div className={styles.namePack}>{NamePack}</div>
-                    <div className={styles.buttonBlock}>
-                        {userId === cardsState.packUserId && (
-                            <div className={styles.userControl}>
-                                <SuperModal
-                                    nameButton="Delete pack"
-                                    body={<DeleteCardPack idPack={packID} />}
-                                />
-                                <SuperModal
-                                    nameButton="Add card"
-                                    body={<CreateCard packID={packID} />}
-                                />
-                                <SuperModal
-                                    nameButton="Rename"
-                                    body={<RenameCardPack idPack={packID} namePack={NamePack} />}
-                                />
-                            </div>
-                        )}
-                        <ShowAnswerModal grade={grade} name="learn" disabled={!cards.length}/>
-                        <Button
-                            variant="outlined"
-                            color="primary"
-                            type="button"
-                            onClick={backToPreviousPage}
-                        >
-                            Back
-                        </Button>
-                    </div>
-                </div>
+                <CardsControl
+                    backToPreviousPage={backToPreviousPage}
+                    packId={packID}
+                    userId={userId}
+                    packUserId={cardsState.packUserId}
+                    namePack={NamePack ? NamePack : ""}
+                    grade={grade}
+                    disLearn={cardsState.cards.length ? false : true}
+                />
                 <table cellPadding="7" width="100%">
                     <tr>
                         <th>Qustion</th>
@@ -121,41 +95,22 @@ const Cards = () => {
                         <th>Updated</th>
                         {userId === cardsState.packUserId && <th>Control</th>}
                     </tr>
-                    {cards.length &&
-                        cards.map((c) => (
-                            <tr>
-                                <td align="center">{c.question}</td>
-                                <td align="center">
-                                    <SuperModal nameButton="Show answer" body={c.answer} />
-                                </td>
-                                <td align="center">{c.grade}</td>
-                                <td align="center">{c.shots}</td>
-                                <td align="center">{c.created}</td>
-                                <td align="center">{c.updated}</td>
-                                {userId === cardsState.packUserId && (
-                                    <td align="center">
-                                        <Button
-                                            variant="outlined"
-                                            color="primary"
-                                            type="button"
-                                            onClick={() => delCard(c._id)}
-                                        >
-                                            Delete
-                                        </Button>
-                                        <SuperModal
-                                            nameButton="Update"
-                                            body={
-                                                <UpdateCard
-                                                    answer={c.answer}
-                                                    question={c.question}
-                                                    idCard={c._id}
-                                                    idPack={packID}
-                                                />
-                                            }
-                                        />
-                                    </td>
-                                )}
-                            </tr>
+                    {cardsState.cards.length &&
+                        cardsState.cards.map((c) => (
+                            <Card
+                                _id={c._id}
+                                answer={c.answer}
+                                question={c.question}
+                                cardsPack_id={c.cardsPack_id}
+                                created={c.created}
+                                grade={c.grade}
+                                updated={c.updated}
+                                shots={c.shots}
+                                userId={userId}
+                                user_id={c.user_id}
+                                packId={packID}
+                                delCard={delCard}
+                            />
                         ))}
                 </table>
                 <SuperPaginator

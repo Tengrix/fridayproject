@@ -9,11 +9,12 @@ import {
 } from "../../a3-dal/mainAPI"
 import { switchLoadingState } from "./appReducer"
 import { AuthInitStateType, setCommonRegister } from "./mainAuthReducer"
-import {gradeAPI, gradeResponseType} from "../../a3-dal/GradeAPI";
-import {Dispatch} from "redux";
+import { gradeAPI, gradeResponseType } from "../../a3-dal/GradeAPI"
+import { Dispatch } from "redux"
 
 export type CardsInitialStateType = {
     cards: Array<CardsType>
+    cardsToLearn: Array<CardsType>
     cardsTotalCount: number
     maxGrade: number
     minGrade: number
@@ -23,9 +24,11 @@ export type CardsInitialStateType = {
     currentPortionToPaginator: number
     newPageForShow: number
     updatedGrade: gradeResponseType
+    learnMode: boolean
 }
 const cardsInitialState: CardsInitialStateType = {
     cards: [],
+    cardsToLearn: [],
     cardsTotalCount: 0,
     maxGrade: 0,
     minGrade: 0,
@@ -34,14 +37,15 @@ const cardsInitialState: CardsInitialStateType = {
     packUserId: "",
     currentPortionToPaginator: 1,
     newPageForShow: 1,
-    updatedGrade:{
-        _id:'',
-        cardsPack_id:'string',
-        card_id:'',
-        user_id:'',
-        grade:0,
-        shots:0
-    }
+    learnMode: false,
+    updatedGrade: {
+        _id: "",
+        cardsPack_id: "string",
+        card_id: "",
+        user_id: "",
+        grade: 0,
+        shots: 0,
+    },
 }
 
 export const getCardsForCardsPack = createAsyncThunk(
@@ -57,7 +61,13 @@ export const getCardsForCardsPack = createAsyncThunk(
                     pageCount: cards.pageCount,
                 },
             }
-            const res = await cardsAPI.getCards(module)
+            const moduleToLearn: GetCardsModuleType = {
+                params: {
+                    cardsPack_id: getPacksData.packID,
+                    pageCount: cards.cardsTotalCount,
+                },
+            }
+            const res = await cardsAPI.getCards(cards.learnMode ? moduleToLearn : module)
             thunkAPI.dispatch(getCards({ response: res.data }))
         } catch (e) {
             const error = e.res ? e.res.data.error : e.message + ", more details in the console"
@@ -70,7 +80,10 @@ export const getCardsForCardsPack = createAsyncThunk(
 )
 export const createCard = createAsyncThunk(
     "cardPacks/createCard",
-    async (createCardData: { question: string; answer: string; cardsPackId: string }, thunkAPI) => {
+    async (
+        createCardData: { question: string; answer: string; cardsPackId: string; grade: number },
+        thunkAPI
+    ) => {
         const { auth } = thunkAPI.getState() as { auth: AuthInitStateType }
         let createModule: CreateCardModuleType = {
             card: {
@@ -78,6 +91,7 @@ export const createCard = createAsyncThunk(
                 cardsPack_id: createCardData.cardsPackId,
                 question: createCardData.question,
                 answer: createCardData.answer,
+                grade: createCardData.grade,
             },
         }
         thunkAPI.dispatch(switchLoadingState({ valueInLoading: "loading" }))
@@ -131,13 +145,17 @@ const slice = createSlice({
     initialState: cardsInitialState,
     reducers: {
         getCards(state, action: PayloadAction<{ response: GetCardsResponceType }>) {
-            state.cards = action.payload.response.cards
-            state.cardsTotalCount = action.payload.response.cardsTotalCount
-            state.maxGrade = action.payload.response.maxGrade
-            state.minGrade = action.payload.response.minGrade
-            state.packUserId = action.payload.response.packUserId
-            state.page = action.payload.response.page
-            state.pageCount = action.payload.response.pageCount
+            if (!state.learnMode) {
+                state.cards = action.payload.response.cards
+                state.cardsTotalCount = action.payload.response.cardsTotalCount
+                state.maxGrade = action.payload.response.maxGrade
+                state.minGrade = action.payload.response.minGrade
+                state.packUserId = action.payload.response.packUserId
+                state.page = action.payload.response.page
+                state.pageCount = action.payload.response.pageCount
+            } else {
+                state.cardsToLearn = action.payload.response.cards
+            }
         },
         changeNewPageForShowCards(state, action: PayloadAction<{ newShowPage: number }>) {
             state.newPageForShow = action.payload.newShowPage
@@ -145,12 +163,14 @@ const slice = createSlice({
         changePortionCards(state, action: PayloadAction<{ currentPortion: number }>) {
             state.currentPortionToPaginator = action.payload.currentPortion
         },
+        switchLearnMode(state, action: PayloadAction<{ newValue: boolean }>) {
+            state.learnMode = action.payload.newValue
+        },
     },
 })
-export const getGradeTC = (grade:number, card_id:string) =>  (dispatch:Dispatch) =>{
-    gradeAPI.grades(grade, card_id).then((res)=>{
-
-    })
+export const getGradeTC = (grade: number, card_id: string) => (dispatch: Dispatch) => {
+    gradeAPI.grades(grade, card_id).then((res) => {})
 }
 export const cardsReducer = slice.reducer
-export const { getCards, changeNewPageForShowCards, changePortionCards } = slice.actions
+export const { getCards, changeNewPageForShowCards, changePortionCards, switchLearnMode } =
+    slice.actions

@@ -29,7 +29,14 @@ const SearchPack = (props: PropsType) => {
         },
     })
     return (
-        <div>
+        <div
+            style={{
+                width: "500px",
+                display: "flex",
+                justifyContent: "space-evenly",
+                flexDirection: "row",
+            }}
+        >
             <Slider
                 value={props.value}
                 onChange={handleChange}
@@ -41,13 +48,13 @@ const SearchPack = (props: PropsType) => {
                 max={maxValue}
             />
             <form onSubmit={formik.handleSubmit}>
-                <input
+                {/* <input
                     id="namePack"
                     name="namePack"
                     placeholder="Name pack"
                     onChange={formik.handleChange}
                     value={formik.values.namePack}
-                />
+                /> */}
                 <Button
                     variant="outlined"
                     color="primary"

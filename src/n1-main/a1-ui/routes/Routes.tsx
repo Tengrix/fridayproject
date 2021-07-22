@@ -9,7 +9,7 @@ import NewPass from "../../../n2-features/b3-pass/Password/NewPass"
 import UpdateProfile from "../../../n2-features/b6-profile/UpdateProfile"
 import Cards from "../../../n2-features/b5-cardsPack/Cards/Cards"
 import CardPacksPage from "../../../n2-features/b5-cardsPack/cardsPacksPage/CardPacksPage"
-import ShowAnswerModal from "../../../n2-features/b7-modal/ShowAnswerModal"
+import SmartLearn from "../../../n2-features/b7-learn/SmartLearn"
 
 export const PATH = {
     PROFILE: "/profile",
@@ -38,7 +38,7 @@ export const Routes = () => {
                 <Route path={PATH.UPDATE_USER} component={UpdateProfile} />
                 <Route path={PATH.PACKS} component={CardPacksPage} />
                 <Route path={PATH.CARDS} component={Cards} />
-                <Route path={PATH.QUIZ} component={ShowAnswerModal} />
+                <Route path={PATH.QUIZ} component={SmartLearn} />
                 <Route path={"/404"} render={() => <h1>404:PAGE NOT FOUND</h1>} />
                 <Redirect from={"*"} to={PATH.ERROR} />
             </Switch>
