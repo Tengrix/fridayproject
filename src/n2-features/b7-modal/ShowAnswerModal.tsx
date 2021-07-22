@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(2, 4, 3),
     },
 }))
-
+const grade =["1", "2", "3", "4", "5"]
 export default function ShowAnswerModal(props: ShowAnswerModalType) {
     const classes = useStyles()
     const dispatch = useDispatch()
@@ -57,9 +57,8 @@ export default function ShowAnswerModal(props: ShowAnswerModalType) {
     }
     let cards = useSelector<AppRootStateType, CardsType[]>((state) => state.cards.cards)
     const [numQA, setNumQA] = useState<number>(0)
-    const [numQ, setNumQ] = useState<number>(0)
     const [countA, setCountA] = useState<number>(1)
-    const [grade, setGrade] = useState<string[]>(["1", "2", "3", "4", "5"])
+
     const [show, setShow] = useState<boolean>(false)
     const [randomQ, setRandomQ] = useState<boolean>(false)
     const showAnswer = () => {
