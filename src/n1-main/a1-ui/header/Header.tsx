@@ -8,7 +8,6 @@ import Logout from "../../../n2-features/b2-auth/sign-in-up/Logout"
 import { Avatar, Button } from "@material-ui/core"
 import PermIdentityIcon from "@material-ui/icons/PermIdentity"
 import SettingsIcon from "@material-ui/icons/Settings"
-import VpnKeyIcon from "@material-ui/icons/VpnKey"
 
 function Header() {
     const isLogged = useSelector<AppRootStateType, boolean>((state) => state.auth.isLogged)
@@ -48,10 +47,18 @@ function Header() {
                                 </Button>
                             </NavLink>
                         </div>
+                        <div className={s.item}>
+                            <NavLink to={PATH.NEW_PASS} activeClassName={s.activeLink} replace>
+                                <Button variant="outlined">
+                                    <SettingsIcon /> new pass{" "}
+                                </Button>
+                            </NavLink>
+                        </div>
                         <Logout />
                     </div>
                 </nav>
             )}
+
         </>
     )
 }

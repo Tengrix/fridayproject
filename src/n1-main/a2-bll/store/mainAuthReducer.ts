@@ -32,6 +32,7 @@ const authInitialState: AuthInitStateType = {
 export const signUp = createAsyncThunk(
     "auth/signUp",
     async (registsData: { email: string; password: string }, thunkAPI) => {
+        debugger
         try {
             const res = await authAPI.signUp(registsData)
             if (res.data.addedUser) {

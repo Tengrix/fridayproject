@@ -54,6 +54,7 @@ const SignUp = () => {
             sendDataToRegister(values.email, values.password)
         },
     })
+
     if (isRegister) {
         return <Redirect to={"/sign-in"} />
     }
