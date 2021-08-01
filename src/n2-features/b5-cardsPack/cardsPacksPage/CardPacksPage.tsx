@@ -15,8 +15,6 @@ import {
 import { AppRootStateType } from "../../../n1-main/a2-bll/store/store"
 import SuperPaginator from "../../../n3-MySuperComponents/SuperPaginator/SuperPaginator"
 import CardsPack from "./CardsPack"
-import CreateCardsPack from "./CreateCardsPack"
-import SearchPack from "./SearchPack"
 import styles from "./CardsPacks.module.scss"
 import CardsPacksControl from "./CardsPacksControl"
 

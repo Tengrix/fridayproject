@@ -8,8 +8,9 @@ import { useState } from "react"
 import { CardsType } from "../../n1-main/a3-dal/mainAPI"
 import {
     getCardsForCardsPack,
-    getGradeTC,
+    learnCardsRefresh,
     switchLearnMode,
+    updateCardGrade,
 } from "../../n1-main/a2-bll/store/cardsReducer"
 
 type ShowAnswerModalType = {
@@ -58,7 +59,7 @@ export default function SmartLearn(props: ShowAnswerModalType) {
     }
     const learnModeOff = () => {
         dispatch(switchLearnMode({ newValue: false }))
-        dispatch(getCardsForCardsPack({ packID: props.packId }))
+        dispatch(learnCardsRefresh({}))
     }
     const handleOpen = () => {
         setOpen(true)
@@ -80,17 +81,23 @@ export default function SmartLearn(props: ShowAnswerModalType) {
         setShow(!show)
     }
 
-    let getAllQuestion:Array<any> = []
-    let getAllRandomQuestion:Array<any> = []
-    let getAllAnswers:Array<string|number> = []
-    let getIdOfQuestion:Array<string> = []
-    let out:Array<number> = [];
-    cards.map((el) => (getAllQuestion.push([el.question]), getAllAnswers.push(el.answer),
-        getIdOfQuestion.push(el._id), getAllRandomQuestion.push([el.question])) )
-    cards.map((el,i)=>getAllQuestion[i].push(el.grade))
+    let getAllQuestion: Array<any> = []
+    let getAllRandomQuestion: Array<any> = []
+    let getAllAnswers: Array<string | number> = []
+    let getIdOfQuestion: Array<string> = []
+    let out: Array<number> = []
+    cards.map(
+        (el) => (
+            getAllQuestion.push([el.question]),
+            getAllAnswers.push(el.answer),
+            getIdOfQuestion.push(el._id),
+            getAllRandomQuestion.push([el.question])
+        )
+    )
+    cards.map((el, i) => getAllQuestion[i].push(el.grade))
     for (let i = 0; i < getAllQuestion.length; ++i) {
         for (let j = 0; j < getAllQuestion[i][1]; ++j) {
-            out.push(getAllQuestion[i][0]);
+            out.push(getAllQuestion[i][0])
         }
     }
     const nextQuestion = () => {
@@ -107,8 +114,8 @@ export default function SmartLearn(props: ShowAnswerModalType) {
         setRandomQ(true)
         setCountA(1)
     }
-    const newGradesForQuestions = (i: number, id: string) => {
-        dispatch(getGradeTC(i, id))
+    const newGradesForQuestions = (grade: number, card_id: string) => {
+        dispatch(updateCardGrade({ grade, card_id }))
     }
     const body = (
         <div style={modalStyle} className={classes.paper}>
@@ -128,7 +135,11 @@ export default function SmartLearn(props: ShowAnswerModalType) {
                         </Button>
                     )}
                 </span>
-                <div>{randomQ?out[Math.floor(Math.random() * out.length)]: getAllRandomQuestion[numQA] }</div>
+                <div>
+                    {randomQ
+                        ? out[Math.floor(Math.random() * out.length)]
+                        : getAllRandomQuestion[numQA]}
+                </div>
                 <div>
                     <Button
                         color="primary"

@@ -5,19 +5,24 @@ import SuperModal from "../../../n3-MySuperComponents/SuperModal/SuperModal"
 import UpdateCard from "./UpdateCard"
 
 const Card = (
-    props: CardsType & { userId: string; packId: string; delCard: (id: string) => void }
+    props: CardsType & {
+        userId: string
+        packId: string
+        delCard: (id: string) => void
+    }
 ) => {
+    const grade = props.grade
     return (
         <tr>
             <td align="center">{props.question}</td>
             <td align="center">
                 <SuperModal nameButton="Show answer" body={props.answer} />
             </td>
-            <td align="center">{props.grade}</td>
+            <td align="center">{Math.floor(grade)}</td>
             <td align="center">{props.shots}</td>
             <td align="center">{props.created}</td>
             <td align="center">{props.updated}</td>
-            {props.userId === props.packId && (
+            {props.userId === props.user_id && (
                 <td align="center">
                     <Button
                         variant="outlined"

@@ -35,6 +35,8 @@ export const authAPI = {
         })
     },
 }
+
+
 export const cardsPacksAPI = {
     getCardsPacks(getModule: GetCardsPacksModuleType) {
         return instance.get<ResponseGetCardPacksType>(`cards/pack`, getModule)
@@ -56,6 +58,7 @@ export const cardsPacksAPI = {
         return instance.put<CardType>("cards/grade", { card_id, grade })
     },
 }
+
 export const cardsAPI = {
     getCards(getCardsModule: GetCardsModuleType) {
         return instance.get<GetCardsResponceType>(`cards/card`, getCardsModule)
@@ -69,9 +72,19 @@ export const cardsAPI = {
     deleteCard(cardId: string) {
         return instance.delete<DeleteCardResponceType>(`cards/card?id=${cardId}`)
     },
+    grades(grade: number, card_id: string) {
+        return instance.put<gradeResponseType>(`cards/grade`, { grade, card_id })
+    },
 }
 
-
+export type gradeResponseType = {
+    _id: string
+    cardsPack_id: string
+    card_id: string
+    user_id: string
+    grade: number
+    shots: number
+}
 
 export type GetCardsModuleType = {
     params: {
@@ -138,6 +151,7 @@ export type GetCardsResponceType = {
     page: number
     pageCount: number
     packUserId: string
+    grade: number
 }
 export type CreateCardModuleType = {
     card: {

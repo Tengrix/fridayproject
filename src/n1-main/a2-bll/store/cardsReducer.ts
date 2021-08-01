@@ -9,8 +9,7 @@ import {
 } from "../../a3-dal/mainAPI"
 import { switchLoadingState } from "./appReducer"
 import { AuthInitStateType, setCommonRegister } from "./mainAuthReducer"
-import { gradeAPI, gradeResponseType } from "../../a3-dal/GradeAPI"
-import { Dispatch } from "redux"
+import { gradeResponseType } from "../../a3-dal/GradeAPI"
 
 export type CardsInitialStateType = {
     cards: Array<CardsType>
@@ -40,7 +39,7 @@ const cardsInitialState: CardsInitialStateType = {
     learnMode: false,
     updatedGrade: {
         _id: "",
-        cardsPack_id: "string",
+        cardsPack_id: "",
         card_id: "",
         user_id: "",
         grade: 0,
@@ -99,6 +98,9 @@ export const createCard = createAsyncThunk(
             await cardsAPI.createCard(createModule)
             await thunkAPI.dispatch(getCardsForCardsPack({ packID: createCardData.cardsPackId }))
         } catch (e) {
+            const error = e.res ? e.res.data.error : e.message + ", more details in the console"
+            console.log("Error:", { ...e })
+            thunkAPI.dispatch(setCommonRegister(error))
         } finally {
             thunkAPI.dispatch(switchLoadingState({ valueInLoading: "successed" }))
         }
@@ -135,6 +137,28 @@ export const updateCard = createAsyncThunk(
             await cardsAPI.updateCard(createModule)
             await thunkAPI.dispatch(getCardsForCardsPack({ packID: updateData.packID }))
         } catch (e) {
+            const error = e.res ? e.res.data.error : e.message + ", more details in the console"
+            console.log("Error:", { ...e })
+            thunkAPI.dispatch(setCommonRegister(error))
+        } finally {
+            thunkAPI.dispatch(switchLoadingState({ valueInLoading: "successed" }))
+        }
+    }
+)
+export const updateCardGrade = createAsyncThunk(
+    "cardPacks/grade",
+    async (gradeData: { grade: number; card_id: string }, thunkAPI) => {
+        thunkAPI.dispatch(switchLoadingState({ valueInLoading: "loading" }))
+        try {
+            const updatedCard = await (
+                await cardsAPI.grades(gradeData.grade, gradeData.card_id)
+            ).data
+            debugger
+            thunkAPI.dispatch(changeCardGrade({ updatedCard: updatedCard }))
+        } catch (e) {
+            const error = e.res ? e.res.data.error : e.message + ", more details in the console"
+            console.log("Error:", { ...e })
+            thunkAPI.dispatch(setCommonRegister(error))
         } finally {
             thunkAPI.dispatch(switchLoadingState({ valueInLoading: "successed" }))
         }
@@ -166,11 +190,26 @@ const slice = createSlice({
         switchLearnMode(state, action: PayloadAction<{ newValue: boolean }>) {
             state.learnMode = action.payload.newValue
         },
+        learnCardsRefresh(state, action) {
+            state.cardsToLearn = []
+        },
+        changeCardGrade(state, action: PayloadAction<{ updatedCard: gradeResponseType }>) {
+            state.cardsToLearn.forEach((c) => {    
+                if (c._id === action.payload.updatedCard.card_id) {
+                    c.grade = action.payload.updatedCard.grade
+                    c.shots = action.payload.updatedCard.shots
+                }
+            })
+        },
     },
 })
-export const getGradeTC = (grade: number, card_id: string) => (dispatch: Dispatch) => {
-    gradeAPI.grades(grade, card_id).then((res) => {})
-}
+
 export const cardsReducer = slice.reducer
-export const { getCards, changeNewPageForShowCards, changePortionCards, switchLearnMode } =
-    slice.actions
+export const {
+    getCards,
+    changeNewPageForShowCards,
+    changePortionCards,
+    switchLearnMode,
+    learnCardsRefresh,
+    changeCardGrade,
+} = slice.actions
