@@ -16,7 +16,7 @@ const appReducerState: AppReducerStateType = {
 export const isInitializedTC = createAsyncThunk("app/isInitialized", async (param, thunkAPI) => {
     thunkAPI.dispatch(switchLoadingState({ valueInLoading: "loading" }))
     try {
-        const res = await await authAPI.getProfile()
+        const res = await authAPI.getProfile()
         if (!res.data.error) {
             const user = res.data
             await thunkAPI.dispatch(getPackCards())

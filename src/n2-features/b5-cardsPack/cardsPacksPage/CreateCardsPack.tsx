@@ -7,11 +7,9 @@ import SuperModal from "../../../n3-MySuperComponents/SuperModal/SuperModal"
 
 const CreateCardsPack = () => {
     const dispatch = useDispatch()
-    const newCardPack = useCallback(
-        (newName: string) => {
+    const newCardPack = useCallback((newName: string) => {
             dispatch(createCardPack({ newName }))
-        },
-        [dispatch]
+        }, [dispatch]
     )
     const formik = useFormik({
         initialValues: {

@@ -23,6 +23,7 @@ function rand() {
     return Math.round(Math.random() * 20) - 10
 }
 
+
 function getModalStyle() {
     const top = 50 + rand()
     const left = 50 + rand()
@@ -48,7 +49,6 @@ const useStyles = makeStyles((theme) => ({
 export default function SmartLearn(props: ShowAnswerModalType) {
     const classes = useStyles()
     const dispatch = useDispatch()
-
     const [modalStyle] = React.useState(getModalStyle)
     const [open, setOpen] = React.useState(false)
 
@@ -101,7 +101,6 @@ export default function SmartLearn(props: ShowAnswerModalType) {
             setCountA(countA + 1)
         }
     }
-    console.log(out)
     const startAgain = () => {
         setRandomQ(true)
         setCountA(1)

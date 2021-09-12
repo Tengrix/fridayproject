@@ -1,4 +1,4 @@
-import { Button, Slider, Typography } from "@material-ui/core"
+import { Button, Slider } from "@material-ui/core"
 import { useFormik } from "formik"
 import React from "react"
 
@@ -48,13 +48,6 @@ const SearchPack = (props: PropsType) => {
                 max={maxValue}
             />
             <form onSubmit={formik.handleSubmit}>
-                {/* <input
-                    id="namePack"
-                    name="namePack"
-                    placeholder="Name pack"
-                    onChange={formik.handleChange}
-                    value={formik.values.namePack}
-                /> */}
                 <Button
                     variant="outlined"
                     color="primary"

@@ -48,8 +48,7 @@ const cardsInitialState: CardsInitialStateType = {
     },
 }
 
-export const getCardsForCardsPack = createAsyncThunk(
-    "cardPacks/get",
+export const getCardsForCardsPack = createAsyncThunk("cardPacks/get",
     async (getPacksData: { packID: string }, thunkAPI) => {
         thunkAPI.dispatch(switchLoadingState({ valueInLoading: "loading" }))
         try {

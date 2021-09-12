@@ -6,8 +6,7 @@ import styles from "./CardsPacks.module.scss"
 const CardsPacksControl = (props: {
     minCCount: number
     maxCcount: number
-    cangeMaxMinRange: (newValue: number[]) => void
-
+    cangeMaxMinRange: (newValue: number[]) => void;
     checked: boolean
     showMyCardPacks: (e: ChangeEvent<HTMLInputElement>) => void
 }) => {

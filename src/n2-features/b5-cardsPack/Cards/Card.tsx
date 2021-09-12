@@ -4,9 +4,7 @@ import { CardsType } from "../../../n1-main/a3-dal/mainAPI"
 import SuperModal from "../../../n3-MySuperComponents/SuperModal/SuperModal"
 import UpdateCard from "./UpdateCard"
 
-const Card = (
-    props: CardsType & { userId: string; packId: string; delCard: (id: string) => void }
-) => {
+const Card = (props: CardsType & { userId: string; packId: string; delCard: (id: string) => void }) => {
     return (
         <tr>
             <td align="center">{props.question}</td>

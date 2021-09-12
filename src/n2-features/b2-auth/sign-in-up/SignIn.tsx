@@ -105,7 +105,7 @@ const SignInWithFormik = () => {
                                 {...formik.getFieldProps("rememberMe")}
                             />
 
-                            <SuperButton type="submit"></SuperButton>
+                            <SuperButton type="submit"/>
 
                             <Grid container>
                                 <Grid item xs>
